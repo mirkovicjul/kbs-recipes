@@ -11,9 +11,9 @@ lazy val dependencies = Seq(
   guice,
   scalaTest,
   postgresqlDriver,
-  scalike,
-  scalikeConf,
-  scalikePlay
+  "com.typesafe.play" %% "play-slick" % "5.0.0",
+  "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0",
+  evolutions
 )
 
 // Project conf
