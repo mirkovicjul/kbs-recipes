@@ -1,8 +1,5 @@
 package services
 
-import com.google.inject.ImplementedBy
-
-@ImplementedBy(classOf[LoginServiceImpl])
 trait LoginService {
 
   def login(username: String, password: String): Int
