@@ -13,7 +13,10 @@ lazy val dependencies = Seq(
   postgresqlDriver,
   "com.typesafe.play" %% "play-slick" % "5.0.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0",
-  evolutions
+  evolutions,
+  scalike,
+  scalikeConf,
+  scalikePlay
 )
 
 // Project conf
