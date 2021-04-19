@@ -1,11 +1,14 @@
-
-lazy val scalaTest = "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
+// Dependencies
+lazy val scalaTest          = "org.scalatestplus.play" %% "scalatestplus-play"           % "5.0.0" % Test
+lazy val postgresqlDriver   = "org.postgresql"         % "postgresql"                    % "42.2.19"
 
 lazy val dependencies = Seq(
   guice,
-  scalaTest
+  scalaTest,
+  postgresqlDriver
 )
 
+// Project conf
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
   .settings(
@@ -15,9 +18,3 @@ lazy val root = (project in file("."))
     scalaVersion := "2.13.5",
     libraryDependencies ++= dependencies
 )
-
-// Adds additional packages into Twirl
-//TwirlKeys.templateImports += "io.recipe.controllers._"
-
-// Adds additional packages into conf/routes
-// play.sbt.routes.RoutesKeys.routesImport += "io.recipe.binders._"
