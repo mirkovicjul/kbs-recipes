@@ -13,12 +13,12 @@ object User extends SQLSyntaxSupport[User] {
 
   override def tableName: String = "users"
 
-  def apply(rs: WrappedResultSet): User =
+  def apply(rs: WrappedResultSet, rn: ResultName[User]): User =
     User(
-      id = rs.get[Long]("id"),
-      username = rs.get[String]("username"),
-      email = rs.get[String]("email"),
-      password = rs.get[String]("password")
+      id = rs.get[Long](rn.id),
+      username = rs.get[String](rn.username),
+      email = rs.get[String](rn.email),
+      password = rs.get[String](rn.password)
     )
 
 }

@@ -1,7 +1,7 @@
 package database
 
-import scalikejdbc._
 import models.User
+import scalikejdbc._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -26,7 +26,7 @@ class UserRepoPostgres extends UserRepo {
             .from(User.as(u))
             .where
             .eq(u.id, id)
-        }.map(result => User(result)).first.apply
+        }.map(result => User(result, u.resultName)).first.apply
       }
     }
 
