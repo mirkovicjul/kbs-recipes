@@ -1,0 +1,30 @@
+<mat-toolbar color="primary">
+
+  <mat-toolbar-row>
+    <span *ngIf="this.userService.isLoggedIn() && !this.userService.isAdmin()">
+      <button mat-button [routerLink]="['/home']">Home</button>
+    </span>
+    <span *ngIf="this.userService.isLoggedIn() && !this.userService.isAdmin()">
+      <button mat-button [routerLink]="['/history']">History</button>
+    </span>
+    <span *ngIf="this.userService.isLoggedIn() && !this.userService.isAdmin()">
+      <button mat-button [routerLink]="['/charts']">Charts</button>
+    </span>
+    <span *ngIf="this.userService.isLoggedIn() && !this.userService.isAdmin()">
+      <button mat-button [routerLink]="['/recommend']">Recommend</button>
+    </span>
+    <span *ngIf="this.userService.isLoggedIn() && !this.userService.isAdmin()">
+      <button mat-button [routerLink]="['/recipe']">Recipe</button>
+    </span>
+    <span *ngIf="this.userService.isLoggedIn() && !this.userService.isAdmin()">
+      <button mat-button [routerLink]="['/ingredient']">Ingredient</button>
+    </span>
+    <span class="example-spacer"></span>
+    <span *ngIf="!this.userService.isLoggedIn()">
+      <button mat-button [routerLink]="['/login']">Login</button>
+    </span>
+    <span *ngIf="this.userService.isLoggedIn()">
+      <button mat-button [routerLink]="['/login']" (click)="logout()">Log out</button>
+    </span>
+  </mat-toolbar-row>
+</mat-toolbar>
