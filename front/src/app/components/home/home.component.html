@@ -1,0 +1,10 @@
+<div>
+  <div class="row" *ngFor="let chunk of this.recommendation">
+    <div class="column" *ngFor="let item of chunk">
+      <div class="card">
+        <div><img src="{{ item.thumbnail }}" width="width:100%"></div>
+        <b>{{ item.name }}</b>
+      </div>
+    </div>
+  </div>
+</div>
