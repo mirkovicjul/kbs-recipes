@@ -1,5 +1,6 @@
 // Dependencies
 lazy val scalaTest        = "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
+lazy val bcrypt = "com.github.t3hnar" %% "scala-bcrypt" % "4.1"
 
 // database deps
 lazy val postgresqlDriver = "org.postgresql"         % "postgresql"          % "42.2.19"
@@ -13,6 +14,7 @@ lazy val dependencies = Seq(
   postgresqlDriver,
   "com.typesafe.play" %% "play-slick" % "5.0.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0",
+  bcrypt,
   evolutions,
   scalike,
   scalikeConf,

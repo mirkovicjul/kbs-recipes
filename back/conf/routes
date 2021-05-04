@@ -12,3 +12,5 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 GET     /login                      controllers.LoginController.login()
 
 GET     /user                       controllers.UserController.getUser()
+
+POST    /register                   controllers.UserController.register()

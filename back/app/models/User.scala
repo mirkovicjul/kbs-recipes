@@ -6,7 +6,8 @@ case class User(
     id: Long,
     username: String,
     email: String,
-    password: String
+    password: String,
+    userType: Long
 )
 
 object User extends SQLSyntaxSupport[User] {
@@ -18,7 +19,8 @@ object User extends SQLSyntaxSupport[User] {
       id = rs.get[Long](rn.id),
       username = rs.get[String](rn.username),
       email = rs.get[String](rn.email),
-      password = rs.get[String](rn.password)
+      password = rs.get[String](rn.password),
+      userType = rs.get[Long](rn.userType)
     )
 
 }
