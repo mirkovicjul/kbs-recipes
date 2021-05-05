@@ -19,7 +19,6 @@ class UserController @Inject()(
                               )(implicit ec: ExecutionContext)
   extends BaseController {
 
-
   def getUser(): Action[AnyContent] = Action.async {
     implicit request: Request[AnyContent] =>
       val serviceResult: Future[Either[Throwable, User]] = userService.get(1)
