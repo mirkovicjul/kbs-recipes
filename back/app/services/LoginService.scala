@@ -27,12 +27,12 @@ class LoginServiceImpl @Inject()(userRepo: UserRepo)(implicit ec: ExecutionConte
           LoginResponse(true, token, "Successfully logged in"))
       } else {
        Future {
-         LoginResponse(false, "", "No such user here")}
+         LoginResponse(false, "", "Invalid username or password")}
       }
     }
     case None => {
       Future {
-        LoginResponse(false, "", "No such user here")
+        LoginResponse(false, "", "Invalid username or password")
       }
     }
   }
