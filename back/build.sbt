@@ -9,6 +9,10 @@ lazy val scalike     = "org.scalikejdbc" %% "scalikejdbc"                  % "3.
 lazy val scalikeConf = "org.scalikejdbc" %% "scalikejdbc-config"           % "3.5.0"
 lazy val scalikePlay = "org.scalikejdbc" %% "scalikejdbc-play-initializer" % "2.8.0-scalikejdbc-3.5"
 
+// logging libs
+lazy val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
+lazy val scalaLogging = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.3"
+
 lazy val dependencies = Seq(
   guice,
   scalaTest,
@@ -20,7 +24,9 @@ lazy val dependencies = Seq(
   evolutions,
   scalike,
   scalikeConf,
-  scalikePlay
+  scalikePlay,
+  logback,
+  scalaLogging
 )
 
 // Project conf

@@ -9,15 +9,19 @@ import services.UserService
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-
 case class UserRegistration(username: String, email: String, password: String)
 
 @Singleton
 class UserController @Inject()(
-                                val controllerComponents: ControllerComponents,
-                                userService: UserService
-                              )(implicit ec: ExecutionContext)
-  extends BaseController {
+    val controllerComponents: ControllerComponents,
+    authAction: AuthAction,
+    userService: UserService
+)(implicit ec: ExecutionContext)
+    extends BaseController {
+
+  def testAuth(): Action[AnyContent] = authAction.async {
+    Future.successful(Ok)
+  }
 
   def getUser(): Action[AnyContent] = Action.async {
     implicit request: Request[AnyContent] =>
@@ -33,7 +37,7 @@ class UserController @Inject()(
       resultToReturn
   }
 
-  def register() = Action.async { implicit request: Request[AnyContent] =>
+  def register(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
     val json = request.body.asJson.get
     val user = json.as[UserRegistration]
 
