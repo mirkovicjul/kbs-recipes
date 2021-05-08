@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class FireExample {
+public class FireExampleJava {
 
     public static void run() {
         KieContainer kc = KieServices.Factory.get().getKieClasspathContainer();
