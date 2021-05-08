@@ -16,3 +16,5 @@ GET     /user                       controllers.UserController.getUser()
 POST    /register                   controllers.UserController.register()
 
 GET     /testAuth                   controllers.UserController.testAuth()
+
+GET     /recommendation/regular     controllers.RecommendationController.regular()
