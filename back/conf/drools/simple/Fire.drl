@@ -13,12 +13,12 @@
  * limitations under the License.
 */
 
-package org.drools.examples.fire.simple;
+package drools.fire.simple;
 
-import org.drools.examples.fire.Fire;
-import org.drools.examples.fire.Alarm;
-import org.drools.examples.fire.Room;
-import org.drools.examples.fire.Sprinkler;
+import drools.fire.Fire;
+import drools.fire.Alarm;
+import drools.fire.Room;
+import drools.fire.Sprinkler;
 
 rule RaiseAlarm when
      exists Fire()

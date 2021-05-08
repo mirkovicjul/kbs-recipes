@@ -1,6 +1,6 @@
 package controllers
 
-import drools.FireExample
+import drools.fire.FireExample
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
 
 import javax.inject.Inject

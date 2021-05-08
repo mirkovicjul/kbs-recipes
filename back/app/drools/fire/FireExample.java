@@ -13,10 +13,9 @@
  * limitations under the License.
 */
 
-package drools;
+package drools.fire;
 
 import org.kie.api.KieServices;
-import org.kie.api.definition.type.PropertyReactive;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.FactHandle;

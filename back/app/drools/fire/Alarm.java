@@ -13,27 +13,27 @@
  * limitations under the License.
 */
 
-package drools;
+package drools.fire;
 
-public class Fire {
-    private Room room;
+public class Alarm {
+    private String name;
 
-    public Fire(Room room) {
-        this.room = room;
+    public Alarm(String name) {
+        this.name = name;
     }
 
-    public Room getRoom() {
-        return room;
+    public String getName() {
+        return name;
     }
 
-    public void setRoom(Room room) {
-        this.room = room;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
-        return "Fire{" +
-               "room=" + room +
+        return "Alarm{" +
+               "name='" + name + '\'' +
                '}';
     }
 
@@ -42,15 +42,15 @@ public class Fire {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
 
-        Fire fire = (Fire) o;
+        Alarm alarm = (Alarm) o;
 
-        if (!room.equals(fire.room)) { return false; }
+        if (!name.equals(alarm.name)) { return false; }
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return room.hashCode();
+        return name.hashCode();
     }
 }

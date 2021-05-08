@@ -13,7 +13,7 @@
  * limitations under the License.
 */
 
-package drools;
+package drools.fire;
 
 public class Sprinkler {
     private Room room;

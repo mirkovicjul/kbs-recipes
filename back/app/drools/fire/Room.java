@@ -13,12 +13,12 @@
  * limitations under the License.
 */
 
-package drools;
+package drools.fire;
 
-public class Alarm {
+public class Room {
     private String name;
 
-    public Alarm(String name) {
+    public Room(String name) {
         this.name = name;
     }
 
@@ -32,7 +32,7 @@ public class Alarm {
 
     @Override
     public String toString() {
-        return "Alarm{" +
+        return "Room{" +
                "name='" + name + '\'' +
                '}';
     }
@@ -42,9 +42,9 @@ public class Alarm {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
 
-        Alarm alarm = (Alarm) o;
+        Room room = (Room) o;
 
-        if (!name.equals(alarm.name)) { return false; }
+        if (!name.equals(room.name)) { return false; }
 
         return true;
     }
