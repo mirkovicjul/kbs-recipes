@@ -1,0 +1,10 @@
+package drools.recommendation.homepage;
+
+import drools.recommendation.Recipe;
+import drools.recommendation.Recommendation;
+
+rule StupidRule when
+     exists Recipe()
+then
+    System.out.println( "It works!" );
+end

@@ -6,4 +6,8 @@
         <ksession name="FireKS"/>
     </kbase>
 
+    <kbase name="SimpleRecommendation" packages="drools.recommendation.homepage">
+        <ksession name="SimpleRecommendation"/>
+    </kbase>
+
 </kmodule>

@@ -1,9 +1,10 @@
 package modules
 
 import database.{UserRepo, UserRepoPostgres}
+import org.kie.api.runtime.KieContainer
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment}
-import services.{LoginService, LoginServiceImpl, UserService, UserServiceImpl}
+import services.{LoginService, LoginServiceImpl, RecommendationService, RecommendationServiceImpl, UserService, UserServiceImpl}
 
 class RecipeModule extends Module {
 
@@ -11,6 +12,9 @@ class RecipeModule extends Module {
     List(
       bind[LoginService].to(classOf[LoginServiceImpl]).eagerly(),
       bind[UserService].to(classOf[UserServiceImpl]).eagerly(),
-      bind[UserRepo].to(classOf[UserRepoPostgres]).eagerly()
+      bind[UserRepo].to(classOf[UserRepoPostgres]).eagerly(),
+      bind[RecommendationService].to(classOf[RecommendationServiceImpl]).eagerly(),
+
+      bind[KieContainer].toProvider(classOf[KieContainerProvider]).eagerly()
     )
 }

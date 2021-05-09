@@ -8,7 +8,7 @@ import java.util.{HashMap => JHashMap, Scanner => JScanner}
 
 object FireExample {
 
-  def run(): Unit = {
+  lazy val run: Unit = {
     val kc: KieContainer     = KieServices.Factory.get.getKieClasspathContainer
     val ksession: KieSession = kc.newKieSession("FireKS")
 
