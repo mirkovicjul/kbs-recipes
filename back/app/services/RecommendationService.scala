@@ -5,6 +5,7 @@ import drools.SessionCache
 import drools.recommendation.Recommendation
 
 import javax.inject.Inject
+import scala.jdk.CollectionConverters.IteratorHasAsScala
 
 final case class Ingredient(name: String)
 
@@ -19,7 +20,13 @@ class RecommendationServiceImpl @Inject()(sessions: SessionCache)
     with LazyLogging {
 
   override def recommend(userId: Long): List[Recommendation] = {
-    sessions.simpleSession(userId).fireAllRules
+    val session = sessions.simpleSession(userId)
+
+    session.fireAllRules
+
+    val results = session.getQueryResults("SimpleResults")
+
+    println(results.toList.get(0))
 
     // TODO: get results with query
     Nil

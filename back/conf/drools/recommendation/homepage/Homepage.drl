@@ -3,8 +3,15 @@ package drools.recommendation.homepage;
 import drools.recommendation.Recipe;
 import drools.recommendation.Recommendation;
 
+import java.util.List;
+
+query "SimpleResults"
+  $result: List() from collect(Recommendation())
+end
+
 rule StupidRule when
      exists Recipe()
 then
     System.out.println( "It works!" );
+    insert ( new Recommendation(1 , 0.78) );
 end

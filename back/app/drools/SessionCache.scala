@@ -25,7 +25,9 @@ class SessionCacheImpl @Inject()(kieContainer: KieContainer) extends SessionCach
   override def simpleSession(userId: Long): KieSession =
     simpleSessionCache.get(userId, _ => kieContainer.newKieSession("SimpleRecommendation"))
 
-  override def invalidateSimpleSession(userId: Long): Unit =
+  override def invalidateSimpleSession(userId: Long): Unit = {
+    Option(simpleSessionCache.getIfPresent(userId)).foreach(_.dispose())
     simpleSessionCache.invalidate(userId)
+  }
 
 }
