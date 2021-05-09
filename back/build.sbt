@@ -13,6 +13,9 @@ lazy val scalikePlay      = "org.scalikejdbc" %% "scalikejdbc-play-initializer" 
 lazy val logback      = "ch.qos.logback"             % "logback-classic" % "1.2.3"
 lazy val scalaLogging = "com.typesafe.scala-logging" %% "scala-logging"  % "3.9.3"
 
+// cache libs
+lazy val caffeine = "com.github.ben-manes.caffeine" % "caffeine" % "2.8.8"
+
 // kbs libs
 lazy val kieApi               = "org.kie"    % "kie-api"               % "7.53.1.Final" % "provided"
 lazy val droolsCore           = "org.drools" % "drools-core"           % "7.53.1.Final"
@@ -45,7 +48,8 @@ lazy val dependencies = Seq(
   scalikeConf,
   scalikePlay,
   logback,
-  scalaLogging
+  scalaLogging,
+  caffeine
 ) ++ droolsLibs
 
 // Project conf
