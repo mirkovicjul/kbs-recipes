@@ -4,6 +4,7 @@ import com.typesafe.scalalogging.LazyLogging
 import drools.SessionCache
 import drools.recommendation.Recommendation
 
+import java.util
 import javax.inject.Inject
 import scala.jdk.CollectionConverters.IteratorHasAsScala
 
@@ -26,8 +27,11 @@ class RecommendationServiceImpl @Inject()(sessions: SessionCache)
 
     val results = session.getQueryResults("SimpleResults")
 
-    println(results.toList.get(0))
+    val res: util.Map[String, AnyRef] = results.toList.get(0)
 
+    val r: util.ArrayList[Recommendation] = res.get("$result").asInstanceOf[java.util.ArrayList[Recommendation]]
+    val recipe = r.get(0)
+    println("========== " + recipe.getRecipeId)
     // TODO: get results with query
     Nil
   }
