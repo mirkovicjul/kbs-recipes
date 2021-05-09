@@ -1,7 +1,7 @@
 package rules
 
 import drools.SessionCache
-import drools.recommendation.Recipe
+import drools.recommendation.{Recipe, Recommendation}
 import org.scalatest.{MustMatchers, WordSpec}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import services.RecommendationService
@@ -21,7 +21,7 @@ final class SimpleRecommendationSpec
         val userId = 1
 
         // when
-        val result = recommendationService.recommend(userId)
+        val result: Seq[Recommendation] = recommendationService.recommend(userId)
 
         // then
         result mustBe Nil
@@ -36,10 +36,12 @@ final class SimpleRecommendationSpec
         session.insert(new Recipe(2, "pepper"))
 
         // when
-        val result = recommendationService.recommend(userId)
+        val result: Seq[Recommendation] = recommendationService.recommend(userId)
 
         // then
-        result mustBe Nil
+        result.size mustBe 1
+        result.head.getHit mustBe 0.78
+        result.head.getRecipeId mustBe 1
       }
     }
   }

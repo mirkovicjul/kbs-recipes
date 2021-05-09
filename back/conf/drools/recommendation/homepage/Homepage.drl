@@ -6,7 +6,7 @@ import drools.recommendation.Recommendation;
 import java.util.List;
 
 query "SimpleResults"
-  $result: List() from collect(Recommendation())
+  $recommendation: Recommendation()
 end
 
 rule StupidRule when
