@@ -8,9 +8,10 @@ public class User {
     private List<Ingredient> likes;
     private List<Ingredient> allergies;
 
-    public User(Long id, List<Ingredient> likes) {
+    public User(Long id, List<Ingredient> likes, List<Ingredient> allergies) {
         this.id = id;
         this.likes = likes;
+        this.allergies = allergies;
     }
 
     public Long getId() {
@@ -19,6 +20,10 @@ public class User {
 
     public List<Ingredient> getLikes() {
         return likes;
+    }
+
+    public List<Ingredient> getAllergies() {
+        return allergies;
     }
 
 }
