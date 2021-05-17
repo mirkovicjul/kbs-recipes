@@ -1,4 +1,4 @@
-package rules
+package rules.recommendations
 
 import drools.SessionCache
 import drools.recommendation.{Recipe, Recommendation}
