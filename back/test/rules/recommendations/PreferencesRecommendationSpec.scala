@@ -22,7 +22,7 @@ final class PreferencesRecommendationSpec
 
   "PreferencesRecommendationSpec" when {
     "recommend recipes based on user preferences" should {
-      "successfully return recipes recommended by user liked an allegic preferences" in {
+      "successfully return recipes recommended by user liked and allergic lists preferences" in {
         // given
         val userId  = 1
         val session = sessionCache.simpleSession(userId)
@@ -36,6 +36,7 @@ final class PreferencesRecommendationSpec
 
         val ingr = Seq(rice, anchovy, chicken).asJava
         val ingr2 = Seq(chicken).asJava
+
         val allergies = Seq(rice).asJava
 
         val usr = new User(userId, liked, allergies)
@@ -51,7 +52,7 @@ final class PreferencesRecommendationSpec
         val result: Seq[Recommendation] = recommendationService.recommend(userId)
 
         // then
-        result.map(_.getRecipeId) mustBe Seq(recipe2.getId, recipe.getId)
+        result.map(_.getRecipeId) mustBe Seq(recipe2.getId)
       }
     }
   }

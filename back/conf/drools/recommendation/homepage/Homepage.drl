@@ -11,14 +11,6 @@ query "SimpleResults"
   $recommendation: Recommendation()
 end
 
-rule StupidRule when
-     exists Recipe()
-then
-    System.out.println( "It works!" );
-    insert ( new Recommendation(1 , 2) );
-end
-
-
 rule "Recipes with ingredients which user likes"
     salience 100
     when
