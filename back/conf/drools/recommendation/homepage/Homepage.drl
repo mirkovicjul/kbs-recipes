@@ -2,6 +2,8 @@ package drools.recommendation.homepage;
 
 import drools.recommendation.Recipe;
 import drools.recommendation.Recommendation;
+import drools.recommendation.User;
+import drools.recommendation.Ingredient;
 
 import java.util.List;
 
@@ -13,5 +15,18 @@ rule StupidRule when
      exists Recipe()
 then
     System.out.println( "It works!" );
-    insert ( new Recommendation(1 , 0.78) );
+    insert ( new Recommendation(1 , 2) );
+end
+
+
+rule "Recipes with ingredients which user likes"
+    when
+        $recipe: Recipe($id: id, $ingredients: ingredients)
+        $user: User($likes: likes)
+        Number($value: intValue >= 1) from accumulate(
+                	Ingredient($t: this, this memberOf $ingredients) from $likes,
+                	count($t)
+        )
+    then
+        insert(new Recommendation($id, $value*10));
 end

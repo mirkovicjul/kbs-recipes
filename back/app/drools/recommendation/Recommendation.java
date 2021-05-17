@@ -2,20 +2,20 @@ package drools.recommendation;
 
 public class Recommendation {
 
-    private int recipeId;
+    private long recipeId;
 
-    private Double hit;
+    private int hit;
 
-    public Recommendation(int recipeId, Double hit) {
+    public Recommendation(long recipeId, int hit) {
         this.recipeId = recipeId;
         this.hit = hit;
     }
 
-    public int getRecipeId() {
+    public long getRecipeId() {
         return recipeId;
     }
 
-    public Double getHit() {
+    public int getHit() {
         return hit;
     }
 
