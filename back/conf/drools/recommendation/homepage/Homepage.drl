@@ -15,26 +15,15 @@ rule "Recipes with ingredients which user likes"
     salience 100
     when
         $recipe: Recipe($id: id, $ingredients: ingredients)
-        $user: User($likes: likes)
+        $user: User($likes: likes, $allergies: allergies, $unavailable: unavailable)
         Number($value: intValue >= 1) from accumulate(
                 	Ingredient($t: this, this memberOf $ingredients) from $likes,
                 	count($t)
         )
+        not Ingredient(this memberOf $ingredients) from $allergies and
+        not Ingredient(this memberOf $ingredients) from $unavailable
     then
         insert(new Recommendation($id, $value*10));
-end
-
-rule "Remove recipes with ingredients to which the user is allergic"
-    when
-        $recommendation: Recommendation($id: recipeId)
-        $recipe: Recipe(id == $id, $ingredients: ingredients)
-        $user: User($allergies: allergies)
-        Number($value: intValue >= 1) from accumulate(
-                    Ingredient($t: this, this memberOf $ingredients) from $allergies,
-                    count($t)
-        )
-    then
-        delete($recommendation);
 end
 
 rule "Lower the possibility of recommending a recipe with ingredients which user dislikes"

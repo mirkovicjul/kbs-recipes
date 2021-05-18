@@ -8,12 +8,14 @@ public class User {
     private List<Ingredient> likes;
     private List<Ingredient> dislikes;
     private List<Ingredient> allergies;
+    private List<Ingredient> unavailable;
 
-    public User(Long id, List<Ingredient> likes, List<Ingredient> allergies, List<Ingredient> dislikes) {
+    public User(Long id, List<Ingredient> likes, List<Ingredient> allergies, List<Ingredient> dislikes, List<Ingredient> unavailable) {
         this.id = id;
         this.likes = likes;
         this.allergies = allergies;
         this.dislikes = dislikes;
+        this.unavailable = unavailable;
     }
 
     public Long getId() {
@@ -29,5 +31,7 @@ public class User {
     }
 
     public List<Ingredient> getDislikes() { return dislikes; }
+
+    public List<Ingredient> getUnavailable() { return unavailable; }
 
 }
