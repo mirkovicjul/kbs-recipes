@@ -14,7 +14,7 @@ end
 rule "Recipes with ingredients which user likes"
     salience 100
     when
-        $recipe: Recipe($id: id, $ingredients: ingredients)
+        $recipe: Recipe($id: id, $ingredients: ingredients.keySet())
         $user: User($likes: likes, $allergies: allergies, $unavailable: unavailable)
         Number($value: intValue >= 1) from accumulate(
                 	Ingredient($t: this, this memberOf $ingredients) from $likes,
@@ -30,7 +30,7 @@ rule "Lower the possibility of recommending a recipe with ingredients which user
     no-loop
     when
         $recommendation: Recommendation($id: recipeId, $hit: hit)
-        $recipe: Recipe(id == $id, $ingredients: ingredients)
+        $recipe: Recipe(id == $id, $ingredients: ingredients.keySet())
         $user: User($dislikes: dislikes)
         Number($value: intValue >= 1) from accumulate(
                 Ingredient($t: this, this memberOf $ingredients) from $dislikes,

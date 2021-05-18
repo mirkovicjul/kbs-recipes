@@ -25,6 +25,9 @@ lazy val droolsDecisionTables = "org.drools" % "drools-decisiontables" % "7.53.1
 lazy val droolsTemplates      = "org.drools" % "drools-templates"      % "7.53.1.Final"
 lazy val kieInternal          = "org.kie"    % "kie-internal"          % "7.53.1.Final"
 
+// utils
+lazy val jodaTime = "joda-time" % "joda-time" % "2.10.10"
+
 lazy val droolsLibs: Seq[ModuleID] = Seq(
   kieApi,
   droolsCore,
@@ -49,7 +52,8 @@ lazy val dependencies = Seq(
   scalikePlay,
   logback,
   scalaLogging,
-  caffeine
+  caffeine,
+  jodaTime
 ) ++ droolsLibs
 
 // Project conf

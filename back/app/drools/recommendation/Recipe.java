@@ -1,7 +1,7 @@
 package drools.recommendation;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Recipe {
 
@@ -9,9 +9,9 @@ public class Recipe {
 
     private String name;
 
-    private List<Ingredient> ingredients;
+    private Map<Ingredient, Quantity> ingredients;
 
-    public Recipe(long id, String name, List<Ingredient> ingredients) {
+    public Recipe(long id, String name, Map<Ingredient, Quantity> ingredients) {
         this.id = id;
         this.name = name;
         this.ingredients = ingredients;
@@ -20,19 +20,31 @@ public class Recipe {
     public Recipe(long id, String name) {
         this.id = id;
         this.name = name;
-        this.ingredients = new ArrayList<Ingredient>();
+        this.ingredients = new HashMap<Ingredient, Quantity>();
     }
 
     public long getId() {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
 
-    public List<Ingredient> getIngredients() {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Map<Ingredient, Quantity> getIngredients() {
         return ingredients;
+    }
+
+    public void setIngredients(Map<Ingredient, Quantity> ingredients) {
+        this.ingredients = ingredients;
     }
 
 }
