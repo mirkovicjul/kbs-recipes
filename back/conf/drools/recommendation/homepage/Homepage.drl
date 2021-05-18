@@ -36,3 +36,18 @@ rule "Remove recipes with ingredients to which the user is allergic"
     then
         delete($recommendation);
 end
+
+rule "Lower the possibility of recommending a recipe with ingredients which user dislikes"
+    no-loop
+    when
+        $recommendation: Recommendation($id: recipeId, $hit: hit)
+        $recipe: Recipe(id == $id, $ingredients: ingredients)
+        $user: User($dislikes: dislikes)
+        Number($value: intValue >= 1) from accumulate(
+                Ingredient($t: this, this memberOf $ingredients) from $dislikes,
+                count($t)
+        )
+    then
+        $recommendation.setHit($hit - $value*20);
+        update($recommendation);
+end

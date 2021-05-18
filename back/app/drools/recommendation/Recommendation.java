@@ -19,4 +19,8 @@ public class Recommendation {
         return hit;
     }
 
+    public void setHit(int hit) {
+        this.hit = hit;
+    }
+
 }
