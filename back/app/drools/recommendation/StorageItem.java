@@ -1,6 +1,7 @@
 package drools.recommendation;
 
-import org.joda.time.DateTime;
+
+import java.time.LocalDate;
 
 public class StorageItem {
 
@@ -8,9 +9,9 @@ public class StorageItem {
 
     private Quantity quantity;
 
-    private DateTime bestBefore;
+    private LocalDate bestBefore;
 
-    public StorageItem(Ingredient ingredient, Quantity quantity, DateTime bestBefore) {
+    public StorageItem(Ingredient ingredient, Quantity quantity, LocalDate bestBefore) {
         this.ingredient = ingredient;
         this.quantity = quantity;
         this.bestBefore = bestBefore;
@@ -32,11 +33,11 @@ public class StorageItem {
         this.quantity = quantity;
     }
 
-    public DateTime getBestBefore() {
+    public LocalDate getBestBefore() {
         return bestBefore;
     }
 
-    public void setBestBefore(DateTime bestBefore) {
+    public void setBestBefore(LocalDate bestBefore) {
         this.bestBefore = bestBefore;
     }
 }

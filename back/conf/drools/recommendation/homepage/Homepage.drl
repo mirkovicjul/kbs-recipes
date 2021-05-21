@@ -4,6 +4,9 @@ import drools.recommendation.Recipe;
 import drools.recommendation.Recommendation;
 import drools.recommendation.User;
 import drools.recommendation.Ingredient;
+import drools.recommendation.StorageItem;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 import java.util.List;
 
@@ -39,4 +42,28 @@ rule "Lower the possibility of recommending a recipe with ingredients which user
     then
         $recommendation.setHit($hit - $value*20);
         update($recommendation);
+end
+
+rule "Expiration ingredients"
+when
+    $user: User($storage: storage)
+    $expiration: StorageItem($ingredient: ingredient, $bestBefore: bestBefore) from $storage
+    Number($bestUntil: intValue >= 0) from ChronoUnit.DAYS.between(LocalDate.now(), $bestBefore)
+    $recipe: Recipe($id: id, $ingredients: ingredients.keySet(), $ingredient memberOf $ingredients)
+then
+     System.out.printf("Increase hit by %s for recipe '%s'\n", - $bestUntil, $recipe.getName());
+end
+
+rule "Recipes with ingredients which user has in storage"
+when
+    $recipe: Recipe($id: id, $ingredients: ingredients.keySet())
+    $user: User($storage: storage)
+    Number($value: intValue >= 1) from accumulate(
+             StorageItem($t: this, ingredient memberOf $ingredients, $quantity: quantity, $bestBefore: bestBefore) from $storage,
+             init(int count = 0;),
+             action(count += $bestBefore.compareTo(LocalDate.now());),
+             result(count)
+    )
+    then
+        System.out.println("========= imas ingredient" + $value);
 end
