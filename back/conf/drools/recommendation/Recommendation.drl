@@ -1,0 +1,26 @@
+package drools.recommendation;
+
+import drools.recommendation.Recipe;
+import drools.recommendation.Recommendation;
+import drools.recommendation.User;
+import drools.recommendation.Ingredient;
+import drools.recommendation.StorageItem;
+import java.time.temporal.ChronoUnit;
+
+import java.util.List;
+
+
+rule "Collect recommendations"
+    no-loop
+when
+    $recipe: Recipe($id: id)
+    $recommendations: List(size > 1) from collect(Recommendation(recipeId == $id))
+    Number($hit: intValue) from accumulate(
+        Recommendation($partialHit: hit) from $recommendations,
+        sum($partialHit)
+    )
+then
+    System.out.printf("Collecting recipe %s, hit %s\n", $id, $hit);
+    $recommendations.forEach(r -> delete(r));
+    insert(new Recommendation($id, $hit));
+end

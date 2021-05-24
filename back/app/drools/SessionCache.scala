@@ -23,7 +23,7 @@ class SessionCacheImpl @Inject()(kieContainer: KieContainer) extends SessionCach
       .maximumSize(10_000).build[Long, KieSession]
 
   override def simpleSession(userId: Long): KieSession =
-    simpleSessionCache.get(userId, _ => kieContainer.newKieSession("SimpleRecommendation"))
+    simpleSessionCache.get(userId, _ => kieContainer.newKieSession("Recommendation"))
 
   override def invalidateSimpleSession(userId: Long): Unit = {
     Option(simpleSessionCache.getIfPresent(userId)).foreach(_.dispose())

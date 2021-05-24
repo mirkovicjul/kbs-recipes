@@ -1,0 +1,21 @@
+package drools.recommendation;
+
+import drools.recommendation.Recipe;
+import drools.recommendation.Recommendation;
+import drools.recommendation.User;
+import drools.recommendation.Ingredient;
+import drools.recommendation.StorageItem;
+import java.time.temporal.ChronoUnit;
+
+
+rule "Expiration ingredients"
+    salience 98
+when
+    $user: User($storage: storage)
+    $expiration: StorageItem($ingredient: ingredient, $bestBefore: bestBefore) from $storage
+    Number($bestUntil: intValue >= 0 && <= 30) from ChronoUnit.DAYS.between(LocalDate.now(), $bestBefore)
+    $recipe: Recipe($id: id, $ingredients: ingredients.keySet(), $ingredient memberOf $ingredients)
+then
+    insert(new Recommendation($id, $bestUntil));
+    System.out.printf("Increase hit by %s for recipe '%s'\n", $bestUntil, $recipe.getId());
+end

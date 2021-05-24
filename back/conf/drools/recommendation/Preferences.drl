@@ -1,0 +1,45 @@
+package drools.recommendation;
+
+import drools.recommendation.Recipe;
+import drools.recommendation.Recommendation;
+import drools.recommendation.User;
+import drools.recommendation.Ingredient;
+import drools.recommendation.StorageItem;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
+import java.util.List;
+
+
+// TODO: query search top 5 results
+
+rule "Recipes with ingredients which user likes"
+    salience 100
+    when
+        $recipe: Recipe($id: id, $ingredients: ingredients.keySet())
+        $user: User($likes: likes, $allergies: allergies, $unavailable: unavailable)
+        Number($value: intValue >= 1) from accumulate(
+                	Ingredient($t: this, this memberOf $ingredients) from $likes,
+                	count($t)
+        )
+        not Ingredient(this memberOf $ingredients) from $allergies and
+        not Ingredient(this memberOf $ingredients) from $unavailable
+    then
+        insert(new Recommendation($id, $value*10));
+end
+
+rule "Lower the possibility of recommending a recipe with ingredients which user dislikes"
+    salience 99
+    no-loop
+    when
+        $recommendation: Recommendation($id: recipeId, $hit: hit)
+        $recipe: Recipe(id == $id, $ingredients: ingredients.keySet())
+        $user: User($dislikes: dislikes)
+        Number($value: intValue >= 1) from accumulate(
+                Ingredient($t: this, this memberOf $ingredients) from $dislikes,
+                count($t)
+        )
+    then
+        $recommendation.setHit($hit - $value*20);
+        update($recommendation);
+end
