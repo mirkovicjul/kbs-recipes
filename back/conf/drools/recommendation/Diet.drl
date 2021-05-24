@@ -1,0 +1,29 @@
+package drools.recommendation;
+
+import drools.recommendation.Recipe;
+import drools.recommendation.Ingredient;
+import drools.recommendation.IngredientType;
+
+
+rule "Mark vegetarian recipes"
+agenda-group "Diet"
+when
+    $recipe: Recipe($ingredients: ingredients.keySet())
+    Number($nonVegetarianIngredients: intValue == 0) from accumulate(
+        Ingredient($t: this, $type: type, $type == IngredientType.Meat) from $ingredients,
+        count($t)
+    )
+then
+    modify($recipe) { setVegetarian(true) }
+end
+
+rule "Mark vegan recipes" extends "Mark vegetarian recipes"
+agenda-group "Diet"
+when
+    Number($nonVeganIngredients: intValue == 0) from accumulate(
+            Ingredient($t: this, $type: type, $type == IngredientType.Dairy || $type == IngredientType.Eggs) from $ingredients,
+            count($t)
+    )
+then
+    modify($recipe) { setVegan(true) }
+end

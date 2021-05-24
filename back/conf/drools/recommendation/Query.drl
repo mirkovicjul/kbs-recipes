@@ -10,3 +10,7 @@ query "SimpleResults"
   )
   $recommendation: Recommendation(hit == $maxHit)
 end
+
+query "Recipes"
+    $recipe: Recipe()
+end

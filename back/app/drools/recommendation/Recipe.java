@@ -11,6 +11,10 @@ public class Recipe {
 
     private Map<Ingredient, Quantity> ingredients;
 
+    private Boolean vegan;
+
+    private Boolean vegetarian;
+
     public Recipe(long id, String name, Map<Ingredient, Quantity> ingredients) {
         this.id = id;
         this.name = name;
@@ -47,4 +51,19 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
+    public Boolean getVegan() {
+        return vegan;
+    }
+
+    public void setVegan(Boolean vegan) {
+        this.vegan = vegan;
+    }
+
+    public Boolean getVegetarian() {
+        return vegetarian;
+    }
+
+    public void setVegetarian(Boolean vegetarian) {
+        this.vegetarian = vegetarian;
+    }
 }
