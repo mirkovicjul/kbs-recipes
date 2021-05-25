@@ -14,6 +14,15 @@ public class Ingredient {
         this.name = name;
     }
 
+    public Ingredient(Long id, String name, IngredientType type, int fats, int carbs, int protein) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.fats = fats;
+        this.carbs = carbs;
+        this.protein = protein;
+    }
+
     public Long getId() {
         return id;
     }

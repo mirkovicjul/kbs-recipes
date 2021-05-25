@@ -11,7 +11,7 @@ public class Quantity {
         this.unit = unit;
     }
 
-    public Double toGrams() {
+    public Double getGrams() {
         return this.amount * unit.getProportion();
     }
 

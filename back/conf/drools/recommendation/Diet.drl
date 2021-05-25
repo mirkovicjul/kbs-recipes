@@ -29,3 +29,21 @@ when
 then
     modify($recipe) { setVegan(true) }
 end
+
+rule "Mark recipe as junk food"
+agenda-group "Diet"
+when
+    $r: Recipe($id: id, $ingredients: ingredients.keySet(), $servings: servings, $quantity: ingredients.values())
+    Number($rCalories: doubleValue) from accumulate(
+        Ingredient($fats: fats, $carbs: carbs, $protein: protein) from $ingredients,
+        init(double calories = 0.0;),
+        action(calories += $fats * 9 + $carbs * 4 + $protein * 4;),
+        result(calories)
+    )
+    Number($rGrams: doubleValue) from accumulate(
+        Quantity($grams: grams) from $quantity,
+        sum($grams)
+    )
+then 
+    System.out.printf("%s \n", $rCalories);
+end
