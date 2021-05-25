@@ -7,17 +7,19 @@ on:
     branches: [ main ]
 
 jobs:
-  services:
-    postgres:
-      image: postrespostgres:9.6.1-alpine
-      ports:
-        - 5432:5432
-      env:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_DB: recipes
-  build:
+  build-test:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postrespostgres:9.6.1-alpine
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: recipes
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
