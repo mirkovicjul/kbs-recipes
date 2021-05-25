@@ -18,5 +18,7 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
+    - name: cd into back
+      run: cd back
     - name: Run tests
       run: sbt test
