@@ -7,6 +7,15 @@ on:
     branches: [ main ]
 
 jobs:
+  services:
+    postgres:
+      image: postrespostgres:9.6.1-alpine
+      ports:
+        - 5432:5432
+      env:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: recipes
   build:
     runs-on: ubuntu-latest
     steps:

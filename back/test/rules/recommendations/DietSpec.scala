@@ -12,8 +12,7 @@ import scala.jdk.CollectionConverters.IteratorHasAsScala
 
 class DietSpec extends WordSpec with GuiceOneAppPerSuite with MustMatchers {
 
-  val recommendationService: RecommendationService =
-    app.injector.instanceOf[RecommendationService]
+  val recommendationService: RecommendationService = app.injector.instanceOf[RecommendationService]
   val sessionCache: SessionCache = app.injector.instanceOf[SessionCache]
 
   "DietSpec" when {
