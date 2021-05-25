@@ -11,6 +11,10 @@ public class Quantity {
         this.unit = unit;
     }
 
+    public Double toGrams() {
+        return this.amount * unit.getProportion();
+    }
+
     public Double getAmount() {
         return amount;
     }

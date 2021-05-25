@@ -8,7 +8,6 @@ public class Ingredient {
     private int fats;
     private int carbs;
     private int protein;
-    private int calories;
 
     public Ingredient(Long id, String name) {
         this.id = id;
@@ -29,5 +28,37 @@ public class Ingredient {
 
     public void setType(IngredientType type) {
         this.type = type;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getFats() {
+        return fats;
+    }
+
+    public void setFats(int fats) {
+        this.fats = fats;
+    }
+
+    public int getCarbs() {
+        return carbs;
+    }
+
+    public void setCarbs(int carbs) {
+        this.carbs = carbs;
+    }
+
+    public int getProtein() {
+        return protein;
+    }
+
+    public void setProtein(int protein) {
+        this.protein = protein;
     }
 }
