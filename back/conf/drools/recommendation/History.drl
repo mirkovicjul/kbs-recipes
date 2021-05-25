@@ -1,0 +1,36 @@
+package drools.recommendation;
+
+import drools.recommendation.Recipe;
+import drools.recommendation.Ingredient;
+import drools.recommendation.IngredientType;
+import drools.conclusion.EatingUnhealthy;
+
+
+rule "User is eating unhealthy"
+agenda-group "Conclusions"
+when
+    $u: User($id: id, $history: history)
+    Number(intValue > 5) from accumulate(
+       MadeRecipe(
+           $t: this,
+           $r: recipe,
+           $r.junkFood == true,
+           madeDate.isAfter(LocalDate.now().minusDays(10))) from $history,
+       count($t)
+    )
+then
+    insert(new EatingUnhealthy($id));
+end
+
+rule "Remove unhealthy food if user is eating unhealtyh"
+when
+    User($id: id)
+    EatingUnhealthy(userId == $id)
+then
+    System.out.printf("Remove unhealthy recipes from recommendations for user %s.\n", $id);
+end
+
+// TODO rule recommend recipe which user has been making a couple of time but not in last 2/3 months
+
+
+// TODO rule remove recommendation for recipes which user was making recently

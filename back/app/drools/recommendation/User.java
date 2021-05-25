@@ -16,6 +16,8 @@ public class User {
 
     private List<StorageItem> storage;
 
+    private List<MadeRecipe> history;
+
     public User(
             Long id,
             List<Ingredient> likes,
@@ -80,4 +82,11 @@ public class User {
         this.storage = storage;
     }
 
+    public List<MadeRecipe> getHistory() {
+        return history;
+    }
+
+    public void setHistory(List<MadeRecipe> history) {
+        this.history = history;
+    }
 }
