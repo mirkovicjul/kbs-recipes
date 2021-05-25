@@ -22,7 +22,7 @@ class DietSpec extends WordSpec
       "successfully mark vegetarian recipes" in {
         // given
         val session = sessionCache.simpleSession(1)
-        val grams = new Measurement("grams")
+        val grams = new Measurement("grams", 1)
 
         val rice    = new Ingredient(1, "rice")
         rice.setType(IngredientType.Grains)

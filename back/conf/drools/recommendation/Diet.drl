@@ -7,6 +7,7 @@ import drools.recommendation.IngredientType;
 
 rule "Mark vegetarian recipes"
 agenda-group "Diet"
+no-loop
 when
     $recipe: Recipe($ingredients: ingredients.keySet())
     Number($nonVegetarianIngredients: intValue == 0) from accumulate(
@@ -19,6 +20,7 @@ end
 
 rule "Mark vegan recipes" extends "Mark vegetarian recipes"
 agenda-group "Diet"
+no-loop
 when
     Number($nonVeganIngredients: intValue == 0) from accumulate(
             Ingredient($t: this, $type: type, $type == IngredientType.Dairy || $type == IngredientType.Eggs) from $ingredients,

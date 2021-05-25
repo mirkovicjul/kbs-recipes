@@ -25,7 +25,7 @@ class StorageRecommendationSpec
       "return recipes sorted by storage ingredient expiration date" in {
         // given
 
-        val grams = new Measurement("grams")
+        val grams = new Measurement("grams", 1)
 
         val rice    = new Ingredient(1, "rice")
         val anchovy = new Ingredient(2, "anchovy")

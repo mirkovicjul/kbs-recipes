@@ -6,10 +6,6 @@ public class Measurement {
 
     private Double proportion;
 
-    public Measurement(String name) {
-        this.name = name;
-    }
-
     public Measurement(String name, Double proportion) {
         this.name = name;
         this.proportion = proportion;
