@@ -5,24 +5,23 @@ import drools.recommendation.Ingredient;
 import drools.recommendation.IngredientType;
 import drools.conclusion.EatingUnhealthy;
 
-
 rule "User is eating unhealthy"
 agenda-group "Conclusions"
 when
-    $u: User($id: id, $history: history)
+    $u: User($id: id)
     Number(intValue > 5) from accumulate(
        MadeRecipe(
            $t: this,
            $r: recipe,
            $r.junkFood == true,
-           madeDate.isAfter(LocalDate.now().minusDays(10))) from $history,
+           madeDate.isAfter(LocalDate.now().minusDays(10))) from entry-point $history,
        count($t)
     )
 then
     insert(new EatingUnhealthy($id));
 end
 
-rule "Remove unhealthy food if user is eating unhealtyh"
+rule "Remove unhealthy food if user is eating unhealthy"
 when
     User($id: id)
     EatingUnhealthy(userId == $id)
@@ -30,7 +29,28 @@ then
     System.out.printf("Remove unhealthy recipes from recommendations for user %s.\n", $id);
 end
 
-// TODO rule recommend recipe which user has been making a couple of time but not in last 2/3 months
+rule "Increase possibilty of recommending recipe which user has been making in the past(6 mo ago or more)"
+agenda-group "Recommendation"
+when
+    $recipe: Recipe($id: id)
+    $recommendation: Recommendation(recipeId == $id)
+    Number(intValue == 0) from accumulate(
+        MadeRecipe($t: this, madeDate.isBefore(LocalDate.now().minusMonths(6))) from entry-point $history,
+        count($t)
+    )
+then
+    System.out.printf("We should increase hit for %s recipe.\n", $id);
+end
 
-
-// TODO rule remove recommendation for recipes which user was making recently
+rule "Remove recommendations of recipes which user made in minimum 6 times in last 2 months(recently)"
+agenda-group "Recommendation"
+when
+    $recipe: Recipe($id: id)
+    $recommendation: Recommendation(recipeId == $id)
+    Number(intValue > 5) from accumulate(
+        MadeRecipe($t: this, madeDate.isAfter(LocalDate.now().minusMonths(2))) from entry-point $history,
+        count($t)
+    )
+then
+    System.out.printf("We should remove %s recipe from recommendations.\n", $id);
+end
