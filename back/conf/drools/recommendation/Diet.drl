@@ -2,18 +2,18 @@ package drools.recommendation;
 
 import drools.recommendation.Recipe;
 import drools.recommendation.Ingredient;
-import drools.recommendation.Quantity;
 import drools.recommendation.IngredientType;
+import drools.recommendation.RecipeIngredient;
 import java.util.Map.Entry;
 
 rule "Mark vegetarian recipes"
 agenda-group "Diet"
 no-loop
 when
-    $recipe: Recipe($ingredients: ingredients.keySet())
+    $recipe: Recipe($ingredients: ingredients)
     Number($nonVegetarianIngredients: intValue == 0) from accumulate(
-        Ingredient($t: this, $type: type, $type == IngredientType.Meat) from $ingredients,
-        count($t)
+        RecipeIngredient($ing: ingredient, $ing.getType() == IngredientType.Meat) from $ingredients,
+        count($ing)
     )
 then
     modify($recipe) { setVegetarian(true) }
@@ -24,8 +24,8 @@ agenda-group "Diet"
 no-loop
 when
     Number($nonVeganIngredients: intValue == 0) from accumulate(
-            Ingredient($t: this, $type: type, $type == IngredientType.Dairy || $type == IngredientType.Eggs) from $ingredients,
-            count($t)
+            RecipeIngredient($ing: ingredient, $ing.getType() == IngredientType.Dairy || $ing.getType() == IngredientType.Eggs) from $ingredients,
+            count($ing)
     )
 then
     modify($recipe) { setVegan(true) }
@@ -34,13 +34,18 @@ end
 rule "Mark recipe as junk food"
 agenda-group "Diet"
 when
-    $r: Recipe($id: id, $ingredients: ingredients.entrySet(), $servings: servings)
-    Number($rCalories: doubleValue) from accumulate(
-        Entry($key: key, $value: value) from $ingredients,
-        init(double calories = 0.0;),
-        action(calories += 4.0;),
-        result(calories)
-    )
-then 
-    System.out.printf("%s \n", $rCalories);
+    $r: Recipe($id: id, $ingredients: ingredients, $servings: servings)
+    accumulate(
+        RecipeIngredient($i: ingredient, $amount: amount, $unit: unit) from $ingredients,
+        $carbs: sum(((($i.getCarbs()) / 100.0) * $amount * $unit.getProportion()) / $servings),
+        $fats: sum(((($i.getFats()) / 100.0) * $amount * $unit.getProportion()) / $servings),
+        $protein: sum(((($i.getProtein()) / 100.0) * $amount * $unit.getProportion()) / $servings),
+        $calories: sum(((($i.getFats() * 9.0 + $i.getCarbs() * 4.0 + $i.getProtein() * 4.0) / 100.0) * $amount * $unit.getProportion()) / $servings)
+    )    
+    eval($calories >= 500.0)
+    eval($carbs + $fats >= 100.0)
+    eval($protein < 5.0)
+then
+    System.out.printf("Carbs: %s, fats: %s, protein: %s, calories: %s\n", $carbs, $fats, $protein, $calories);
+    System.out.printf("Recipe %s is junk food.\n", $id);
 end

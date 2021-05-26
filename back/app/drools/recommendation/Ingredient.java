@@ -5,16 +5,16 @@ public class Ingredient {
     private Long id;
     private String name;
     private IngredientType type;
-    private int fats;
-    private int carbs;
-    private int protein;
+    private Double fats;
+    private Double carbs;
+    private Double protein;
 
     public Ingredient(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Ingredient(Long id, String name, IngredientType type, int fats, int carbs, int protein) {
+    public Ingredient(Long id, String name, IngredientType type, Double fats, Double carbs, Double protein) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -47,27 +47,28 @@ public class Ingredient {
         this.name = name;
     }
 
-    public int getFats() {
+    public Double getFats() {
         return fats;
     }
 
-    public void setFats(int fats) {
+    public void setFats(Double fats) {
         this.fats = fats;
     }
 
-    public int getCarbs() {
+    public Double getCarbs() {
         return carbs;
     }
 
-    public void setCarbs(int carbs) {
+    public void setCarbs(Double carbs) {
         this.carbs = carbs;
     }
 
-    public int getProtein() {
+    public Double getProtein() {
         return protein;
     }
 
-    public void setProtein(int protein) {
+    public void setProtein(Double protein) {
         this.protein = protein;
     }
+
 }

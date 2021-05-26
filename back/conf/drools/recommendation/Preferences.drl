@@ -1,6 +1,7 @@
 package drools.recommendation;
 
 import drools.recommendation.Recipe;
+import drools.recommendation.RecipeIngredient;
 import drools.recommendation.Recommendation;
 import drools.recommendation.User;
 import drools.recommendation.Ingredient;
@@ -16,7 +17,11 @@ import java.util.List;
 rule "Recipes with ingredients which user likes"
     salience 100
     when
-        $recipe: Recipe($id: id, $ingredients: ingredients.keySet())
+        $recipe: Recipe($id: id, $rIngredients: ingredients)
+        $ingredients: List() from accumulate(
+            RecipeIngredient($i: ingredient) from $rIngredients,
+            collectList($i)
+        )
         $user: User($likes: likes, $allergies: allergies, $unavailable: unavailable)
         Number($value: intValue >= 1) from accumulate(
                 	Ingredient($t: this, this memberOf $ingredients) from $likes,
@@ -33,7 +38,11 @@ rule "Lower the possibility of recommending a recipe with ingredients which user
     no-loop
     when
         $recommendation: Recommendation($id: recipeId, $hit: hit)
-        $recipe: Recipe(id == $id, $ingredients: ingredients.keySet())
+        $recipe: Recipe($rIngredients: ingredients)
+        $ingredients: List() from accumulate(
+            RecipeIngredient($i: ingredient) from $rIngredients,
+            collectList($i)
+        )
         $user: User($dislikes: dislikes)
         Number($value: intValue >= 1) from accumulate(
                 Ingredient($t: this, this memberOf $ingredients) from $dislikes,

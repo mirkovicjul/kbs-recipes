@@ -53,18 +53,18 @@ trait Ingredients {
     6,
     "potato",
     IngredientType.Vegetable,
-    0,
-    0,
-    0
+    0.1,
+    20.1,
+    1.9
   )
 
   val sunflowerOil: Ingredient = new Ingredient(
     7,
     "Sunflower Oil",
     IngredientType.Oils,
-    0,
-    0,
-    0
+    100.0,
+    0.0,
+    0.0
   )
 
   val allIngredients: Seq[Ingredient] = Seq(

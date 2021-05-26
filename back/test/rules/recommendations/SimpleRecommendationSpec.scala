@@ -1,5 +1,6 @@
 package rules.recommendations
 
+import com.google.common.collect.ImmutableList
 import drools.SessionCache
 import drools.recommendation.{Recipe, Recommendation}
 import org.scalatest.{MustMatchers, WordSpec}
@@ -32,8 +33,8 @@ final class SimpleRecommendationSpec
         val userId = 2
         val session = sessionCache.simpleSession(userId)
 
-        session.insert(new Recipe(1, "salt"))
-        session.insert(new Recipe(2, "pepper"))
+        session.insert(new Recipe(1, "salt", ImmutableList.of()))
+        session.insert(new Recipe(2, "pepper", ImmutableList.of()))
 
         // when
         val result: Seq[Recommendation] = recommendationService.recommend(userId)

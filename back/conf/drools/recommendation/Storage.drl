@@ -12,9 +12,13 @@ rule "Expiration ingredients"
     salience 98
 when
     $user: User($storage: storage)
-    $expiration: StorageItem($ingredient: ingredient, $bestBefore: bestBefore) from $storage
+    $recipe: Recipe($id: id, $rIngredients: ingredients)
+    $ingredients: List() from accumulate(
+        RecipeIngredient($i: ingredient) from $rIngredients,
+        collectList($i)
+    )
+    $expiration: StorageItem(ingredient memberOf $ingredients, $bestBefore: bestBefore) from $storage
     Number($bestUntil: intValue >= 0 && <= 30) from ChronoUnit.DAYS.between(LocalDate.now(), $bestBefore)
-    $recipe: Recipe($id: id, $ingredients: ingredients.keySet(), $ingredient memberOf $ingredients)
 then
     insert(new Recommendation($id, $bestUntil));
     System.out.printf("Increase hit by %s for recipe '%s'\n", $bestUntil, $recipe.getId());

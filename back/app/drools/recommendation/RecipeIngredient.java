@@ -1,18 +1,25 @@
 package drools.recommendation;
 
-public class Quantity {
+public class RecipeIngredient {
+
+    private Ingredient ingredient;
 
     private Double amount;
 
     private Measurement unit;
 
-    public Quantity(final Double amount, Measurement unit) {
+    public RecipeIngredient(Ingredient ingredient, Double amount, Measurement unit) {
+        this.ingredient = ingredient;
         this.amount = amount;
         this.unit = unit;
     }
 
-    public Double getGrams() {
-        return this.amount * unit.getProportion();
+    public Ingredient getIngredient() {
+        return ingredient;
+    }
+
+    public void setIngredient(Ingredient ingredient) {
+        this.ingredient = ingredient;
     }
 
     public Double getAmount() {
@@ -30,5 +37,4 @@ public class Quantity {
     public void setUnit(Measurement unit) {
         this.unit = unit;
     }
-
 }
