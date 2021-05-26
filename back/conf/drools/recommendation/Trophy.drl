@@ -5,7 +5,7 @@ import drools.recommendation.Ingredient;
 import drools.recommendation.IngredientType;
 import drools.recommendation.MadeRecipe;
 import drools.conclusion.Vegan;
-import drools.conclusion.Vegeterian;
+import drools.conclusion.Vegetarian;
 import drools.conclusion.OnKetoDiet;
 
 
@@ -13,9 +13,10 @@ rule "User acts like a vegeterian(90% of made recipes in last month is vegeteria
 when
     User($id: id)
     Number(doubleValue > 0.9) from accumulate(
-        MadeRecipe($p: recipe.vegetarian) from entry-point $history,
+        MadeRecipe($p: recipe.vegetarian, madeDate.isAfter(LocalDate.now().minusMonths(1))) from entry-point $history,
         average($p ? 1.0 : 0.0)
     )
 then
+    insert(new Vegetarian($id));
     System.out.printf("Insert a fact that user %s is vegetarian.\n", $id);
 end

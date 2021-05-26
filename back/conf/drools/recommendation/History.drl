@@ -9,7 +9,7 @@ rule "User is eating unhealthy"
 agenda-group "Conclusions"
 when
     $u: User($id: id)
-    Number(intValue > 5) from accumulate(
+    Number(intValue >= 3) from accumulate(
        MadeRecipe(
            $t: this,
            $r: recipe,
@@ -22,35 +22,50 @@ then
 end
 
 rule "Remove unhealthy food if user is eating unhealthy"
+no-loop
 when
     User($id: id)
     EatingUnhealthy(userId == $id)
+    $unhealthyRecipes: List() from accumulate(
+        Recipe($rId: id, junkFood == true),
+        collectList($rId)
+    )
+    $unhealthyRecommendations: List() from accumulate(
+        Recommendation($t: this, $recipeId: recipeId, $recipeId memberOf $unhealthyRecipes),
+        collectList($t)
+    )
 then
-    System.out.printf("Remove unhealthy recipes from recommendations for user %s.\n", $id);
+    $unhealthyRecommendations.forEach(r -> delete(r));
+    System.out.printf("Remove unhealthy recipes(%s) from recommendations for user %s.\n", $unhealthyRecommendations, $id);
 end
 
 rule "Increase possibilty of recommending recipe which user has been making in the past(6 mo ago or more)"
 agenda-group "Recommendation"
+no-loop
 when
     $recipe: Recipe($id: id)
-    $recommendation: Recommendation(recipeId == $id)
+    Number(intValue >= 3) from accumulate(
+        MadeRecipe($t: this, recipe.id == $id, madeDate.isBefore(LocalDate.now().minusMonths(6))) from entry-point $history,
+        count($t)
+    )
     Number(intValue == 0) from accumulate(
-        MadeRecipe($t: this, madeDate.isBefore(LocalDate.now().minusMonths(6))) from entry-point $history,
+        MadeRecipe($t: this, recipe.id == $id, madeDate.isAfter(LocalDate.now().minusMonths(6))) from entry-point $history,
         count($t)
     )
 then
-    System.out.printf("We should increase hit for %s recipe.\n", $id);
+    insert(new Recommendation($id, 5));
+    System.out.printf("Increase hit for %s recipe.\n", $id);
 end
 
-rule "Remove recommendations of recipes which user made in minimum 6 times in last 2 months(recently)"
+rule "Remove recommendations of recipes which user made minimum 6 times in last 2 months(recently)"
 agenda-group "Recommendation"
 when
     $recipe: Recipe($id: id)
-    $recommendation: Recommendation(recipeId == $id)
     Number(intValue > 5) from accumulate(
-        MadeRecipe($t: this, madeDate.isAfter(LocalDate.now().minusMonths(2))) from entry-point $history,
+        MadeRecipe($t: this, recipe.id == $id, madeDate.isAfter(LocalDate.now().minusMonths(2))) from entry-point $history,
         count($t)
     )
 then
+    insert(new Recommendation($id, -5));
     System.out.printf("We should remove %s recipe from recommendations.\n", $id);
 end

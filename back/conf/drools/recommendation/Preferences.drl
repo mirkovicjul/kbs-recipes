@@ -11,9 +11,6 @@ import java.time.temporal.ChronoUnit;
 
 import java.util.List;
 
-
-// TODO: query search top 5 results
-
 rule "Recipes with ingredients which user likes"
     salience 100
     when
@@ -51,4 +48,13 @@ rule "Lower the possibility of recommending a recipe with ingredients which user
     then
         $recommendation.setHit($hit - $value*20);
         update($recommendation);
+end
+
+rule "Recommend vegetarian recipes"
+when
+    Vegetarian($userId: userId)
+    Recipe($id: id, vegetarian == true)
+then
+    insert(new Recommendation($id, 10));
+    System.out.printf("Recommend vegetarian recipe %s to user %s.\n", $id, $userId);
 end

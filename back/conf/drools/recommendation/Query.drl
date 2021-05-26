@@ -2,7 +2,6 @@ package drools.recommendation;
 
 import drools.recommendation.Recommendation;
 
-
 query "SimpleResults"
   Number($maxHit: intValue) from accumulate(
       Recommendation($hit: hit),

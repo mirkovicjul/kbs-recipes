@@ -53,7 +53,7 @@ class DietSpec extends WordSpec with GuiceOneAppPerSuite with MustMatchers {
           .toSeq
 
         // then
-        result.exists(_.getId == frenchFries.getId) mustBe true
+        result.find(_.getId == frenchFries.getId).head.getJunkFood mustBe true
       }
 
     }

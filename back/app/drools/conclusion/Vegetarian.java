@@ -1,10 +1,10 @@
 package drools.conclusion;
 
-public class Vegeterian {
+public class Vegetarian {
 
     private Long userId;
 
-    public Vegeterian(Long userId) {
+    public Vegetarian(Long userId) {
         this.userId = userId;
     }
 

@@ -33,6 +33,7 @@ end
 
 rule "Mark recipe as junk food"
 agenda-group "Diet"
+no-loop
 when
     $r: Recipe($id: id, $ingredients: ingredients, $servings: servings)
     accumulate(
@@ -46,6 +47,7 @@ when
     eval($carbs + $fats >= 100.0)
     eval($protein < 5.0)
 then
+    modify($r) { setJunkFood(true); }
     System.out.printf("Carbs: %s, fats: %s, protein: %s, calories: %s\n", $carbs, $fats, $protein, $calories);
     System.out.printf("Recipe %s is junk food.\n", $id);
 end
