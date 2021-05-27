@@ -12,8 +12,7 @@ class KieContainerProvider @Inject()(
 )(implicit ec: ExecutionContext)
     extends Provider[KieContainer] {
 
-  private val singleton: KieContainer =
-    KieServices.Factory.get.getKieClasspathContainer
+  private val singleton: KieContainer = KieServices.Factory.get.newKieClasspathContainer
 
   override def get(): KieContainer = singleton
 
