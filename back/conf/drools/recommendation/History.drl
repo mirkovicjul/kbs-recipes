@@ -14,10 +14,11 @@ when
            $t: this,
            $r: recipe,
            $r.junkFood == true,
-           madeDate.isAfter(LocalDate.now().minusDays(10))) from entry-point $history,
+           madeDate.isAfter(LocalDate.now().minusDays(10))) from entry-point "history",
        count($t)
     )
 then
+    System.out.println($id + " user is eating unhealthy");
     insert(new EatingUnhealthy($id));
 end
 
@@ -30,7 +31,7 @@ when
         Recipe($rId: id, junkFood == true),
         collectList($rId)
     )
-    $unhealthyRecommendations: List() from accumulate(
+    $unhealthyRecommendations: List(size > 0) from accumulate(
         Recommendation($t: this, $recipeId: recipeId, $recipeId memberOf $unhealthyRecipes),
         collectList($t)
     )
@@ -39,17 +40,17 @@ then
     System.out.printf("Remove unhealthy recipes(%s) from recommendations for user %s.\n", $unhealthyRecommendations, $id);
 end
 
-rule "Increase possibilty of recommending recipe which user has been making in the past(6 mo ago or more)"
+rule "Increase possibility of recommending recipe which user has been making in the past(6 mo ago or more)"
 agenda-group "Recommendation"
 no-loop
 when
     $recipe: Recipe($id: id)
     Number(intValue >= 3) from accumulate(
-        MadeRecipe($t: this, recipe.id == $id, madeDate.isBefore(LocalDate.now().minusMonths(6))) from entry-point $history,
+        MadeRecipe($t: this, recipe.id == $id, madeDate.isBefore(LocalDate.now().minusMonths(6))) from entry-point "history",
         count($t)
     )
     Number(intValue == 0) from accumulate(
-        MadeRecipe($t: this, recipe.id == $id, madeDate.isAfter(LocalDate.now().minusMonths(6))) from entry-point $history,
+        MadeRecipe($t: this, recipe.id == $id, madeDate.isAfter(LocalDate.now().minusMonths(6))) from entry-point "history",
         count($t)
     )
 then
@@ -62,7 +63,7 @@ agenda-group "Recommendation"
 when
     $recipe: Recipe($id: id)
     Number(intValue > 5) from accumulate(
-        MadeRecipe($t: this, recipe.id == $id, madeDate.isAfter(LocalDate.now().minusMonths(2))) from entry-point $history,
+        MadeRecipe($t: this, recipe.id == $id, madeDate.isAfter(LocalDate.now().minusMonths(2))) from entry-point "history",
         count($t)
     )
 then

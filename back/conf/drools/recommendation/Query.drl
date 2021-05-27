@@ -13,3 +13,7 @@ end
 query "Recipes"
     $recipe: Recipe()
 end
+
+query "Conclusions"
+    $unhealthy: EatingUnhealthy()
+end
