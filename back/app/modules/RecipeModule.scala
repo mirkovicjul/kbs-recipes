@@ -1,6 +1,6 @@
 package modules
 
-import database.{IngredientRepo, IngredientRepoImpl, RecipeRepo, RecipeRepoImpl, UserRepo, UserRepoPostgres}
+import database.{IngredientRepo, IngredientRepoImpl, MeasurementRepo, MeasurementRepoImpl, RecipeRepo, RecipeRepoImpl, UserRepo, UserRepoPostgres}
 import drools.{SessionCache, SessionCacheImpl}
 import org.kie.api.runtime.KieContainer
 import play.api.inject.{Binding, Module}
@@ -20,6 +20,7 @@ class RecipeModule extends Module {
       bind[UserRepo].to(classOf[UserRepoPostgres]).eagerly(),
       bind[RecipeRepo].to(classOf[RecipeRepoImpl]).eagerly(),
       bind[IngredientRepo].to(classOf[IngredientRepoImpl]).eagerly(),
+      bind[MeasurementRepo].to(classOf[MeasurementRepoImpl]).eagerly(),
 
       // utils
       bind[KieContainer].toProvider(classOf[KieContainerProvider]).eagerly(),

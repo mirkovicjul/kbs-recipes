@@ -20,7 +20,7 @@ trait RecommendationService {
 
   def initSession(userId: Long): Unit
 
-  def recommend(userId: Long): Option[Recommendation]
+  def recommend(userId: Long): Seq[Recommendation]
 
 }
 
@@ -81,7 +81,7 @@ class RecommendationServiceImpl @Inject()(
       }
   }
 
-  override def recommend(userId: Long): Option[Recommendation] = {
+  override def recommend(userId: Long): Seq[Recommendation] = {
     val session = sessions.simpleSession(userId)
 
     session.fireAllRules
@@ -92,7 +92,6 @@ class RecommendationServiceImpl @Inject()(
       .asScala
       .map(r => r.get("$recommendation").asInstanceOf[Recommendation])
       .toSeq
-      .headOption
   }
 
 }

@@ -1,10 +1,16 @@
 package controllers
 
-import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
+import controllers.RecommendationController._
+import drools.recommendation.Recommendation
+import play.api.libs.json.{JsObject, JsPath, JsValue, Json, Reads, Writes}
+import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents, _}
 import services.RecommendationService
 
-import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject._
+import scala.concurrent.ExecutionContext
+import scala.jdk.CollectionConverters.CollectionHasAsScala
+
+case class RecommendationRequest(userId: Long)
 
 class RecommendationController @Inject()(
     val controllerComponents: ControllerComponents,
@@ -12,9 +18,35 @@ class RecommendationController @Inject()(
 )(implicit ec: ExecutionContext)
     extends BaseController {
 
-  def regular(): Action[AnyContent] = Action.async { req =>
-    recommendationService.recommend(3)
-    Future.successful(Ok)
+  def regular(): Action[AnyContent] = Action {
+    implicit req: Request[AnyContent] =>
+      val requestParams: RecommendationRequest =
+        req.body.asJson.get.as[RecommendationRequest]
+
+      val recommendations: Seq[Recommendation] = recommendationService.recommend(requestParams.userId)
+
+      Ok(Json.toJson(recommendations))
   }
+}
+
+object RecommendationController {
+
+  implicit val recommendRequest: Reads[RecommendationRequest] =
+    (JsPath \ "user_id").read[Long].map(RecommendationRequest)
+
+  implicit val recommendation: Writes[Recommendation] = new Writes[Recommendation] {
+    override def writes(o: Recommendation): JsValue =
+      Json.obj(
+        "recipe_id" -> o.getRecipeId.toString,
+        "hit" -> o.getHit,
+        "messages" -> Json.arr(o.getMessages.asScala.toSeq.map(Json.toJson[String]))
+      )
+  }
+
+  implicit val recommendResponse: Writes[Seq[Recommendation]] = new Writes[Seq[Recommendation]] {
+    override def writes(o: Seq[Recommendation]): JsValue =
+      Json.obj("result" -> Json.arr(o.map(Json.toJson[Recommendation])))
+  }
+
 
 }
