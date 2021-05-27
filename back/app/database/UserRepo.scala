@@ -9,8 +9,11 @@ import scala.concurrent.Future
 trait UserRepo {
 
   def one(id: Long): Future[Option[User]]
+
   def getByUsername(username: String): Future[Option[User]]
+
   def getByEmail(email: String): Future[Option[User]]
+
   def create(username: String, email: String, password: String): Future[Long]
 
 }
@@ -19,7 +22,7 @@ class UserRepoPostgres extends UserRepo {
 
   implicit val session: DBSession = AutoSession
 
-  val u: QuerySQLSyntaxProvider[SQLSyntaxSupport[User], User] = User.syntax
+  val u = User.syntax
   val c = User.column
 
   override def one(id: Long): Future[Option[User]] = {
@@ -39,11 +42,11 @@ class UserRepoPostgres extends UserRepo {
     Future {
       DB readOnly { implicit session =>
         withSQL {
-         select
-           .from(User.as(u))
-           .where
-           .eq(u.username, username)
-       }.map(result => User(result, u.resultName)).first().apply()
+          select
+            .from(User.as(u))
+            .where
+            .eq(u.username, username)
+        }.map(result => User(result, u.resultName)).first().apply()
       }
     }
   }
@@ -61,14 +64,17 @@ class UserRepoPostgres extends UserRepo {
     }
   }
 
-  override def create(username: String, email: String, password: String): Future[Long] =
+  override def create(username: String,
+                      email: String,
+                      password: String): Future[Long] =
     Future {
       DB autoCommit { implicit session =>
         withSQL {
-          insert.into(User)
+          insert
+            .into(User)
             .namedValues(
               c.username -> username,
-              c.email -> email,
+              c.email    -> email,
               c.password -> password,
               c.userType -> 1
             )
