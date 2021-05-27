@@ -1,6 +1,6 @@
 package modules
 
-import database.{UserRepo, UserRepoPostgres}
+import database.{IngredientRepo, IngredientRepoImpl, RecipeRepo, RecipeRepoImpl, UserRepo, UserRepoPostgres}
 import drools.{SessionCache, SessionCacheImpl}
 import org.kie.api.runtime.KieContainer
 import play.api.inject.{Binding, Module}
@@ -11,11 +11,17 @@ class RecipeModule extends Module {
 
   override def bindings(environment: Environment, configuration: Configuration): collection.Seq[Binding[_]] =
     List(
+      // services
       bind[LoginService].to(classOf[LoginServiceImpl]).eagerly(),
       bind[UserService].to(classOf[UserServiceImpl]).eagerly(),
-      bind[UserRepo].to(classOf[UserRepoPostgres]).eagerly(),
       bind[RecommendationService].to(classOf[RecommendationServiceImpl]).eagerly(),
 
+      // repos
+      bind[UserRepo].to(classOf[UserRepoPostgres]).eagerly(),
+      bind[RecipeRepo].to(classOf[RecipeRepoImpl]).eagerly(),
+      bind[IngredientRepo].to(classOf[IngredientRepoImpl]).eagerly(),
+
+      // utils
       bind[KieContainer].toProvider(classOf[KieContainerProvider]).eagerly(),
       bind[SessionCache].to(classOf[SessionCacheImpl]).eagerly()
     )

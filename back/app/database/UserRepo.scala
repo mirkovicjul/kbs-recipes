@@ -33,7 +33,7 @@ class UserRepoPostgres extends UserRepo {
             .from(User.as(u))
             .where
             .eq(u.id, id)
-        }.map(result => User(result, u.resultName)).first.apply
+        }.map(result => User(result, u.resultName)).first().apply()
       }
     }
   }
@@ -64,9 +64,11 @@ class UserRepoPostgres extends UserRepo {
     }
   }
 
-  override def create(username: String,
-                      email: String,
-                      password: String): Future[Long] =
+  override def create(
+      username: String,
+      email: String,
+      password: String
+  ): Future[Long] =
     Future {
       DB autoCommit { implicit session =>
         withSQL {

@@ -26,6 +26,16 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
+    public Recipe(long id, String name, List<RecipeIngredient> ingredients, Boolean vegan, Boolean vegetarian, Boolean junkFood, int servings) {
+        this.id = id;
+        this.name = name;
+        this.ingredients = ingredients;
+        this.vegan = vegan;
+        this.vegetarian = vegetarian;
+        this.junkFood = junkFood;
+        this.servings = servings;
+    }
+
     public long getId() {
         return id;
     }
