@@ -11,7 +11,9 @@ case class RecipeIngredient(
 
 object RecipeIngredient extends SQLSyntaxSupport[RecipeIngredient] {
 
-  override def tableName: String = "recipe_ingredient"
+  override def tableName: String = "recipe_ingredients"
+
+  override def nameConverters: Map[String, String] = Map("^amount$" -> "quantity")
 
   def apply(rs: WrappedResultSet, rn: ResultName[RecipeIngredient]): RecipeIngredient =
     RecipeIngredient(

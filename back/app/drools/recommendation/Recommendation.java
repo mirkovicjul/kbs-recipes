@@ -1,5 +1,6 @@
 package drools.recommendation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Recommendation {
@@ -13,6 +14,7 @@ public class Recommendation {
     public Recommendation(long recipeId, int hit) {
         this.recipeId = recipeId;
         this.hit = hit;
+        this.messages = new ArrayList<String>();
     }
 
     public Recommendation(long recipeId, int hit, List<String> messages) {

@@ -3,18 +3,13 @@ package services
 import com.typesafe.scalalogging.LazyLogging
 import database.{IngredientRepo, MeasurementRepo, RecipeRepo, UserRepo}
 import drools.SessionCache
-import drools.recommendation.{
-  Recommendation,
-  Recipe => RecipeFact,
-  Ingredient => IngredientFact,
-  Measurement => MeasurementFact,
-  RecipeIngredient => RecipeIngredientFact
-}
-import models.Recipe
+import drools.conclusion.Vegetarian
+import drools.recommendation.{Recommendation, Ingredient => IngredientFact, Measurement => MeasurementFact, Recipe => RecipeFact, RecipeIngredient => RecipeIngredientFact}
 import org.kie.api.runtime.KieSession
 
 import javax.inject.Inject
-import scala.jdk.CollectionConverters.{IteratorHasAsScala, SeqHasAsJava}
+import scala.collection.JavaConverters.seqAsJavaListConverter
+import scala.jdk.CollectionConverters.IteratorHasAsScala
 
 trait RecommendationService {
 
@@ -25,13 +20,13 @@ trait RecommendationService {
 }
 
 class RecommendationServiceImpl @Inject()(
-    sessions: SessionCache,
-    userRepo: UserRepo,
-    recipeRepo: RecipeRepo,
-    ingredientRepo: IngredientRepo,
-    measurementRepo: MeasurementRepo
-) extends RecommendationService
-    with LazyLogging {
+                                           sessions: SessionCache,
+                                           userRepo: UserRepo,
+                                           recipeRepo: RecipeRepo,
+                                           ingredientRepo: IngredientRepo,
+                                           measurementRepo: MeasurementRepo
+                                         ) extends RecommendationService
+  with LazyLogging {
 
   override def initSession(userId: Long): Unit = {
     val session: KieSession = sessions.simpleSession(userId)
@@ -49,11 +44,13 @@ class RecommendationServiceImpl @Inject()(
             i.protein
           )
         }
+    allIngredients.foreach(session.insert)
 
     val allMeasurements: Seq[MeasurementFact] =
       measurementRepo
         .allMeasurements()
         .map(m => new MeasurementFact(m.id, m.measurement, m.proportion))
+    allMeasurements.foreach(session.insert)
 
     recipeRepo
       .allRecipes()
@@ -78,13 +75,20 @@ class RecommendationServiceImpl @Inject()(
           false,
           recipe.servings
         )
+        session.insert(recipeFact)
       }
+      val veg = new Vegetarian(1);
+      session.insert(veg)
+
   }
 
   override def recommend(userId: Long): Seq[Recommendation] = {
     val session = sessions.simpleSession(userId)
 
+    session.getAgenda().getAgendaGroup("Diet").setFocus()
+    session.getAgenda().getAgendaGroup("Conclusions").setFocus()
     session.fireAllRules
+
 
     session
       .getQueryResults("SimpleResults")

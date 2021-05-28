@@ -16,6 +16,8 @@ object Ingredient extends SQLSyntaxSupport[Ingredient] {
 
   override def tableName: String = "ingredients"
 
+  override def nameConverters: Map[String, String] = Map("^name$" -> "ingredient")
+
   def apply(rs: WrappedResultSet, rn: ResultName[Ingredient]): Ingredient =
     Ingredient(
       id = rs.get[Long](rn.id),

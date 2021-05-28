@@ -22,7 +22,7 @@ class RecommendationController @Inject()(
     implicit req: Request[AnyContent] =>
       val requestParams: RecommendationRequest =
         req.body.asJson.get.as[RecommendationRequest]
-
+      recommendationService.initSession(1)
       val recommendations: Seq[Recommendation] = recommendationService.recommend(requestParams.userId)
 
       Ok(Json.toJson(recommendations))
