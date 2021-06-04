@@ -46,7 +46,9 @@ export class LoginComponent implements OnInit {
   }
 
   register(data) {
+    console.log(data);
     this.newAccount = "{\"username\":\"" + data.username + "\","
+      + " \"email\":\"" + data.email + "\","
       + " \"password\":\"" + data.password + "\"}";
     console.log(this.newAccount);
     this.registerService.register(this.newAccount).subscribe((response) => {

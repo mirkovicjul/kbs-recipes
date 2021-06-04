@@ -17,9 +17,10 @@ export class RegistrationService {
       headers: {
         'content-type': 'application/json',
         'accept': 'application/json'
+        
       }
     }
-    return this.http.post<RegistrationResponse>(`${this.apiUrl}user/create`, data, config);
+    return this.http.post<RegistrationResponse>(`${this.apiUrl}register`, data, config);
   }
 
 }
