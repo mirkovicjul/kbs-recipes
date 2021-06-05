@@ -3,7 +3,7 @@
 CREATE TABLE user_types (
 	id SERIAL PRIMARY KEY,
 	type VARCHAR(255) NOT NULL
-)
+);
 
 CREATE TABLE users (
 	id SERIAL PRIMARY KEY,
@@ -11,7 +11,7 @@ CREATE TABLE users (
 	email VARCHAR(255) NOT NULL UNIQUE,
 	password VARCHAR(255) NOT NULL,
 	user_type INT REFERENCES user_types(id) NOT NULL
-)
+);
 
 -- !Downs
 

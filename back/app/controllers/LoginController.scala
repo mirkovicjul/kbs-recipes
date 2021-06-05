@@ -1,12 +1,12 @@
 package controllers
 
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{JsPath, Reads}
+import play.api.libs.json.{JsPath, JsValue, Json, Reads}
 import play.api.mvc._
 import services.LoginService
 
 import javax.inject._
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 case class UserLogin(username: String, password: String)
 
@@ -27,8 +27,9 @@ class LoginController @Inject()(
     val json = request.body.asJson.get
     val user = json.as[UserLogin]
 
-    val serviceResult = loginService.login(user.username, user.password)
-    val resultToReturn = serviceResult.map(x => Ok(x.toString))
+    val serviceResult: Future[JsValue] = loginService.login(user.username, user.password).map(r => Json.toJson(r))
+
+    val resultToReturn: Future[Result] = serviceResult.map(x => Ok(x.toString))
 
     resultToReturn
   }

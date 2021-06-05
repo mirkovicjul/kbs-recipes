@@ -12,6 +12,7 @@ import scala.concurrent.{ExecutionContext, Future}
 trait LoginService {
 
   def login(username: String, password: String): Future[LoginResponse]
+
   def createToken(user: User): Future[String]
 
 }
@@ -29,7 +30,7 @@ class LoginServiceImpl @Inject()(
     userRepo.getByUsername(username).flatMap {
       case Some(user) => {
         if (password.isBcrypted(user.password)) {
-          createToken(user).map(_.toString).map { token =>
+          createToken(user).map { token =>
             recommendationService.initSession(user.id)
             LoginResponse(true, token, "Successfully logged in")
           }

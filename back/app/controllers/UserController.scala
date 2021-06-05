@@ -1,5 +1,6 @@
 package controllers
 
+import com.typesafe.scalalogging.LazyLogging
 import models.User
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Reads}
@@ -17,9 +18,10 @@ class UserController @Inject()(
     authAction: AuthAction,
     userService: UserService
 )(implicit ec: ExecutionContext)
-    extends BaseController {
+    extends BaseController with LazyLogging {
 
   def testAuth(): Action[AnyContent] = authAction.async {
+    logger.debug("Inside test auth.")
     Future.successful(Ok)
   }
 
