@@ -1,12 +1,15 @@
 package controllers
+
 import com.typesafe.scalalogging.LazyLogging
 import controllers.AuthAction.parseBearerToken
+import pdi.jwt.{JwtAlgorithm, JwtJson}
 import play.api.http.HeaderNames
-import play.api.mvc.Results.Forbidden
+import play.api.mvc.Results.{Forbidden, Ok}
 import play.api.mvc._
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 import scala.util.matching.Regex
 
 class AuthAction @Inject()(
@@ -21,8 +24,12 @@ class AuthAction @Inject()(
   ): Future[Result] =
     request.headers
       .get(HeaderNames.AUTHORIZATION)
-      .flatMap(parseBearerToken) match {
-      case Some(token) =>
+      match {
+      case Some(token) =>{
+        JwtJson.decodeJson(token, "secretKey", Seq(JwtAlgorithm.HS256)) match {
+          case Failure(exception) => Future.successful(Forbidden)
+          case Success(value) => Future.successful(Ok)
+        }}
         // check if token is valid
         // otherwise Forbidden
         block(request)
