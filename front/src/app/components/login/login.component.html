@@ -48,10 +48,10 @@
           [(ngModel)]="registration.password" name="password"
           #name="ngModel">
         </div>
-        <div *ngIf="regFailed" class="alert alert-danger">
+        <div *ngIf="registrationFailed" class="alert alert-danger">
           Username already in use!
         </div>
-        <div *ngIf="regSuccess" class="alert alert-success">
+        <div *ngIf="registrationSuccess" class="alert alert-success">
           Registration successful!
         </div>
         <button type="submit" class="btn btn-success" (click)="register(registration);" [disabled]="!registration.valid">Join</button>

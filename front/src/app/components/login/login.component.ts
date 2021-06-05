@@ -17,8 +17,8 @@ export class LoginComponent implements OnInit {
   response: LoginResponse;
   regResponse: RegistrationResponse;
   loginFailed: boolean = false;
-  regFailed: boolean = false;
-  regSuccess: boolean = false;
+  registrationFailed: boolean = false;
+  registrationSuccess: boolean = false;
 
   constructor(private router: Router, private loginService: LoginService, private registerService: RegistrationService) { 
     if(this.loginService.isLoggedIn()){
@@ -47,19 +47,20 @@ export class LoginComponent implements OnInit {
 
   register(data) {
     console.log(data);
+    this.registrationFailed = false;
+      this.registrationSuccess = false;
     this.newAccount = "{\"username\":\"" + data.username + "\","
       + " \"email\":\"" + data.email + "\","
       + " \"password\":\"" + data.password + "\"}";
     console.log(this.newAccount);
     this.registerService.register(this.newAccount).subscribe((response) => {
       this.regResponse = response;
-      this.regFailed = false;
-      this.regSuccess = false;
+      
       if(this.regResponse.success == true){
-        this.regSuccess = true;
+        this.registrationSuccess = true;
         this.router.navigateByUrl('/login');
       } else {
-        this.regFailed = true;
+        this.registrationFailed = true;
       }
     });
   }
