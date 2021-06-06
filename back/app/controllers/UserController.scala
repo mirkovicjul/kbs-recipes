@@ -7,6 +7,7 @@ import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Reads}
 import play.api.mvc._
 import services.UserService
+import utils.RepoError
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -41,16 +42,20 @@ class UserController @Inject()(
       resultToReturn
   }
 
-  def register(): Action[AnyContent] = Action.async {
-    implicit request: Request[AnyContent] =>
-      val json = request.body.asJson.get
-      val user = json.as[UserRegistration]
+  def register(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
+    val json = request.body.asJson.get
+    val user = json.as[UserRegistration]
 
-      val serviceResult =
-        userService.create(user.username, user.email, user.password)
-      val resultToReturn = serviceResult.map(x => Ok(x.toString))
+    val serviceResult: Future[Result] = userService.create(user.username, user.email, user.password).map {
+      case Left(RepoError(msg)) => Ok("{ \"success\": false," +
+        "\"message\":"+msg+"}")
+      case Right(value) => Ok("{ \"success\": true," +
+        "\"message\":\"\"}")
+      case _ => InternalServerError
+    }
 
-      resultToReturn
+    serviceResult
+
   }
 }
 
