@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
   loginFailed: boolean = false;
   registrationFailed: boolean = false;
   registrationSuccess: boolean = false;
+  errorMessage: string;
 
   constructor(private router: Router, private loginService: LoginService, private registerService: RegistrationService) { 
     if(this.loginService.isLoggedIn()){
@@ -32,7 +33,6 @@ export class LoginComponent implements OnInit {
   login(credentials) {
     this.credentials = "{\"username\":\"" + credentials.username + "\","
       + " \"password\":\"" + credentials.password + "\"}";
-
     this.loginService.login(this.credentials).subscribe((response) => {
       this.response = response;
       if(this.response.success == true){
@@ -40,6 +40,8 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('/home');
       } 
       if(this.response.success == false){
+        credentials.username = "";
+        credentials.password = "";
         this.loginFailed = true;
       }
     });
@@ -48,14 +50,16 @@ export class LoginComponent implements OnInit {
   register(data) {
     console.log(data);
     this.registrationFailed = false;
-      this.registrationSuccess = false;
+    this.registrationSuccess = false;
     this.newAccount = "{\"username\":\"" + data.username + "\","
       + " \"email\":\"" + data.email + "\","
       + " \"password\":\"" + data.password + "\"}";
     console.log(this.newAccount);
     this.registerService.register(this.newAccount).subscribe((response) => {
+      data.username = "";
+      data.password = "";
+      data.email = "";
       this.regResponse = response;
-      
       if(this.regResponse.success == true){
         this.registrationSuccess = true;
         this.router.navigateByUrl('/login');
