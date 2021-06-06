@@ -4,7 +4,8 @@ INSERT into user_types (id, type) values (2, 'admin')
 
 INSERT into measurements (id, measurement, proportion) values (1, 'grams', 1)
 INSERT into measurements (id, measurement, proportion) values (2, 'millilitre', 1)
-
+INSERT into measurements (id, measurement, proportion) values (3, 'teaspoon', 5)
+INSERT into measurements (id, measurement, proportion) values (4, 'tablespoon', 15)
 
 INSERT into users(id, username, email, password, user_type) values (1, 'admin', 'admin@gmail.com', '$2a$05$A61otk2T0PbqzemZJW2B7.7dwmMZHD6PFEjoqyh2aHJevFQQWMh/G', 2); /*sifra123*/
 INSERT into users(id, username, email, password, user_type) values (2, 'mika', 'mika@gmail.com', '$2a$05$A61otk2T0PbqzemZJW2B7.7dwmMZHD6PFEjoqyh2aHJevFQQWMh/G', 1);
@@ -66,3 +67,17 @@ INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quanti
 INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (3, 9, 1, 60);
 INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (3, 12, 2, 300);
 INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (3, 13, 2, 15);
+
+
+INSERT into ingredients (id, ingredient, fats, carbs, protein, type) values (14, 'Chicken breasts', 3.6, 0, 31, 'Meat');
+INSERT into ingredients (id, ingredient, fats, carbs, protein, type) values (15, 'Salt', 0, 0, 0, 'Condiment');
+INSERT into ingredients (id, ingredient, fats, carbs, protein, type) values (16, 'Black pepper', 3.26, 64.81, 10.95, 'Condiment');
+
+
+INSERT into recipes (id, title, description, number_of_portions) values (4, 'Baked chicken breasts', 'Heat the oven. Preheat oven to 450°F. Season the chicken. Place the chicken breasts in a single layer in a large baking dish. Brush on both sides (turning once) evenly with the melted butter or olive oil. In a separate small bowl, whisk the salt, pepper, garlic powder and paprika until combined. Then sprinkle the mixture evenly over the chicken on both sides. Bake for 15-18 minutes, or until the chicken is cooked through and no longer pink. ', 4);
+
+
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (4, 14, 1, 700);
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (4, 15, 3, 1);
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (4, 16, 3, 0.5);
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (4, 5, 4, 1);
