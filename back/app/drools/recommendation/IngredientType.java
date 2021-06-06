@@ -9,5 +9,6 @@ public enum IngredientType {
     Fruit,
     Grains,
     Oils,
+    Condiment,
     Other
 }
