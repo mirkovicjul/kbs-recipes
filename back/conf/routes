@@ -15,6 +15,7 @@ GET     /user                       controllers.UserController.getUser()
 
 POST    /register                   controllers.UserController.register()
 
++nocsrf
 POST    /testAuth                   controllers.UserController.testAuth()
 
 POST    /recommendation/regular     controllers.RecommendationController.regular()

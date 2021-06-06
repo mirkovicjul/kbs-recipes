@@ -2,9 +2,10 @@
 <configuration>
 
   <conversionRule conversionWord="coloredLevel" converterClass="play.api.libs.logback.ColoredLevel" />
+  <timestamp key="bySecond" datePattern="yyyy-MM-dd-HH-mm-ss"/>
 
   <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-    <file>${application.home:-.}/logs/application.log</file>
+    <file>${application.home:-.}/logs/back-${bySecond}.log</file>
     <encoder>
       <charset>UTF-8</charset>
       <pattern>
@@ -31,10 +32,10 @@
     <appender-ref ref="STDOUT" />
   </appender>
 
-  <logger name="play" level="INFO" />
+  <logger name="play" level="DEBUG" />
   <logger name="application" level="DEBUG" />
 
-  <root level="WARN">
+  <root level="DEBUG">
     <appender-ref ref="ASYNCFILE" />
     <appender-ref ref="ASYNCSTDOUT" />
   </root>

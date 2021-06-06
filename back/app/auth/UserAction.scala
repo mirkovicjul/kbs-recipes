@@ -1,4 +1,4 @@
-package controllers
+package auth
 
 import com.typesafe.scalalogging.LazyLogging
 import pdi.jwt.{JwtAlgorithm, JwtJson}
@@ -10,7 +10,7 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class AuthAction @Inject()(
+class UserAction @Inject()(
     parser: BodyParsers.Default
 )(implicit ec: ExecutionContext)
     extends ActionBuilderImpl(parser)
@@ -21,16 +21,20 @@ class AuthAction @Inject()(
       block: Request[A] => Future[Result]
   ): Future[Result] =
     request.headers.get(HeaderNames.AUTHORIZATION) match {
-      case Some(token) => {
+      case Some(token) =>
         JwtJson.decodeJson(token, "secretKey", Seq(JwtAlgorithm.HS256)) match {
           case Failure(exception) =>
             logger.warn("Exception in auth middleware: ", exception)
             Future.successful(Forbidden)
           case Success(value) =>
             logger.debug(s"Value of JWT token: $value")
-            block(request)
+            (value \ "type")
+              .asOpt[String]
+              .filter(_ == "user") match {
+              case Some(_) => block(request)
+              case None    => Future.successful(Forbidden)
+            }
         }
-      }
       case None =>
         logger.debug(s"Missing auth token in request ${request.path}")
         Future.successful(Forbidden)
