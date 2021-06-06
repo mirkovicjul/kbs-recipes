@@ -10,6 +10,7 @@ import java.time.temporal.ChronoUnit;
 
 rule "Expiration ingredients"
     salience 98
+    agenda-group "Recommendation"
 when
     $user: User($storage: storage)
     $recipe: Recipe($id: id, $rIngredients: ingredients)

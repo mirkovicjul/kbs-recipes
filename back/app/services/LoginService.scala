@@ -28,18 +28,15 @@ class LoginServiceImpl @Inject()(
       password: String
   ): Future[LoginResponse] =
     userRepo.getByUsername(username).flatMap {
-      case Some(user) => {
-        if (password.isBcrypted(user.password)) {
-          createToken(user).map { token =>
-            recommendationService.initSession(user.id)
-            LoginResponse(true, token, "Successfully logged in")
-          }
-        } else {
-          Future {
-            LoginResponse(false, "", "Invalid username or password")
-          }
+      case Some(user) if password.isBcrypted(user.password) =>
+        createToken(user).map { token =>
+          recommendationService.initSession(user.id)
+          LoginResponse(true, token, "Successfully logged in")
         }
-      }
+      case Some(user) if !password.isBcrypted(user.password) =>
+        Future {
+          LoginResponse(false, "", "Invalid username or password")
+        }
       case None => {
         Future {
           LoginResponse(false, "", "Invalid username or password")

@@ -9,14 +9,31 @@ import drools.conclusion.Vegetarian;
 import drools.conclusion.OnKetoDiet;
 
 
-rule "User acts like a vegeterian(90% of made recipes in last month is vegeterian)"
+rule "User acts like a vegetarian(90% of made recipes in last month is vegeterian)"
+no-loop
+agenda-group "Conclusion"
 when
     User($id: id)
-    Number(doubleValue > 0.9) from accumulate(
+    Number(doubleValue >= 0.95) from accumulate(
         MadeRecipe($p: recipe.vegetarian, madeDate.isAfter(LocalDate.now().minusMonths(1))) from entry-point $history,
         average($p ? 1.0 : 0.0)
     )
 then
     insert(new Vegetarian($id));
     System.out.printf("Insert a fact that user %s is vegetarian.\n", $id);
+end
+
+
+rule "User no longer vegetarian"
+no-loop
+agenda-group "Conclusion"
+when
+    User($id: id)
+    Number(doubleValue < 0.5) from accumulate(
+        MadeRecipe($p: recipe.vegetarian, madeDate.isAfter(LocalDate.now().minusMonths(1))) from entry-point $history,
+        average($p ? 1.0 : 0.0)
+    )
+    Vegetarian($t: this)
+then
+    delete($t);
 end

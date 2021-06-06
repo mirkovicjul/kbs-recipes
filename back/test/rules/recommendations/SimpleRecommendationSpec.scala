@@ -22,7 +22,7 @@ final class SimpleRecommendationSpec
         val userId = 1
 
         // when
-        val result: Seq[Recommendation] = recommendationService.recommend(userId)
+        val result: Seq[Recommendation] = recommendationService.recommendOnHomepage(userId)
 
         // then
         result mustBe Nil
@@ -37,7 +37,7 @@ final class SimpleRecommendationSpec
         session.insert(new Recipe(2, "pepper", ImmutableList.of()))
 
         // when
-        val result: Seq[Recommendation] = recommendationService.recommend(userId)
+        val result: Seq[Recommendation] = recommendationService.recommendOnHomepage(userId)
 
         // then
         result.size mustBe 1

@@ -7,7 +7,7 @@ import drools.recommendation.RecipeIngredient;
 import java.util.Map.Entry;
 
 rule "Mark vegetarian recipes"
-agenda-group "Diet"
+agenda-group "Conclusion"
 no-loop
 when
     $recipe: Recipe($ingredients: ingredients)
@@ -20,7 +20,7 @@ then
 end
 
 rule "Mark vegan recipes" extends "Mark vegetarian recipes"
-agenda-group "Diet"
+agenda-group "Conclusion"
 no-loop
 when
     Number($nonVeganIngredients: intValue == 0) from accumulate(
@@ -32,7 +32,7 @@ then
 end
 
 rule "Mark recipe as junk food"
-agenda-group "Diet"
+agenda-group "Conclusion"
 no-loop
 when
     $r: Recipe($id: id, $ingredients: ingredients, $servings: servings)

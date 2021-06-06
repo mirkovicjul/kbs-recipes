@@ -6,7 +6,7 @@ import drools.recommendation.IngredientType;
 import drools.conclusion.EatingUnhealthy;
 
 rule "User is eating unhealthy"
-agenda-group "Conclusions"
+agenda-group "Conclusion"
 when
     $u: User($id: id)
     Number(intValue >= 3) from accumulate(
@@ -24,6 +24,7 @@ end
 
 rule "Remove unhealthy food if user is eating unhealthy"
 no-loop
+agenda-group "Recommendation"
 when
     User($id: id)
     EatingUnhealthy(userId == $id)

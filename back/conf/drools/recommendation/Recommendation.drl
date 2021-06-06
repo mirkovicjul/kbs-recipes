@@ -5,8 +5,8 @@ import drools.recommendation.Recommendation;
 import drools.recommendation.User;
 import drools.recommendation.Ingredient;
 import drools.recommendation.StorageItem;
-import java.time.temporal.ChronoUnit;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 

@@ -3,8 +3,15 @@ package services
 import com.typesafe.scalalogging.LazyLogging
 import database.{IngredientRepo, MeasurementRepo, RecipeRepo, UserRepo}
 import drools.SessionCache
+import drools.cep.WantsNewRecommendation
 import drools.conclusion.Vegetarian
-import drools.recommendation.{Recommendation, Ingredient => IngredientFact, Measurement => MeasurementFact, Recipe => RecipeFact, RecipeIngredient => RecipeIngredientFact}
+import drools.recommendation.{
+  Recommendation,
+  Ingredient => IngredientFact,
+  Measurement => MeasurementFact,
+  Recipe => RecipeFact,
+  RecipeIngredient => RecipeIngredientFact
+}
 import org.kie.api.runtime.KieSession
 
 import javax.inject.Inject
@@ -15,18 +22,20 @@ trait RecommendationService {
 
   def initSession(userId: Long): Unit
 
-  def recommend(userId: Long): Seq[Recommendation]
+  def recommendOnHomepage(userId: Long): Seq[Recommendation]
+
+  def somethingNew(userId: Long): Seq[Recommendation]
 
 }
 
 class RecommendationServiceImpl @Inject()(
-                                           sessions: SessionCache,
-                                           userRepo: UserRepo,
-                                           recipeRepo: RecipeRepo,
-                                           ingredientRepo: IngredientRepo,
-                                           measurementRepo: MeasurementRepo
-                                         ) extends RecommendationService
-  with LazyLogging {
+    sessions: SessionCache,
+    userRepo: UserRepo,
+    recipeRepo: RecipeRepo,
+    ingredientRepo: IngredientRepo,
+    measurementRepo: MeasurementRepo
+) extends RecommendationService
+    with LazyLogging {
 
   override def initSession(userId: Long): Unit = {
     val session: KieSession = sessions.simpleSession(userId)
@@ -77,18 +86,34 @@ class RecommendationServiceImpl @Inject()(
         )
         session.insert(recipeFact)
       }
-      val veg = new Vegetarian(1);
-      session.insert(veg)
-
   }
 
-  override def recommend(userId: Long): Seq[Recommendation] = {
-    val session = sessions.simpleSession(userId)
+  override def recommendOnHomepage(userId: Long): Seq[Recommendation] = {
+    val session: KieSession = sessions.simpleSession(userId)
 
-    session.getAgenda().getAgendaGroup("Diet").setFocus()
-    session.getAgenda().getAgendaGroup("Conclusions").setFocus()
     session.fireAllRules
 
+    session
+      .getQueryResults("SimpleResults")
+      .iterator()
+      .asScala
+      .map(r => r.get("$recommendation").asInstanceOf[Recommendation])
+      .toSeq
+  }
+
+  override def somethingNew(userId: Long): Seq[Recommendation] = {
+    def wantsNewRecommendation(implicit session: KieSession): Unit = {
+      session
+        .getEntryPoint("recommendation frequency")
+        .insert(new WantsNewRecommendation())
+    }
+
+    implicit val session: KieSession = sessions.simpleSession(userId)
+
+    wantsNewRecommendation
+
+    session.getAgenda().getAgendaGroup("Recommendation").setFocus()
+    session.fireAllRules
 
     session
       .getQueryResults("SimpleResults")
