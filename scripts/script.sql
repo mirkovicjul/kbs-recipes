@@ -47,7 +47,22 @@ INSERT into ingredients (id, ingredient, fats, carbs, protein, type) values (9, 
 INSERT into ingredients (id, ingredient, fats, carbs, protein, type) values (10, 'Vanilla extract', 0.1, 13, 0.1, 'Other');
 
 
-INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (2, 7, 4, 200);
-INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (2, 8, 4, 250);
-INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (2, 9, 4, 60);
-INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (2, 10, 3, 10);
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (2, 7, 1, 200);
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (2, 8, 1, 250);
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (2, 9, 1, 60);
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (2, 10, 2, 10);
+
+
+INSERT into recipes (id, title, description, number_of_portions) values (3, 'Easy pancakes', 'Put 100g plain flour, 2 large eggs, 300ml milk, 1 tbsp sunflower or vegetable oil and a pinch of salt into a bowl or large jug, then whisk to a smooth batter. Set aside for 30 mins to rest if you have time, or start cooking straight away. 
+Set a medium frying pan or crêpe pan over a medium heat and carefully wipe it with some oiled kitchen paper. When hot, cook your pancakes for 1 min on each side until golden, keeping them warm in a low oven as you go. Serve with lemon wedges and caster sugar, or your favourite filling. Once cold, you can layer the pancakes between baking parchment, then wrap in cling film and freeze for up to 2 months.', 6);
+
+
+INSERT into ingredients (id, ingredient, fats, carbs, protein, type) values (11, 'Plain flour', 1, 76, 10, 'Other');
+INSERT into ingredients (id, ingredient, fats, carbs, protein, type) values (12, 'Milk', 1, 5, 3.4, 'Dairy');
+INSERT into ingredients (id, ingredient, fats, carbs, protein, type) values (13, 'Sunflower oil', 100, 0, 0, 'Oils');
+
+
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (3, 11, 1, 100);
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (3, 9, 1, 60);
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (3, 12, 2, 300);
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (3, 13, 2, 15);
