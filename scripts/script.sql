@@ -81,3 +81,13 @@ INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quanti
 INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (4, 15, 3, 1);
 INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (4, 16, 3, 0.5);
 INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (4, 5, 4, 1);
+
+
+insert into history (id, user_id, recipe_id, servings, date) values (1, 2, 3, 12, '2021-05-01 04:05:06');
+insert into history (id, user_id, recipe_id, servings, date) values (2, 2, 4, 2, '2021-05-03 04:05:06');
+insert into history (id, user_id, recipe_id, servings, date) values (3, 2, 3, 2, '2021-05-04 04:05:06');
+
+insert into ingredient_storage (id, user_id, ingredient_id, quantity, measurement, best_before) values (1, 2, 11, 1000, 1, '2022-05-01 04:05:06');
+insert into ingredient_storage (id, user_id, ingredient_id, quantity, measurement, best_before) values (2, 2, 13, 1000, 2, '2022-05-01 04:05:06');
+insert into ingredient_storage (id, user_id, ingredient_id, quantity, measurement, best_before) values (3, 2, 14, 500, 1, '2021-06-30 04:05:06');
+
