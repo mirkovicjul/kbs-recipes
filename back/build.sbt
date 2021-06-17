@@ -58,7 +58,7 @@ lazy val dependencies = Seq(
 
 // Project conf
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala)
+  .enablePlugins(PlayScala, PlayJava, PlayEbean)
   .settings(
     name := """back""",
     organization := "io.recipe",
