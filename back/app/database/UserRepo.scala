@@ -1,8 +1,9 @@
 package database
 
+import io.ebean.Finder
 import models.User
-import scalikejdbc._
 
+import scala.compat.java8.OptionConverters
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -20,68 +21,34 @@ trait UserRepo {
 
 class UserRepoPostgres extends UserRepo {
 
-  implicit val session: DBSession = AutoSession
+  private val find: Finder[Long, User] = new Finder[Long, User](classOf[User])
 
-  val u = User.syntax
-  val c = User.column
-
-  override def one(id: Long): Future[Option[User]] = {
+  override def one(id: Long): Future[Option[User]] =
     Future {
-      DB readOnly { implicit session =>
-        withSQL {
-          select
-            .from(User.as(u))
-            .where
-            .eq(u.id, id)
-        }.map(result => User(result, u.resultName)).first().apply()
-      }
+      OptionConverters.toScala(
+        find.query().where().eq("id", id).findOneOrEmpty())
     }
-  }
 
-  override def getByUsername(username: String): Future[Option[User]] = {
+  override def getByUsername(username: String): Future[Option[User]] =
     Future {
-      DB readOnly { implicit session =>
-        withSQL {
-          select
-            .from(User.as(u))
-            .where
-            .eq(u.username, username)
-        }.map(result => User(result, u.resultName)).first().apply()
-      }
+      OptionConverters.toScala(
+        find.query().where().eq("username", username).findOneOrEmpty())
     }
-  }
 
-  override def getByEmail(email: String): Future[Option[User]] = {
+  override def getByEmail(email: String): Future[Option[User]] =
     Future {
-      DB readOnly { implicit session =>
-        withSQL {
-          select
-            .from(User.as(u))
-            .where
-            .eq(u.email, email)
-        }.map(result => User(result, u.resultName)).first().apply()
-      }
+      OptionConverters.toScala(
+        find.query().where().eq("email", email).findOneOrEmpty())
     }
-  }
 
   override def create(
       username: String,
       email: String,
       password: String
-  ): Future[Long] =
-    Future {
-      DB autoCommit { implicit session =>
-        withSQL {
-          insert
-            .into(User)
-            .namedValues(
-              c.username -> username,
-              c.email    -> email,
-              c.password -> password,
-              c.userType -> 1
-            )
-        }.updateAndReturnGeneratedKey().apply()
-      }
-    }
+  ): Future[Long] = {
+    val u = new User(username, email, password, 1)
+    u.save()
+    Future.successful(u.getId)
+  }
 
 }

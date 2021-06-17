@@ -28,12 +28,12 @@ class LoginServiceImpl @Inject()(
       password: String
   ): Future[LoginResponse] =
     userRepo.getByUsername(username).flatMap {
-      case Some(user) if password.isBcrypted(user.password) =>
+      case Some(user) if password.isBcrypted(user.getPassword) =>
         createToken(user).map { token =>
-          recommendationService.initSession(user.id)
+          recommendationService.initSession(user.getId)
           LoginResponse(true, token, "Successfully logged in")
         }
-      case Some(user) if !password.isBcrypted(user.password) =>
+      case Some(user) if !password.isBcrypted(user.getPassword) =>
         Future {
           LoginResponse(false, "", "Invalid username or password")
         }
@@ -46,7 +46,7 @@ class LoginServiceImpl @Inject()(
 
   override def createToken(user: User): Future[String] = {
     Future {
-      val claim = Json.obj(("user", user.username), ("type", user.userType))
+      val claim = Json.obj(("user", user.getUsername), ("type", user.getUserType.longValue()))
       val key   = "secretKey"
       val algo  = JwtAlgorithm.HS256
       JwtJson.encode(claim, key, algo)
