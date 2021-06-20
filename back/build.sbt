@@ -42,8 +42,6 @@ lazy val dependencies = Seq(
   guice,
   scalaTest,
   postgresqlDriver,
-  "com.typesafe.play" %% "play-slick"            % "5.0.0",
-  "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0",
   bcrypt,
   jwt,
   evolutions,
@@ -58,7 +56,7 @@ lazy val dependencies = Seq(
 
 // Project conf
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala, PlayJava, PlayEbean)
+  .enablePlugins(PlayScala, PlayJava, PlayEbean, PlayEnhancer)
   .settings(
     name := """back""",
     organization := "io.recipe",
