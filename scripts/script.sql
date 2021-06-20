@@ -1,11 +1,11 @@
-INSERT into user_types (id, type) values (1, 'user')
-INSERT into user_types (id, type) values (2, 'admin')
+INSERT into user_types (id, type) values (1, 'user');
+INSERT into user_types (id, type) values (2, 'admin');
 
 
-INSERT into measurements (id, measurement, proportion) values (1, 'grams', 1)
-INSERT into measurements (id, measurement, proportion) values (2, 'millilitre', 1)
-INSERT into measurements (id, measurement, proportion) values (3, 'teaspoon', 5)
-INSERT into measurements (id, measurement, proportion) values (4, 'tablespoon', 15)
+INSERT into measurements (id, measurement, proportion) values (1, 'grams', 1);
+INSERT into measurements (id, measurement, proportion) values (2, 'millilitre', 1);
+INSERT into measurements (id, measurement, proportion) values (3, 'teaspoon', 5);
+INSERT into measurements (id, measurement, proportion) values (4, 'tablespoon', 15);
 
 INSERT into users(id, username, email, password, user_type) values (1, 'admin', 'admin@gmail.com', '$2a$05$A61otk2T0PbqzemZJW2B7.7dwmMZHD6PFEjoqyh2aHJevFQQWMh/G', 2); /*sifra123*/
 INSERT into users(id, username, email, password, user_type) values (2, 'mika', 'mika@gmail.com', '$2a$05$A61otk2T0PbqzemZJW2B7.7dwmMZHD6PFEjoqyh2aHJevFQQWMh/G', 1);
