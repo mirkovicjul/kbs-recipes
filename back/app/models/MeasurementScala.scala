@@ -2,18 +2,18 @@ package models
 
 import scalikejdbc._
 
-case class Measurement(
+case class MeasurementScala(
     id: Long,
     measurement: String,
     proportion: Double
 )
 
-object Measurement extends SQLSyntaxSupport[Measurement] {
+object MeasurementScala extends SQLSyntaxSupport[MeasurementScala] {
 
   override def tableName: String = "measurements"
 
-  def apply(rs: WrappedResultSet, rn: ResultName[Measurement]): Measurement =
-    Measurement(
+  def apply(rs: WrappedResultSet, rn: ResultName[MeasurementScala]): MeasurementScala =
+    MeasurementScala(
       id = rs.get[Long](rn.id),
       measurement = rs.get[String](rn.measurement),
       proportion = rs.get[Double](rn.proportion)

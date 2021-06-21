@@ -19,3 +19,5 @@ POST    /register                   controllers.UserController.register()
 POST    /testAuth                   controllers.UserController.testAuth()
 
 POST    /recommendation/regular     controllers.RecommendationController.regular()
+
+GET     /getIngredientStorage                   controllers.StorageController.getIngredientStorage()
