@@ -29,8 +29,8 @@ class AdminAction @Inject()(
           case Success(value) =>
             logger.debug(s"Value of JWT token: $value")
             (value \ "type")
-              .asOpt[String]
-              .filter(_ == "admin") match {
+              .asOpt[Long]
+              .filter(_ == 2) match {
               case Some(_) => block(request)
               case None    => Future.successful(Forbidden)
             }

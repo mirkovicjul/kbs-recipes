@@ -29,8 +29,8 @@ class UserAction @Inject()(
           case Success(value) =>
             logger.debug(s"Value of JWT token: $value")
             (value \ "type")
-              .asOpt[String]
-              .filter(_ == "user") match {
+              .asOpt[Long]
+              .filter(_ == 1) match {
               case Some(_) => block(request)
               case None    => Future.successful(Forbidden)
             }
