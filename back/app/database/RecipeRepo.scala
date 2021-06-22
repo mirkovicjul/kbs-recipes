@@ -1,23 +1,23 @@
 package database
 
-import models.Recipe
+import models.RecipeScala
 import scalikejdbc._
 
 trait RecipeRepo {
 
-  def allRecipes(): Seq[Recipe]
+  def allRecipes(): Seq[RecipeScala]
 
 }
 
 class RecipeRepoImpl extends RecipeRepo {
 
-  val rs = Recipe.syntax
+  val rs = RecipeScala.syntax
 
-  override def allRecipes(): Seq[Recipe] =
+  override def allRecipes(): Seq[RecipeScala] =
     DB readOnly { implicit session =>
       withSQL {
-        select.from(Recipe.as(rs))
-      }.map(result => Recipe(result, rs.resultName)).list().apply()
+        select.from(RecipeScala.as(rs))
+      }.map(result => RecipeScala(result, rs.resultName)).list().apply()
     }
 
 }

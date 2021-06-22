@@ -20,4 +20,6 @@ POST    /testAuth                   controllers.UserController.testAuth()
 
 POST    /recommendation/regular     controllers.RecommendationController.regular()
 
-GET     /getIngredientStorage                   controllers.StorageController.getIngredientStorage()
+GET     /ingredientStorage          controllers.StorageController.getIngredientStorage()
+
+GET     /history                    controllers.HistoryController.getHistory()

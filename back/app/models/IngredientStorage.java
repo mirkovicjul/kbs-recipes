@@ -41,7 +41,7 @@ public class IngredientStorage implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     public Ingredient getIngredient() {
         return ingredient;
     }
