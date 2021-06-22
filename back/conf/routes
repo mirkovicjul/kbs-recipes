@@ -22,4 +22,7 @@ POST    /recommendation/regular     controllers.RecommendationController.regular
 
 GET     /ingredientStorage          controllers.StorageController.getIngredientStorage()
 
+GET     /recipeStorage              controllers.StorageController.getRecipeStorage()
+
 GET     /history                    controllers.HistoryController.getHistory()
+
