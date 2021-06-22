@@ -1,8 +1,6 @@
 package drools.recommendation;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Recipe {
 
@@ -26,7 +24,15 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
-    public Recipe(long id, String name, List<RecipeIngredient> ingredients, Boolean vegan, Boolean vegetarian, Boolean junkFood, int servings) {
+    public Recipe(
+            long id,
+            String name,
+            List<RecipeIngredient> ingredients,
+            Boolean vegan,
+            Boolean vegetarian,
+            Boolean junkFood,
+            int servings
+    ) {
         this.id = id;
         this.name = name;
         this.ingredients = ingredients;

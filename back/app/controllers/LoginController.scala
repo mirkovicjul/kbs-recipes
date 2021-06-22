@@ -29,7 +29,7 @@ class LoginController @Inject()(
 
     val serviceResult: Future[JsValue] = loginService.login(user.username, user.password).map(r => Json.toJson(r))
 
-    val resultToReturn: Future[Result] = serviceResult.map(x => Ok(x.toString))
+    val resultToReturn: Future[Result] = serviceResult.map(x => Ok(x))
 
     resultToReturn
   }

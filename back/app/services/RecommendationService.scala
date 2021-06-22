@@ -38,8 +38,11 @@ class RecommendationServiceImpl @Inject()(
     with LazyLogging {
 
   override def initSession(userId: Long): Unit = {
+    logger.info(s"Initializing KIE Session for user $userId...")
+
     val session: KieSession = sessions.simpleSession(userId)
 
+    logger.info(s"Adding ingredients to user $userId KIE Session...")
     val allIngredients: Seq[IngredientFact] =
       ingredientRepo
         .allIngredients()
@@ -55,18 +58,20 @@ class RecommendationServiceImpl @Inject()(
         }
     allIngredients.foreach(session.insert)
 
+    logger.info(s"Adding measurements to user $userId KIE Session...")
     val allMeasurements: Seq[MeasurementFact] =
       measurementRepo
         .allMeasurements()
         .map(m => new MeasurementFact(m.id, m.measurement, m.proportion))
     allMeasurements.foreach(session.insert)
 
+    logger.info(s"Adding recipes to user $userId KIE Session...")
     recipeRepo
       .allRecipes()
       .foreach { recipe =>
         val recipeIngredients: Seq[RecipeIngredientFact] =
           ingredientRepo
-            .recipeIngredients(recipe.id)
+            .recipeIngredients(recipe.getId)
             .map { ri =>
               new RecipeIngredientFact(
                 allIngredients.filter(_.getId == ri.ingredientId).head,
@@ -76,16 +81,18 @@ class RecommendationServiceImpl @Inject()(
             }
 
         val recipeFact = new RecipeFact(
-          recipe.id,
-          recipe.name,
+          recipe.getId,
+          recipe.getTitle,
           recipeIngredients.asJava,
-          false,
-          false,
-          false,
-          recipe.servings
+          recipe.getVegan,
+          recipe.getVegetarian,
+          recipe.getJunkFood,
+          recipe.getNumberOfPortions.toInt
         )
         session.insert(recipeFact)
       }
+
+    logger.info(s"KIE Session initialized for user $userId.")
   }
 
   override def recommendOnHomepage(userId: Long): Seq[Recommendation] = {
