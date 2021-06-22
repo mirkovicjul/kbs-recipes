@@ -3,7 +3,7 @@ package services
 
 import com.typesafe.scalalogging.LazyLogging
 import database.IngredientStorageRepo
-import models.{Ingredient, IngredientStorage}
+import models.{IngredientScala, IngredientStorage}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

@@ -3,7 +3,7 @@ package models
 import drools.recommendation.IngredientType
 import scalikejdbc._
 
-case class Ingredient(
+case class IngredientScala(
     id: Long,
     name: String,
     fats: Double,
@@ -12,14 +12,14 @@ case class Ingredient(
     `type`: IngredientType
 )
 
-object Ingredient extends SQLSyntaxSupport[Ingredient] {
+object IngredientScala extends SQLSyntaxSupport[IngredientScala] {
 
   override def tableName: String = "ingredients"
 
   override def nameConverters: Map[String, String] = Map("^name$" -> "ingredient")
 
-  def apply(rs: WrappedResultSet, rn: ResultName[Ingredient]): Ingredient =
-    Ingredient(
+  def apply(rs: WrappedResultSet, rn: ResultName[IngredientScala]): IngredientScala =
+    IngredientScala(
       id = rs.get[Long](rn.id),
       name = rs.get[String](rn.name),
       fats = rs.get[Double](rn.fats),

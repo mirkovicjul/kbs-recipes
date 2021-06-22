@@ -1,11 +1,11 @@
 package database
 
-import models.{Ingredient, RecipeIngredient}
+import models.{IngredientScala, RecipeIngredient}
 import scalikejdbc._
 
 trait IngredientRepo {
 
-  def allIngredients(): Seq[Ingredient]
+  def allIngredients(): Seq[IngredientScala]
 
   def recipeIngredients(recipeId: Long): Seq[RecipeIngredient]
 
@@ -13,17 +13,17 @@ trait IngredientRepo {
 
 class IngredientRepoImpl extends IngredientRepo {
 
-  val is = Ingredient.syntax
-  val ic = Ingredient.column
+  val is = IngredientScala.syntax
+  val ic = IngredientScala.column
 
   val ris = RecipeIngredient.syntax
   val ric = RecipeIngredient.column
 
-  override def allIngredients(): Seq[Ingredient] =
+  override def allIngredients(): Seq[IngredientScala] =
     DB readOnly { implicit session =>
       withSQL {
-        select.from(Ingredient.as(is))
-      }.map(result => Ingredient(result, is.resultName)).list().apply()
+        select.from(IngredientScala.as(is))
+      }.map(result => IngredientScala(result, is.resultName)).list().apply()
     }
 
   override def recipeIngredients(recipeId: Long): Seq[RecipeIngredient] =

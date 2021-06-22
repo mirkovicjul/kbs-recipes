@@ -1,37 +1,33 @@
 package models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "ingredient_storage")
-public class IngredientStorage {
+public class IngredientStorage implements Serializable {
 
     @Id
     @Column
     Long id;
 
     @Column
-    User user;
-
-    @Column
+    @ManyToOne
     Ingredient ingredient;
 
     @Column
     Double quantity;
 
     @Column
+    @ManyToOne
     Measurement measurement;
 
     @Column
     LocalDate bestBefore;
 
-    public IngredientStorage(Long id, User user, Ingredient ingredient, Double quantity, Measurement measurement, LocalDate bestBefore) {
+    public IngredientStorage(Long id, Ingredient ingredient, Double quantity, Measurement measurement, LocalDate bestBefore) {
         this.id = id;
-        this.user = user;
         this.ingredient = ingredient;
         this.quantity = quantity;
         this.measurement = measurement;
@@ -45,15 +41,7 @@ public class IngredientStorage {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
+    
     public Ingredient getIngredient() {
         return ingredient;
     }
