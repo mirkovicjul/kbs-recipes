@@ -1,0 +1,10 @@
+TRUNCATE users cascade;
+TRUNCATE history cascade;
+TRUNCATE ingredient_storage cascade;
+TRUNCATE ingredients cascade;
+TRUNCATE measurement_converter cascade;
+TRUNCATE recipe_ingredients cascade;
+TRUNCATE recipe_storage cascade;
+TRUNCATE recipes cascade;
+TRUNCATE user_types cascade;
+TRUNCATE measurements cascade;
