@@ -8,6 +8,7 @@ import { HomeComponent } from './components/home/home.component';
 import { IngredientComponent } from './components/ingredient/ingredient.component';
 import { HistoryComponent } from './components/history/history.component';
 import { RecipesComponent } from './components/recipes/recipes.component';
+import { RecipeProfileComponent } from './components/recipe-profile/recipe-profile.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent},
@@ -18,7 +19,8 @@ const routes: Routes = [
   { path: 'storage', component: StorageComponent},
   { path: 'home', component: HomeComponent},
   { path: 'history', component: HistoryComponent},
-  { path: 'recipes', component: RecipesComponent}
+  { path: 'recipes', component: RecipesComponent},
+  { path: 'recipe/:id', component: RecipeProfileComponent }
 
 ];
 

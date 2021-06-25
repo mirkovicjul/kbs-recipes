@@ -12,6 +12,8 @@ trait RecipeRepo {
 
   def allRecipes(): Seq[Recipe]
 
+  def recipeById(id: Long): Recipe
+
 }
 
 class RecipeRepoImpl extends RecipeRepo {
@@ -28,5 +30,7 @@ class RecipeRepoImpl extends RecipeRepo {
     }
 
   override def allRecipes(): Seq[Recipe] = find.all().asScala.toList
+
+  override def recipeById(id: Long): Recipe = find.byId(id)
 
 }

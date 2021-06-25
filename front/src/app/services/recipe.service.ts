@@ -21,4 +21,15 @@ export class RecipeService {
     }
     return this.http.get<Recipe[]>(`${this.apiUrl}recipes`, config);
   }
+
+  getRecipeById(id: number) {
+    var config = {
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json'
+      }
+    }
+    return this.http.get<Recipe>(`${this.apiUrl}recipe/`+id, config);
+  }
+  
 }

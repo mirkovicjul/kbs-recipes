@@ -16,9 +16,16 @@ class RecipeController @Inject()(
                                 )(implicit ec: ExecutionContext)
   extends BaseController with LazyLogging {
 
-  def getAllRecipes(): Action[AnyContent] = Action.async { request =>
+  def getAllRecipes(): Action[AnyContent] = Action.async {
 
     val res: java.util.List[Recipe] = recipeService.getAllRecipes().asJava
+    Future(Ok(Json.toJson(res).toString))
+
+  }
+
+  def getRecipeById(id: Long): Action[AnyContent] = Action.async {
+
+    val res = recipeService.getRecipeById(id)
     Future(Ok(Json.toJson(res).toString))
 
   }

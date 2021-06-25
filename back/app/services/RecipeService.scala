@@ -8,10 +8,13 @@ import javax.inject.Inject
 
 trait RecipeService {
   def getAllRecipes(): Seq[Recipe]
+  def getRecipeById(id: Long): Recipe
 }
 
 class RecipeServiceImpl @Inject()(recipeRepo: RecipeRepo) extends RecipeService with LazyLogging {
 
   override def getAllRecipes(): Seq[Recipe] = recipeRepo.allRecipes()
+
+  override def getRecipeById(id: Long): Recipe = recipeRepo.recipeById(id)
 
 }
