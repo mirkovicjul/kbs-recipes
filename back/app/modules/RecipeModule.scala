@@ -5,7 +5,7 @@ import drools.{SessionCache, SessionCacheImpl}
 import org.kie.api.runtime.KieContainer
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment}
-import services.{HistoryService, HistoryServiceImpl, IngredientStorageService, IngredientStorageServiceImpl, LoginService, LoginServiceImpl, RecipeStorageService, RecipeStorageServiceImpl, RecommendationService, RecommendationServiceImpl, UserService, UserServiceImpl}
+import services.{HistoryService, HistoryServiceImpl, IngredientStorageService, IngredientStorageServiceImpl, LoginService, LoginServiceImpl, RecipeService, RecipeServiceImpl, RecipeStorageService, RecipeStorageServiceImpl, RecommendationService, RecommendationServiceImpl, UserService, UserServiceImpl}
 
 class RecipeModule extends Module {
 
@@ -18,6 +18,7 @@ class RecipeModule extends Module {
       bind[IngredientStorageService].to(classOf[IngredientStorageServiceImpl]).eagerly(),
       bind[RecipeStorageService].to(classOf[RecipeStorageServiceImpl]).eagerly(),
       bind[HistoryService].to(classOf[HistoryServiceImpl]).eagerly(),
+      bind[RecipeService].to(classOf[RecipeServiceImpl]).eagerly(),
 
       // repos
       bind[UserRepo].to(classOf[UserRepoPostgres]).eagerly(),
@@ -27,6 +28,7 @@ class RecipeModule extends Module {
       bind[IngredientStorageRepo].to(classOf[IngredientStorageRepoImpl]).eagerly(),
       bind[RecipeStorageRepo].to(classOf[RecipeStorageRepoImpl]).eagerly(),
       bind[HistoryRepo].to(classOf[HistoryRepoImpl]).eagerly(),
+      bind[RecipeRepo].to(classOf[RecipeRepoImpl]).eagerly(),
 
       // utils
       bind[KieContainer].toProvider(classOf[KieContainerProvider]).eagerly(),

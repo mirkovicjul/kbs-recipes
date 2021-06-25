@@ -35,10 +35,13 @@ public class Recipe {
     @Column
     Long daysBeforeExpiration;
 
+    @Column
+    Long preparationTime;
+
     @OneToMany(mappedBy = "recipe", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<RecipeIngredient> ingredients;
 
-    public Recipe(Long id, String title, String description, Long numberOfPortions, Boolean vegan, Boolean vegetarian, Boolean junkFood, Long daysBeforeExpiration, List<RecipeIngredient> ingredients) {
+    public Recipe(Long id, String title, String description, Long numberOfPortions, Boolean vegan, Boolean vegetarian, Boolean junkFood, Long daysBeforeExpiration, Long preparationTime, List<RecipeIngredient> ingredients) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -47,6 +50,7 @@ public class Recipe {
         this.vegetarian = vegetarian;
         this.junkFood = junkFood;
         this.daysBeforeExpiration = daysBeforeExpiration;
+        this.preparationTime = preparationTime;
         this.ingredients = ingredients;
     }
 
@@ -120,5 +124,13 @@ public class Recipe {
 
     public void setIngredients(List<RecipeIngredient> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public Long getPreparationTime() {
+        return preparationTime;
+    }
+
+    public void setPreparationTime(Long preparationTime) {
+        this.preparationTime = preparationTime;
     }
 }

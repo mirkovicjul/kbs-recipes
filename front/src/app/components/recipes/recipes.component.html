@@ -1,1 +1,36 @@
-<p>recipes works!</p>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<div class="container">
+
+  <section class="col-xs-12 col-sm-6 col-md-12">
+    <div *ngFor="let recipe of recipes">
+      <article class="search-result row">
+
+        <div class="col-xs-12 col-sm-12 col-md-3">
+          <img src="../../../assets/pizza.jpg" />
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-2">
+          <ul class="meta-search">
+            <li><span>{{recipe.title}}</span></li>
+            <li><span>{{recipe.preparationTime}}</span></li>
+            <li><span>{{recipe.numberOfPortions}} servings</span></li>
+          </ul>
+          <!-- <h6> From <span style="color:green; font-size: 20px;">{{hotel.najnizaCena}}€</span> / room ({{nights}} nights)</h6> -->
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
+          <h3><a title=""  style="cursor: pointer; ">{{recipe.title}}</a></h3>
+          <p>{{recipe.description}}</p>
+        </div>
+        
+      </article>
+      <br>
+    </div>
+  </section>
+
+ 
+  
+</div>

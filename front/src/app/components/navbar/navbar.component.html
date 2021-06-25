@@ -7,6 +7,9 @@
     <span *ngIf="this.userService.isLoggedIn() && !this.userService.isAdmin()">
       <button mat-button [routerLink]="['/history']">History</button>
     </span>
+    <span>
+      <button mat-button [routerLink]="['/recipes']">Recipes</button>
+    </span>
     <span *ngIf="this.userService.isLoggedIn() && !this.userService.isAdmin()">
       <button mat-button [routerLink]="['/storage']">Storage</button>
     </span>

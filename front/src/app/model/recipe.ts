@@ -9,5 +9,6 @@ export interface Recipe {
     vegan: boolean;
     vegetarian: boolean;
     junkFood: boolean;
-    daysBeforeExpiration: number
+    daysBeforeExpiration: number;
+    preparationTime: number;
 }
