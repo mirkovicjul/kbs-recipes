@@ -5,7 +5,11 @@
 <div class="container">
 
   <section class="col-xs-12 col-sm-6 col-md-12">
-    
+
+        <h2 style="text-align: center;">{{recipe.title}}</h2>
+        <br>
+        <h5 style="text-align: center;">{{recipe.numberOfPortions}} servings ~ {{recipe.preparationTime}} min</h5>
+        <br><br>
       <article class="search-result row">
 
         <div class="col-xs-12 col-sm-12 col-md-3">
@@ -13,16 +17,12 @@
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-2">
-          <ul class="meta-search">
-            <li><span>{{recipe.title}}</span></li>
-            <li><span>{{recipe.preparationTime}}</span></li>
-            <li><span>{{recipe.numberOfPortions}} servings</span></li>
+          <ul class="meta-search" *ngFor="let ingredient of recipe.ingredients">
+            <li><span> {{ingredient.quantity}} {{ingredient.measurement.measurement}} {{ingredient.ingredient.ingredient}}</span></li>
           </ul>
-          <!-- <h6> From <span style="color:green; font-size: 20px;">{{hotel.najnizaCena}}€</span> / room ({{nights}} nights)</h6> -->
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
-          <h3><a title=""  style="cursor: pointer; ">{{recipe.title}}</a></h3>
           <p>{{recipe.description}}</p>
         </div>
         

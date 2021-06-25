@@ -3,7 +3,7 @@ import { Measurement } from "./measurement";
 
 export interface RecipeIngredient {
     id: number;
-    ingredients: Ingredient[];
+    ingredient: Ingredient;
     measurement: Measurement;
     quantity: number
 }
