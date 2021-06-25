@@ -14,15 +14,14 @@
 
         <div class="col-xs-12 col-sm-12 col-md-2">
           <ul class="meta-search">
-            <li><span>{{recipe.title}}</span></li>
-            <li><span>{{recipe.preparationTime}}</span></li>
+            <li><span>{{recipe.preparationTime}} min</span></li>
             <li><span>{{recipe.numberOfPortions}} servings</span></li>
           </ul>
           <!-- <h6> From <span style="color:green; font-size: 20px;">{{hotel.najnizaCena}}€</span> / room ({{nights}} nights)</h6> -->
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
-          <h3><a title=""  style="cursor: pointer; ">{{recipe.title}}</a></h3>
+          <h3><a title=""  (click)="goToRecipe(recipe.id)" style="cursor: pointer; ">{{recipe.title}}</a></h3>
           <p>{{recipe.description}}</p>
         </div>
         
