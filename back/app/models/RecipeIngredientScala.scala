@@ -2,21 +2,21 @@ package models
 
 import scalikejdbc._
 
-case class RecipeIngredient(
+case class RecipeIngredientScala(
     ingredientId: Long,
     recipeId: Long,
     measurementId: Long,
     amount: Double
 )
 
-object RecipeIngredient extends SQLSyntaxSupport[RecipeIngredient] {
+object RecipeIngredientScala extends SQLSyntaxSupport[RecipeIngredientScala] {
 
   override def tableName: String = "recipe_ingredients"
 
   override def nameConverters: Map[String, String] = Map("^amount$" -> "quantity")
 
-  def apply(rs: WrappedResultSet, rn: ResultName[RecipeIngredient]): RecipeIngredient =
-    RecipeIngredient(
+  def apply(rs: WrappedResultSet, rn: ResultName[RecipeIngredientScala]): RecipeIngredientScala =
+    RecipeIngredientScala(
       ingredientId = rs.get[Long](rn.ingredientId),
       recipeId = rs.get[Long](rn.recipeId),
       measurementId = rs.get[Long](rn.measurementId),

@@ -1,0 +1,17 @@
+
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Recipe</th>
+        <th scope="col">Servings</th>
+        <th scope="col">Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr  *ngFor="let h of history;">
+        <td>{{ h.recipe.title }}</td>
+        <td>{{ h.servings }}</td>
+        <td>{{ h.date }}</td>
+      </tr>
+    </tbody>
+  </table>

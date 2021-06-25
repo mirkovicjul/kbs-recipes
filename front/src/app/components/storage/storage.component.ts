@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { IngredientStorageItem } from 'src/app/model/ingredient-storage-item';
+import { MealStorageItem } from 'src/app/model/meal-storage-item';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-storage',
@@ -7,9 +10,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StorageComponent implements OnInit {
 
-  constructor() { }
+  ingredientStorage: IngredientStorageItem[]
+
+  mealStorage: MealStorageItem[]
+
+  constructor(private storageService: StorageService) { }
 
   ngOnInit() {
+    this.storageService.getIngredientStorage().subscribe(response => this.ingredientStorage = response);
+    this.storageService.getRecipeStorage().subscribe(response => this.mealStorage = response);
   }
 
 }

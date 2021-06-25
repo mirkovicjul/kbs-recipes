@@ -6,6 +6,7 @@ import { RecommendComponent } from './components/recommend/recommend.component';
 import { StorageComponent } from './components/storage/storage.component';
 import { HomeComponent } from './components/home/home.component';
 import { IngredientComponent } from './components/ingredient/ingredient.component';
+import { HistoryComponent } from './components/history/history.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent},
@@ -14,7 +15,9 @@ const routes: Routes = [
   { path: 'ingredient', component: IngredientComponent},
   { path: 'recommend', component: RecommendComponent},
   { path: 'storage', component: StorageComponent},
-  { path: 'home', component: HomeComponent}
+  { path: 'home', component: HomeComponent},
+  { path: 'history', component: HistoryComponent}
+
 ];
 
 @NgModule({

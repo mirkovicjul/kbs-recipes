@@ -17,6 +17,12 @@ import { HomeComponent } from './components/home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MaterialModule } from './material.module';
+import { HistoryComponent } from './components/history/history.component';
+import { HistoryService } from './services/history.service';
+import { RecommendationService } from './services/recommendation.service';
+import { RegistrationService } from './services/registration.service';
+import { StorageService } from './services/storage.service';
+import { RecipesComponent } from './components/recipes/recipes.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +33,9 @@ import { MaterialModule } from './material.module';
     RecipeComponent,
     RecommendComponent,
     NavbarComponent,
-    HomeComponent
+    HomeComponent,
+    HistoryComponent,
+    RecipesComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +48,11 @@ import { MaterialModule } from './material.module';
     MatNativeDateModule
   ],
   providers: [
-    LoginService
+    LoginService,
+    HistoryService,
+    RecommendationService,
+    RegistrationService,
+    StorageService
   ],
   bootstrap: [
     AppComponent,

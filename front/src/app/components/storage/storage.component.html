@@ -1,3 +1,46 @@
-<p>
-  storage works!
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Recipe</th>
+            <th scope="col">Servings</th>
+            <th scope="col">Best before</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr  *ngFor="let meal of mealStorage">
+            <td>{{meal.recipe.title}}</td>
+            <td>{{meal.servings}}</td>
+            <td>{{meal.bestBefore}}</td>
+            <td><button class="btn btn-primary">Remove</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="col-sm">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Recipe</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Best before</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr  *ngFor="let ingredient of ingredientStorage">
+            <td>{{ingredient.ingredient.ingredient}}</td>
+            <td>{{ingredient.quantity}} {{ingredient.measurement.measurement}}</td>
+            <td>{{ingredient.bestBefore}}</td>
+            <td><button class="btn btn-primary">Remove</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

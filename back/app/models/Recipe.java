@@ -1,9 +1,10 @@
 package models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "recipes")
@@ -34,7 +35,10 @@ public class Recipe {
     @Column
     Long daysBeforeExpiration;
 
-    public Recipe(Long id, String title, String description, Long numberOfPortions, Boolean vegan, Boolean vegetarian, Boolean junkFood, Long daysBeforeExpiration) {
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    List<RecipeIngredient> ingredients;
+
+    public Recipe(Long id, String title, String description, Long numberOfPortions, Boolean vegan, Boolean vegetarian, Boolean junkFood, Long daysBeforeExpiration, List<RecipeIngredient> ingredients) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -43,6 +47,7 @@ public class Recipe {
         this.vegetarian = vegetarian;
         this.junkFood = junkFood;
         this.daysBeforeExpiration = daysBeforeExpiration;
+        this.ingredients = ingredients;
     }
 
     public Long getId() {
@@ -109,4 +114,11 @@ public class Recipe {
         this.daysBeforeExpiration = daysBeforeExpiration;
     }
 
+    public List<RecipeIngredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<RecipeIngredient> ingredients) {
+        this.ingredients = ingredients;
+    }
 }
