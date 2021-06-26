@@ -30,7 +30,7 @@ class LoginServiceImpl @Inject()(
     userRepo.getByUsername(username).flatMap {
       case Some(user) if password.isBcrypted(user.getPassword) =>
         createToken(user).map { token =>
-          //recommendationService.initSession(user.getId)
+          recommendationService.initSession(user.getId)
           LoginResponse(true, token, "Successfully logged in")
         }
       case Some(user) if !password.isBcrypted(user.getPassword) =>

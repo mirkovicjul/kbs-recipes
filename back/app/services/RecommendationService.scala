@@ -5,18 +5,13 @@ import database.{IngredientRepo, MeasurementRepo, RecipeRepo, UserRepo}
 import drools.SessionCache
 import drools.cep.WantsNewRecommendation
 import drools.conclusion.Vegetarian
-import drools.recommendation.{
-  Recommendation,
-  Ingredient => IngredientFact,
-  Measurement => MeasurementFact,
-  Recipe => RecipeFact,
-  RecipeIngredient => RecipeIngredientFact
-}
+import drools.recommendation.{Recommendation, StorageItem, User, Ingredient => IngredientFact, Measurement => MeasurementFact, Recipe => RecipeFact, RecipeIngredient => RecipeIngredientFact}
 import org.kie.api.runtime.KieSession
 
 import javax.inject.Inject
 import scala.collection.JavaConverters.seqAsJavaListConverter
 import scala.jdk.CollectionConverters.IteratorHasAsScala
+import java.util.{ArrayList => JArrayList}
 
 trait RecommendationService {
 
@@ -41,6 +36,18 @@ class RecommendationServiceImpl @Inject()(
     logger.info(s"Initializing KIE Session for user $userId...")
 
     val session: KieSession = sessions.simpleSession(userId)
+
+    logger.info(s"Adding user $userId to KIE Session...")
+    session.insert(
+      new User(
+        userId,
+        new JArrayList[IngredientFact](), // TODO: Replace with real values
+        new JArrayList[IngredientFact](),
+        new JArrayList[IngredientFact](),
+        new JArrayList[IngredientFact](),
+        new JArrayList[StorageItem]()
+      )
+    )
 
     logger.info(s"Adding ingredients to user $userId KIE Session...")
     val allIngredients: Seq[IngredientFact] =
@@ -97,6 +104,9 @@ class RecommendationServiceImpl @Inject()(
 
   override def recommendOnHomepage(userId: Long): Seq[Recommendation] = {
     val session: KieSession = sessions.simpleSession(userId)
+
+    session.getAgenda().getAgendaGroup("Conclusion").setFocus()
+    session.getAgenda().getAgendaGroup("Recommendation").setFocus()
 
     session.fireAllRules
 
