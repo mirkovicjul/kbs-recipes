@@ -22,9 +22,6 @@ class RecommendationController @Inject()(
   def regular(): Action[AnyContent] = Action {
     implicit req: Request[AnyContent] =>
       val requestParams: RecommendationRequest = req.body.asJson.get.as[RecommendationRequest]
-
-      recommendationService.initSession(requestParams.userId)
-
       logger.info(s"Recommending recipes for user ${requestParams.userId}...")
 
       val recommendations: Seq[Recommendation] = recommendationService.recommendOnHomepage(requestParams.userId)

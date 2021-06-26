@@ -1,5 +1,6 @@
 package services
 
+import com.google.common.collect.ImmutableList
 import com.typesafe.scalalogging.LazyLogging
 import database.{IngredientRepo, MeasurementRepo, RecipeRepo, UserRepo}
 import drools.SessionCache
@@ -37,18 +38,6 @@ class RecommendationServiceImpl @Inject()(
 
     val session: KieSession = sessions.simpleSession(userId)
 
-    logger.info(s"Adding user $userId to KIE Session...")
-    session.insert(
-      new User(
-        userId,
-        new JArrayList[IngredientFact](), // TODO: Replace with real values
-        new JArrayList[IngredientFact](),
-        new JArrayList[IngredientFact](),
-        new JArrayList[IngredientFact](),
-        new JArrayList[StorageItem]()
-      )
-    )
-
     logger.info(s"Adding ingredients to user $userId KIE Session...")
     val allIngredients: Seq[IngredientFact] =
       ingredientRepo
@@ -64,6 +53,20 @@ class RecommendationServiceImpl @Inject()(
           )
         }
     allIngredients.foreach(session.insert)
+
+    val likes: Seq[IngredientFact] = Nil
+
+    logger.info(s"Adding user $userId to KIE Session...")
+    session.insert(
+      new User(
+        userId,
+        allIngredients.filter(r => likes.map(_.getId).contains(r.getId)).asJava, // TODO: test with manually created facts
+        new JArrayList[IngredientFact](),
+        new JArrayList[IngredientFact](),
+        new JArrayList[IngredientFact](),
+        new JArrayList[StorageItem]()
+      )
+    )
 
     logger.info(s"Adding measurements to user $userId KIE Session...")
     val allMeasurements: Seq[MeasurementFact] =
@@ -110,12 +113,16 @@ class RecommendationServiceImpl @Inject()(
 
     session.fireAllRules
 
-    session
+    val results = session
       .getQueryResults("SimpleResults")
       .iterator()
       .asScala
       .map(r => r.get("$recommendation").asInstanceOf[Recommendation])
       .toSeq
+
+    results.headOption.map(session.getFactHandle(_)).foreach(session.delete)
+
+    results
   }
 
   override def somethingNew(userId: Long): Seq[Recommendation] = {
