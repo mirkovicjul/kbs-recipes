@@ -10,6 +10,8 @@ trait SessionCache {
 
   def simpleSession(userId: Long): KieSession
 
+  def exist(userId: Long): Boolean
+
   def invalidateSimpleSession(userId: Long): Unit
 
 }
@@ -24,6 +26,8 @@ class SessionCacheImpl @Inject()(kieContainer: KieContainer) extends SessionCach
 
   override def simpleSession(userId: Long): KieSession =
     simpleSessionCache.get(userId, _ => kieContainer.newKieSession("Recommendation"))
+
+  override def exist(userId: Long): Boolean = simpleSessionCache.asMap().keySet().contains(userId)
 
   override def invalidateSimpleSession(userId: Long): Unit = {
     Option(simpleSessionCache.getIfPresent(userId)).foreach(_.dispose())

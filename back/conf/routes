@@ -13,11 +13,12 @@ GET     /images/*file               controllers.Assets.at(path="/public/content"
 
 POST    /login                      controllers.LoginController.login()
 
+POST    /logout                     controllers.LoginController.logout()
+
 GET     /user                       controllers.UserController.getUser()
 
 POST    /register                   controllers.UserController.register()
 
-+nocsrf
 POST    /testAuth                   controllers.UserController.testAuth()
 
 POST    /recommendation/regular     controllers.RecommendationController.regular()
@@ -32,6 +33,4 @@ GET     /history                    controllers.HistoryController.getHistory()
 
 GET     /recipes                    controllers.RecipeController.getAllRecipes()
 GET     /recipe/:id                 controllers.RecipeController.getRecipeById(id: Long)
-
-+nocsrf
 POST    /recipe                     controllers.RecipeController.addRecipe()

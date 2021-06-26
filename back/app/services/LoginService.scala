@@ -1,6 +1,7 @@
 package services
 
 import com.github.t3hnar.bcrypt._
+import com.typesafe.scalalogging.LazyLogging
 import database.UserRepo
 import models.{LoginResponse, User}
 import pdi.jwt.{JwtAlgorithm, JwtJson}
@@ -13,6 +14,8 @@ trait LoginService {
 
   def login(username: String, password: String): Future[LoginResponse]
 
+  def logout(userId: Long): Unit
+
   def createToken(user: User): Future[String]
 
 }
@@ -21,7 +24,7 @@ class LoginServiceImpl @Inject()(
     userRepo: UserRepo,
     recommendationService: RecommendationService
 )(implicit ec: ExecutionContext)
-    extends LoginService {
+    extends LoginService with LazyLogging {
 
   override def login(
       username: String,
@@ -43,6 +46,11 @@ class LoginServiceImpl @Inject()(
         }
       }
     }
+
+  override def logout(userId: Long): Unit = {
+    logger.info(s"Logging out user $userId.")
+    recommendationService.removeSession(userId)
+  }
 
   override def createToken(user: User): Future[String] = {
     Future {

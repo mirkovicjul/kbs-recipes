@@ -1,5 +1,6 @@
 package controllers
 
+import auth.AuthUtils
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, JsValue, Json, Reads}
 import play.api.mvc._
@@ -14,24 +15,29 @@ case class UserLogin(username: String, password: String)
 class LoginController @Inject()(
     val controllerComponents: ControllerComponents,
     loginService: LoginService
-)(implicit ec: ExecutionContext) extends BaseController {
+)(implicit ec: ExecutionContext)
+    extends BaseController {
 
-  /**
-    * Create an Action to render an HTML page.
-    *
-    * The configuration in the `routes` file means that this method
-    * will be called when the application receives a `GET` request with
-    * a path of `/`.
-    */
   def login() = Action.async { implicit request: Request[AnyContent] =>
     val json = request.body.asJson.get
     val user = json.as[UserLogin]
 
-    val serviceResult: Future[JsValue] = loginService.login(user.username, user.password).map(r => Json.toJson(r))
+    val serviceResult: Future[JsValue] =
+      loginService.login(user.username, user.password).map(r => Json.toJson(r))
 
     val resultToReturn: Future[Result] = serviceResult.map(x => Ok(x))
 
     resultToReturn
+  }
+
+  def logout() = Action.apply { implicit request =>
+    AuthUtils.extractUserId(request) match {
+      case Some(userId) =>
+        loginService.logout(userId)
+        Ok
+      case None =>
+        BadRequest
+    }
   }
 }
 
@@ -40,6 +46,6 @@ object UserLogin {
   implicit val userLoginReads: Reads[UserLogin] = (
     (JsPath \ "username").read[String] and
       (JsPath \ "password").read[String]
-    )(UserLogin.apply _)
+  )(UserLogin.apply _)
 
 }
