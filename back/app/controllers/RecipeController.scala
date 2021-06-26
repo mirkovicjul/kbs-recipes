@@ -18,13 +18,12 @@ import scala.jdk.CollectionConverters.SeqHasAsJava
 
 class RecipeController @Inject()(
     val controllerComponents: ControllerComponents,
-    recipeService: RecipeService,
-    conf: Configuration
+    recipeService: RecipeService
 )(implicit ec: ExecutionContext)
     extends BaseController
     with LazyLogging {
 
-  private val StoragePath = conf.get[String]("recipes.images.dir")
+  private val Sep = java.io.File.separator
 
   def getAllRecipes(): Action[AnyContent] = Action.async {
     val res: java.util.List[Recipe] = recipeService.getAllRecipes().asJava
@@ -46,7 +45,7 @@ class RecipeController @Inject()(
       (rForm: RecipeForm) => {
         val recipeImageFilepath = request.body.asMultipartFormData.flatMap { d =>
           d.file("recipeImage").map { picture =>
-            picture.ref.moveTo(new java.io.File(s"$StoragePath${java.io.File.separator}${UUID.randomUUID}")).getFileName.toString
+            picture.ref.moveTo(new java.io.File(s"public${Sep}content$Sep${UUID.randomUUID}")).getFileName.toString
           }
         }
 
