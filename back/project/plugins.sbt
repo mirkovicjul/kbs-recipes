@@ -6,3 +6,4 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-play-ebean" % "6.0.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-play-enhancer" % "1.2.2")
 
+addSbtPlugin("au.com.onegeek" % "sbt-dotenv" % "2.1.204")

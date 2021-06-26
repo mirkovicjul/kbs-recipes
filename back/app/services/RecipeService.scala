@@ -21,13 +21,15 @@ trait RecipeService {
       vegetarian: Boolean,
       junkFood: Boolean,
       daysBeforeExpiration: Long,
-      preparationTime: Long
+      preparationTime: Long,
+      imageName: Option[String]
   ): Recipe
 
 }
 
-class RecipeServiceImpl @Inject()(recipeRepo: RecipeRepo)
-    extends RecipeService
+class RecipeServiceImpl @Inject()(
+    recipeRepo: RecipeRepo
+) extends RecipeService
     with LazyLogging {
 
   override def getAllRecipes(): Seq[Recipe] = recipeRepo.allRecipes()
@@ -42,8 +44,11 @@ class RecipeServiceImpl @Inject()(recipeRepo: RecipeRepo)
       vegetarian: Boolean,
       junkFood: Boolean,
       daysBeforeExpiration: Long,
-      preparationTime: Long
-  ): Recipe =
+      preparationTime: Long,
+      imageName: Option[String]
+  ): Recipe = {
+    val imagePath = imageName.map(fileName => s"http://localhost:9000/images/$fileName").orNull
+
     recipeRepo.saveRecipe(
       new Recipe(
         title,
@@ -54,8 +59,10 @@ class RecipeServiceImpl @Inject()(recipeRepo: RecipeRepo)
         junkFood,
         daysBeforeExpiration,
         preparationTime,
-        new JArrayList[RecipeIngredient]()
+        new JArrayList[RecipeIngredient](),
+        imagePath
       )
     )
+  }
 
 }

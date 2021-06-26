@@ -37,6 +37,9 @@ public class Recipe extends Model {
     @Column
     Long preparationTime;
 
+    @Column
+    String image;
+
     @OneToMany(mappedBy = "recipe", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<RecipeIngredient> ingredients;
 
@@ -73,7 +76,8 @@ public class Recipe extends Model {
             Boolean junkFood,
             Long daysBeforeExpiration,
             Long preparationTime,
-            List<RecipeIngredient> ingredients
+            List<RecipeIngredient> ingredients,
+            String image
     ) {
         this.title = title;
         this.description = description;
@@ -84,6 +88,7 @@ public class Recipe extends Model {
         this.daysBeforeExpiration = daysBeforeExpiration;
         this.preparationTime = preparationTime;
         this.ingredients = ingredients;
+        this.image = image;
     }
 
     public Long getId() {
@@ -164,5 +169,13 @@ public class Recipe extends Model {
 
     public void setPreparationTime(Long preparationTime) {
         this.preparationTime = preparationTime;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

@@ -4,22 +4,27 @@ import com.typesafe.scalalogging.LazyLogging
 import controllers.RecipeController.recipeForm
 import forms.RecipeForm
 import models.Recipe
+import play.api.Configuration
 import play.api.data.Forms._
 import play.api.data._
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
 import play.libs.Json
 import services.RecipeService
 
+import java.util.UUID
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.jdk.CollectionConverters.SeqHasAsJava
 
 class RecipeController @Inject()(
     val controllerComponents: ControllerComponents,
-    recipeService: RecipeService
+    recipeService: RecipeService,
+    conf: Configuration
 )(implicit ec: ExecutionContext)
     extends BaseController
     with LazyLogging {
+
+  private val StoragePath = conf.get[String]("recipes.images.dir")
 
   def getAllRecipes(): Action[AnyContent] = Action.async {
     val res: java.util.List[Recipe] = recipeService.getAllRecipes().asJava
@@ -39,6 +44,12 @@ class RecipeController @Inject()(
         BadRequest
       },
       (rForm: RecipeForm) => {
+        val recipeImageFilepath = request.body.asMultipartFormData.flatMap { d =>
+          d.file("recipeImage").map { picture =>
+            picture.ref.moveTo(new java.io.File(s"$StoragePath${java.io.File.separator}${UUID.randomUUID}")).getFileName.toString
+          }
+        }
+
         recipeService.saveRecipe(
           rForm.title,
           rForm.description,
@@ -47,9 +58,10 @@ class RecipeController @Inject()(
           rForm.vegetarian,
           rForm.junkFood,
           rForm.daysBeforeExpiration,
-          rForm.preparationTime
+          rForm.preparationTime,
+          recipeImageFilepath
         )
-        Ok
+        Ok("Successfully added new recipe!")
       }
     )
   }

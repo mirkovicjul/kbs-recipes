@@ -1,11 +1,7 @@
 -- !Ups
 
-CREATE TABLE recipe_images (
-	id SERIAL PRIMARY KEY,
-	recipe_id INT REFERENCES recipes(id) NOT NULL,
-	path VARCHAR(255) NOT NULL
-);
+ALTER TABLE recipes ADD COLUMN image VARCHAR(255);
 
 -- !Downs
 
-DROP TABLE recipe_images;
+ALTER TABLE recipes DROP COLUMN IF EXISTS image;
