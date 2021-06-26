@@ -1,14 +1,13 @@
 package models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.ebean.Model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "recipes")
-public class Recipe {
+public class Recipe extends Model {
 
     @Id
     @Column
@@ -41,8 +40,41 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<RecipeIngredient> ingredients;
 
-    public Recipe(Long id, String title, String description, Long numberOfPortions, Boolean vegan, Boolean vegetarian, Boolean junkFood, Long daysBeforeExpiration, Long preparationTime, List<RecipeIngredient> ingredients) {
+    public Recipe(
+            Long id,
+            String title,
+            String description,
+            Long numberOfPortions,
+            Boolean vegan,
+            Boolean vegetarian,
+            Boolean junkFood,
+            Long daysBeforeExpiration,
+            Long preparationTime,
+            List<RecipeIngredient> ingredients
+    ) {
         this.id = id;
+        this.title = title;
+        this.description = description;
+        this.numberOfPortions = numberOfPortions;
+        this.vegan = vegan;
+        this.vegetarian = vegetarian;
+        this.junkFood = junkFood;
+        this.daysBeforeExpiration = daysBeforeExpiration;
+        this.preparationTime = preparationTime;
+        this.ingredients = ingredients;
+    }
+
+    public Recipe(
+            String title,
+            String description,
+            Long numberOfPortions,
+            Boolean vegan,
+            Boolean vegetarian,
+            Boolean junkFood,
+            Long daysBeforeExpiration,
+            Long preparationTime,
+            List<RecipeIngredient> ingredients
+    ) {
         this.title = title;
         this.description = description;
         this.numberOfPortions = numberOfPortions;

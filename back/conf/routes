@@ -9,6 +9,8 @@ GET     /                           controllers.HomeController.index()
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
+GET     /static/*file               controllers.Assets.at(path="/public/uploads", file)
+
 POST    /login                      controllers.LoginController.login()
 
 GET     /user                       controllers.UserController.getUser()
@@ -26,6 +28,10 @@ GET     /recipeStorage              controllers.StorageController.getRecipeStora
 
 GET     /history                    controllers.HistoryController.getHistory()
 
-GET     /recipes                    controllers.RecipeController.getAllRecipes()
+# Recipe resource
 
+GET     /recipes                    controllers.RecipeController.getAllRecipes()
 GET     /recipe/:id                 controllers.RecipeController.getRecipeById(id: Long)
+
++nocsrf
+POST    /recipe                     controllers.RecipeController.addRecipe()
