@@ -11,4 +11,5 @@ export interface Recipe {
     junkFood: boolean;
     daysBeforeExpiration: number;
     preparationTime: number;
+    image: string;
 }

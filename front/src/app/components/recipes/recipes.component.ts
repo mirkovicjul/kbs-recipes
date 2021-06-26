@@ -17,8 +17,5 @@ export class RecipesComponent implements OnInit {
   ngOnInit() {
     this.recipeService.getAllRecipes().subscribe(response => this.recipes = response);
   }
-
-  goToRecipe(id: number){
-    this.router.navigateByUrl('/recipe/'+id);
-  }
+  
 }

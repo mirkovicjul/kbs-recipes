@@ -3,7 +3,7 @@
 }
 
 .nav.navbar-nav li a {
-    color: #00001e;
+    color: #031e00;
 }
 
 .example-icon {
@@ -12,4 +12,9 @@
 
 .example-spacer {
     flex: 1 1 auto;
+}
+
+.navigation {
+    background-color: red !important;
+
 }

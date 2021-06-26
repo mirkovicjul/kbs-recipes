@@ -4,12 +4,14 @@
 
 <div class="container">
 
-  <section class="col-xs-12 col-sm-6 col-md-12">
-    <div *ngFor="let recipe of recipes">
+  <section class="col-xs-12 col-sm-6 col-md-12" *ngFor="let recipe of recipes">
+    <div >
       <article class="search-result row">
 
         <div class="col-xs-12 col-sm-12 col-md-3">
-          <img src="../../../assets/pizza.jpg" />
+          <a href="/recipe/{{recipe.id}}">
+           <img src='{{recipe.image}}' width="300" height="auto"/>
+          </a>
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-2">
@@ -21,12 +23,15 @@
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
-          <h3><a title=""  (click)="goToRecipe(recipe.id)" style="cursor: pointer; ">{{recipe.title}}</a></h3>
+          <h3><a href="/recipe/{{recipe.id}}" title=""  style="cursor: pointer; ">{{recipe.title}}</a></h3>
           <p>{{recipe.description}}</p>
         </div>
         
       </article>
       <br>
+      <br>
+      <br>
+    
     </div>
   </section>
 
