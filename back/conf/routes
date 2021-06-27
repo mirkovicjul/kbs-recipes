@@ -8,7 +8,7 @@ POST    /upload                     controllers.FileUploadController.upload()
 
 # User & Auth
 POST    /login                      controllers.LoginController.login()
-POST    /logout                     controllers.LoginController.logout()
+GET     /logout                     controllers.LoginController.logout()
 GET     /user                       controllers.UserController.getUser()
 POST    /register                   controllers.UserController.register()
 

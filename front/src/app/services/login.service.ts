@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { LoginResponse } from '../model/login-response';
 import { ElementSchemaRegistry } from '@angular/compiler';
 import { environment } from './../../environments/environment';
+import { AnyARecord } from 'dns';
 
 @Injectable({
   providedIn: 'root'
@@ -29,11 +30,16 @@ export class LoginService {
   }
   
   logout(){
-    //this.admin = false;
-    //this.loggedIn = false;
-    //this.token = "";
+    var config = {
+      headers: {
+        'authorization': localStorage.getItem("id_token")
+      }
+    }    
+ 
     localStorage.removeItem("id_token");
     localStorage.removeItem("admin");
+    return this.http.get<string>(`${this.apiUrl}logout`, config);
+    
   }
 
   isLoggedIn(){
