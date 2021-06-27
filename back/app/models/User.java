@@ -2,10 +2,8 @@ package models;
 
 import io.ebean.Model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -27,12 +25,30 @@ public class User extends Model {
     @Column
     Long userType;
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_likes",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "ingredient_id") }
+    )
+    List<Ingredient> likes;
+
     public User(String username, String email, String password, Long userType) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.userType = userType;
     }
+
+    public User(Long id, String username, String email, String password, Long userType, List<Ingredient> likes) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.userType = userType;
+        this.likes = likes;
+    }
+
 
     public Long getId() {
         return id;
@@ -73,4 +89,13 @@ public class User extends Model {
     public void setUserType(Long userType) {
         this.userType = userType;
     }
+
+    public List<Ingredient> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Ingredient> likes) {
+        this.likes = likes;
+    }
+
 }

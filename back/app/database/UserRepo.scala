@@ -17,6 +17,8 @@ trait UserRepo {
 
   def create(username: String, email: String, password: String): Future[Long]
 
+  def save(user: User): Future[Long]
+
 }
 
 class UserRepoPostgres extends UserRepo {
@@ -49,6 +51,11 @@ class UserRepoPostgres extends UserRepo {
     val u = new User(username, email, password, 1)
     u.save()
     Future.successful(u.getId)
+  }
+
+  override def save(user: User): Future[Long] = {
+    user.save()
+    Future.successful(user.getId)
   }
 
 }

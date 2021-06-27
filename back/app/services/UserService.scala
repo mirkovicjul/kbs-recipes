@@ -1,12 +1,14 @@
 package services
 
-import database.UserRepo
-import models.User
+import database.{IngredientRepo, UserRepo}
+import models.{Ingredient, User}
 import utils.RepoError
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import com.github.t3hnar.bcrypt._
+
+import scala.concurrent.impl.Promise
 
 trait UserService {
 
@@ -15,9 +17,10 @@ trait UserService {
   def checkIfUsernameAvailable(username: String): Future[Boolean]
   def checkIfEmailAvailable(email: String): Future[Boolean]
   def encryptPassword(password: String): Future[Option[String]]
+  def addLike(user: User, ingredientId: Long): Unit
 }
 
-class UserServiceImpl @Inject()(userRepo: UserRepo)(implicit ec: ExecutionContext) extends UserService {
+class UserServiceImpl @Inject()(userRepo: UserRepo, ingredientRepo: IngredientRepo)(implicit ec: ExecutionContext) extends UserService {
 
   override def get(id: Long): Future[Either[Throwable, User]] =
     userRepo.one(id).map {
@@ -66,6 +69,18 @@ class UserServiceImpl @Inject()(userRepo: UserRepo)(implicit ec: ExecutionContex
           }
         }
       }}
+  }
+
+  override def addLike(user: User, ingredientId: Long) = {
+    val likes = user.getLikes
+    ingredientRepo.one(ingredientId) match {
+      case Some(value) => {
+        likes.add(value)
+        user.setLikes(likes)
+        userRepo.save(user)
+      }
+      case None =>
+    }
   }
 
 }

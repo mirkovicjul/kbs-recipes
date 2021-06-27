@@ -26,3 +26,8 @@ GET     /history                    controllers.HistoryController.getHistory()
 GET     /recipes                    controllers.RecipeController.getAllRecipes()
 GET     /recipe/:id                 controllers.RecipeController.getRecipeById(id: Long)
 POST    /recipe                     controllers.RecipeController.addRecipe()
+
+
+# User preferences
+POST    /addLike                    controllers.UserController.addLike()
+

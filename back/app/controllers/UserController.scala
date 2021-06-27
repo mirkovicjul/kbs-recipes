@@ -2,14 +2,18 @@ package controllers
 
 import auth.UserAction
 import com.typesafe.scalalogging.LazyLogging
-import models.User
+import models.{IngredientStorage, User}
+import pdi.jwt.{JwtAlgorithm, JwtJson}
+import play.api.http.HeaderNames
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Reads}
 import play.api.mvc._
+import play.libs.Json
 import services.UserService
 import utils.RepoError
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.impl.Promise
 import scala.concurrent.{ExecutionContext, Future}
 
 case class UserRegistration(username: String, email: String, password: String)
@@ -56,6 +60,25 @@ class UserController @Inject()(
 
     serviceResult
 
+  }
+
+  def addLike() = userAction.async { request =>
+    val token: Option[String] = request.headers.get(HeaderNames.AUTHORIZATION)
+    val ingredientId = request.body.asJson.flatMap(j => (j \ "ingredientId").asOpt[String]).get
+    token.flatMap(t => JwtJson.decodeJson(t, "secretKey", Seq(JwtAlgorithm.HS256)).toOption) match {
+      case Some(value) => {
+        val userId = (value \ "userId").as[Long]
+        userService.get(userId).map {
+          case Left(value) => Future(Forbidden)
+          case Right(user) => {
+            userService.addLike(user, ingredientId.toLong)
+          }
+        }
+      }
+      Future(Ok)
+
+      case None => Future(Forbidden)
+    }
   }
 }
 
