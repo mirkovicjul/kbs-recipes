@@ -1,36 +1,28 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# https://www.playframework.com/documentation/latest/ScalaRouting
-# ~~~~
-
-# An example controller showing a sample home page
 GET     /                           controllers.HomeController.index()
-
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
-
-GET     /images/*file               controllers.Assets.at(path="/public/content", file)
-
-POST    /login                      controllers.LoginController.login()
-
-POST    /logout                     controllers.LoginController.logout()
-
-GET     /user                       controllers.UserController.getUser()
-
-POST    /register                   controllers.UserController.register()
-
 POST    /testAuth                   controllers.UserController.testAuth()
 
+# Assets
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /images/*file               controllers.Assets.at(path="/public/content", file)
+POST    /upload                     controllers.FileUploadController.upload()
+
+# User & Auth
+POST    /login                      controllers.LoginController.login()
+POST    /logout                     controllers.LoginController.logout()
+GET     /user                       controllers.UserController.getUser()
+POST    /register                   controllers.UserController.register()
+
+# Recommendations
 POST    /recommendation/regular     controllers.RecommendationController.regular()
 
+# Storage
 GET     /ingredientStorage          controllers.StorageController.getIngredientStorage()
-
 GET     /recipeStorage              controllers.StorageController.getRecipeStorage()
 
+# History
 GET     /history                    controllers.HistoryController.getHistory()
 
 # Recipe resource
-
 GET     /recipes                    controllers.RecipeController.getAllRecipes()
 GET     /recipe/:id                 controllers.RecipeController.getRecipeById(id: Long)
 POST    /recipe                     controllers.RecipeController.addRecipe()
