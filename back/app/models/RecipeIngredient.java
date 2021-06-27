@@ -1,12 +1,13 @@
 package models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.ebean.Model;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "recipe_ingredients")
-public class RecipeIngredient {
+public class RecipeIngredient extends Model {
 
     @Id
     @Column
@@ -31,6 +32,13 @@ public class RecipeIngredient {
 
     public RecipeIngredient(Long id, Ingredient ingredient, Recipe recipe, Measurement measurement, Double quantity) {
         this.id = id;
+        this.ingredient = ingredient;
+        this.recipe = recipe;
+        this.measurement = measurement;
+        this.quantity = quantity;
+    }
+
+    public RecipeIngredient(Ingredient ingredient, Recipe recipe, Measurement measurement, Double quantity) {
         this.ingredient = ingredient;
         this.recipe = recipe;
         this.measurement = measurement;

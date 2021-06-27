@@ -1,11 +1,13 @@
 package models;
 
+import io.ebean.Model;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "recipe_storage")
-public class RecipeStorage {
+public class RecipeStorage extends Model {
 
     @Id
     @Column

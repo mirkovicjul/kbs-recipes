@@ -1,5 +1,7 @@
 package models;
 
+import io.ebean.Model;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -7,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "measurements")
-public class Measurement {
+public class Measurement extends Model {
 
     @Id
     @Column

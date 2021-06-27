@@ -47,7 +47,7 @@ class RecommendationServiceImpl @Inject()(
       logger.info(s"Adding ingredients to user $userId KIE Session...")
       val allIngredients: Seq[IngredientFact] =
         ingredientRepo
-          .allIngredients()
+          .allIngredientsScala()
           .map { i =>
             new IngredientFact(
               i.id,
@@ -87,7 +87,7 @@ class RecommendationServiceImpl @Inject()(
         .foreach { recipe =>
           val recipeIngredients: Seq[RecipeIngredientFact] =
             ingredientRepo
-              .recipeIngredients(recipe.getId)
+              .recipeIngredientsScala(recipe.getId)
               .map { ri =>
                 new RecipeIngredientFact(
                   allIngredients.filter(_.getId == ri.ingredientId).head,

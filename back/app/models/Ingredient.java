@@ -1,12 +1,13 @@
 package models;
 
 import drools.recommendation.IngredientType;
+import io.ebean.Model;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "ingredients")
-public class Ingredient {
+public class Ingredient extends Model {
 
     @Id
     @Column

@@ -1,12 +1,14 @@
 package models;
 
+import io.ebean.Model;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "ingredient_storage")
-public class IngredientStorage implements Serializable {
+public class IngredientStorage extends Model {
 
     @Id
     @Column

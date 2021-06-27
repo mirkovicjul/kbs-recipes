@@ -1,11 +1,13 @@
 package models;
 
+import io.ebean.Model;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "history")
-public class HistoryItem {
+public class HistoryItem extends Model {
 
     @Id
     @Column

@@ -39,6 +39,6 @@ class FileUploadController @Inject()(
 
 object FileUploadController {
   case class UploadFileResponse(filePath: String)
-  implicit val uploadFileResponseW: OFormat[UploadFileResponse] =
+  implicit val uploadFileFormat: OFormat[UploadFileResponse] =
     Json.format[UploadFileResponse]
 }
