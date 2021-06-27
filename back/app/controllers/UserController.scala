@@ -80,6 +80,64 @@ class UserController @Inject()(
       case None => Future(Forbidden)
     }
   }
+
+  def addDislike() = userAction.async { request =>
+    val token: Option[String] = request.headers.get(HeaderNames.AUTHORIZATION)
+    val ingredientId = request.body.asJson.flatMap(j => (j \ "ingredientId").asOpt[String]).get
+    token.flatMap(t => JwtJson.decodeJson(t, "secretKey", Seq(JwtAlgorithm.HS256)).toOption) match {
+      case Some(value) => {
+        val userId = (value \ "userId").as[Long]
+        userService.get(userId).map {
+          case Left(value) => Future(Forbidden)
+          case Right(user) => {
+            userService.addDislike(user, ingredientId.toLong)
+          }
+        }
+      }
+        Future(Ok)
+
+      case None => Future(Forbidden)
+    }
+  }
+
+  def addAllergy() = userAction.async { request =>
+    val token: Option[String] = request.headers.get(HeaderNames.AUTHORIZATION)
+    val ingredientId = request.body.asJson.flatMap(j => (j \ "ingredientId").asOpt[String]).get
+    token.flatMap(t => JwtJson.decodeJson(t, "secretKey", Seq(JwtAlgorithm.HS256)).toOption) match {
+      case Some(value) => {
+        val userId = (value \ "userId").as[Long]
+        userService.get(userId).map {
+          case Left(value) => Future(Forbidden)
+          case Right(user) => {
+            userService.addAllergy(user, ingredientId.toLong)
+          }
+        }
+      }
+        Future(Ok)
+
+      case None => Future(Forbidden)
+    }
+  }
+
+  def addUnavailable() = userAction.async { request =>
+    val token: Option[String] = request.headers.get(HeaderNames.AUTHORIZATION)
+    val ingredientId = request.body.asJson.flatMap(j => (j \ "ingredientId").asOpt[String]).get
+    token.flatMap(t => JwtJson.decodeJson(t, "secretKey", Seq(JwtAlgorithm.HS256)).toOption) match {
+      case Some(value) => {
+        val userId = (value \ "userId").as[Long]
+        userService.get(userId).map {
+          case Left(value) => Future(Forbidden)
+          case Right(user) => {
+            userService.addUnavailable(user, ingredientId.toLong)
+          }
+        }
+      }
+        Future(Ok)
+
+      case None => Future(Forbidden)
+    }
+  }
+
 }
 
 object UserRegistration {

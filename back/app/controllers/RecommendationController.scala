@@ -26,15 +26,17 @@ class RecommendationController @Inject()(
       AuthUtils.extractUserId(req) match {
         case Some(userId) =>
           logger.info(s"Recommending recipes for user ${userId}...")
-          val recommendations: Seq[Recommendation] =
-            recommendationService.recommendOnHomepage(userId)
-          logger.info(
-            s"Recommendation finished for user ${userId}, recommended recipes ${recommendations.size}.")
-          val recipes:java.util.List[Recipe] = recommendations.map(r => recipeService.getRecipeById(r.getRecipeId)).asJava
-          if(recipes.size() > 0)
-            (Ok(play.libs.Json.toJson(recipes.get(0)).toString()))
-          else
-            (Ok(play.libs.Json.toJson(recipeService.getRandomRecipe()).toString()))
+          val recommendation: Option[Recommendation] = recommendationService.recommendOnHomepage(userId)
+
+          recommendation match {
+            case Some(value) =>
+              logger.info(s"Recommendation finished for user $userId, recommended recipe id: ${value.getRecipeId}.")
+              val recipe = recipeService.getRecipeById(value.getRecipeId)
+              Ok(play.libs.Json.toJson(recipe).toString)
+            case None =>
+              logger.info(s"No recommendation found for user $userId, recommending random recipe.")
+              Ok(play.libs.Json.toJson(recipeService.getRandomRecipe()).toString())
+          }
         case None =>
           BadRequest
       }

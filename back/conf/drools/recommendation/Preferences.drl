@@ -58,6 +58,6 @@ rule "Recommend vegetarian recipes"
         Vegetarian($userId: userId)
         Recipe($id: id, vegetarian == true)
     then
-        insert(new Recommendation($id, 10));
+        insert(new Recommendation($id, 20));
         System.out.printf("Recommend vegetarian recipe %s to user %s.\n", $id, $userId);
 end

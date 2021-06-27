@@ -18,6 +18,9 @@ trait UserService {
   def checkIfEmailAvailable(email: String): Future[Boolean]
   def encryptPassword(password: String): Future[Option[String]]
   def addLike(user: User, ingredientId: Long): Unit
+  def addDislike(user: User, ingredientId: Long): Unit
+  def addAllergy(user: User, ingredientId: Long): Unit
+  def addUnavailable(user: User, ingredientId: Long): Unit
 }
 
 class UserServiceImpl @Inject()(userRepo: UserRepo, ingredientRepo: IngredientRepo)(implicit ec: ExecutionContext) extends UserService {
@@ -77,6 +80,42 @@ class UserServiceImpl @Inject()(userRepo: UserRepo, ingredientRepo: IngredientRe
       case Some(value) => {
         likes.add(value)
         user.setLikes(likes)
+        userRepo.save(user)
+      }
+      case None =>
+    }
+  }
+
+  override def addDislike(user: User, ingredientId: Long) = {
+    val dislikes = user.getDislikes
+    ingredientRepo.one(ingredientId) match {
+      case Some(value) => {
+        dislikes.add(value)
+        user.setDislikes(dislikes)
+        userRepo.save(user)
+      }
+      case None =>
+    }
+  }
+
+  override def addAllergy(user: User, ingredientId: Long) = {
+    val allergies = user.getAllergies
+    ingredientRepo.one(ingredientId) match {
+      case Some(value) => {
+        allergies.add(value)
+        user.setAllergies(allergies)
+        userRepo.save(user)
+      }
+      case None =>
+    }
+  }
+
+  override def addUnavailable(user: User, ingredientId: Long) = {
+    val unavailable = user.getUnavailable
+    ingredientRepo.one(ingredientId) match {
+      case Some(value) => {
+        unavailable.add(value)
+        user.setUnavailable(unavailable)
         userRepo.save(user)
       }
       case None =>

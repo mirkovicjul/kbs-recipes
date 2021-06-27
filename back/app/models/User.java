@@ -33,6 +33,30 @@ public class User extends Model {
     )
     List<Ingredient> likes;
 
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_dislikes",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "ingredient_id") }
+    )
+    List<Ingredient> dislikes;
+
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_allergies",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "ingredient_id") }
+    )
+    List<Ingredient> allergies;
+
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_unavailable_ingredients",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "ingredient_id") }
+    )
+    List<Ingredient> unavailable;
+
     public User(String username, String email, String password, Long userType) {
         this.username = username;
         this.email = email;
@@ -40,15 +64,17 @@ public class User extends Model {
         this.userType = userType;
     }
 
-    public User(Long id, String username, String email, String password, Long userType, List<Ingredient> likes) {
+    public User(Long id, String username, String email, String password, Long userType, List<Ingredient> likes, List<Ingredient> dislikes, List<Ingredient> allergies, List<Ingredient> unavailable) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.userType = userType;
         this.likes = likes;
+        this.dislikes = dislikes;
+        this.allergies = allergies;
+        this.unavailable = unavailable;
     }
-
 
     public Long getId() {
         return id;
@@ -98,4 +124,27 @@ public class User extends Model {
         this.likes = likes;
     }
 
+    public List<Ingredient> getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(List<Ingredient> dislikes) {
+        this.dislikes = dislikes;
+    }
+
+    public List<Ingredient> getAllergies() {
+        return allergies;
+    }
+
+    public void setAllergies(List<Ingredient> allergies) {
+        this.allergies = allergies;
+    }
+
+    public List<Ingredient> getUnavailable() {
+        return unavailable;
+    }
+
+    public void setUnavailable(List<Ingredient> unavailable) {
+        this.unavailable = unavailable;
+    }
 }

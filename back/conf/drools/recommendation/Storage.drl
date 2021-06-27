@@ -21,6 +21,6 @@ when
     $expiration: StorageItem(ingredient memberOf $ingredients, $bestBefore: bestBefore) from $storage
     Number($bestUntil: intValue >= 0 && <= 30) from ChronoUnit.DAYS.between(LocalDate.now(), $bestBefore)
 then
-    insert(new Recommendation($id, $bestUntil));
+    insert(new Recommendation($id, 100 - $bestUntil));
     System.out.printf("Increase hit by %s for recipe '%s'\n", $bestUntil, $recipe.getId());
 end

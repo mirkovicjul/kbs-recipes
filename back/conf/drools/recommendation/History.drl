@@ -55,7 +55,7 @@ when
         count($t)
     )
 then
-    insert(new Recommendation($id, 5));
+    insert(new Recommendation($id, 50));
     System.out.printf("Increase hit for %s recipe.\n", $id);
 end
 
@@ -68,6 +68,6 @@ when
         count($t)
     )
 then
-    insert(new Recommendation($id, -5));
+    insert(new Recommendation($id, -50));
     System.out.printf("We should remove %s recipe from recommendations.\n", $id);
 end

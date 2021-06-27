@@ -2,12 +2,14 @@ package services
 
 import com.google.common.collect.ImmutableList
 import com.typesafe.scalalogging.LazyLogging
-import database.{IngredientRepo, MeasurementRepo, RecipeRepo, UserRepo}
+import database.{HistoryRepo, IngredientRepo, IngredientStorageRepo, MeasurementRepo, RecipeRepo, UserRepo}
 import drools.SessionCache
 import drools.cep.WantsNewRecommendation
 import drools.conclusion.Vegetarian
-import drools.recommendation.{Recommendation, StorageItem, User, Ingredient => IngredientFact, Measurement => MeasurementFact, Recipe => RecipeFact, RecipeIngredient => RecipeIngredientFact}
+import drools.recommendation.{MadeRecipe, Recommendation, StorageItem, User, Ingredient => IngredientFact, Measurement => MeasurementFact, Recipe => RecipeFact, RecipeIngredient => RecipeIngredientFact}
+import models.IngredientStorage
 import org.kie.api.runtime.KieSession
+import org.kie.api.runtime.rule.EntryPoint
 
 import java.lang
 import javax.inject.Inject
@@ -21,7 +23,7 @@ trait RecommendationService {
 
   def removeSession(userId: Long): Unit
 
-  def recommendOnHomepage(userId: Long): Seq[Recommendation]
+  def recommendOnHomepage(userId: Long): Option[Recommendation]
 
   def somethingNew(userId: Long): Seq[Recommendation]
 
@@ -32,6 +34,8 @@ class RecommendationServiceImpl @Inject()(
     userRepo: UserRepo,
     recipeRepo: RecipeRepo,
     ingredientRepo: IngredientRepo,
+    ingredientStorageRepo: IngredientStorageRepo,
+    historyRepo: HistoryRepo,
     measurementRepo: MeasurementRepo
 ) extends RecommendationService
     with LazyLogging {
@@ -61,20 +65,7 @@ class RecommendationServiceImpl @Inject()(
           }
       allIngredients.foreach(session.insert)
 
-      logger.info(s"Adding user $userId to KIE Session...")
-      val user = userRepo.oneBlocking(userId).get
-      user.getLikes.forEach(i => logger.info(s"User $userId likes " + i.getIngredient))
 
-      session.insert(
-        new User(
-          userId,
-          allIngredients.filter(r => user.getLikes.asScala.map(_.getId).toSeq.contains(r.getId)).asJava, // TODO: test with manually created facts
-          new JArrayList[IngredientFact](),
-          new JArrayList[IngredientFact](),
-          new JArrayList[IngredientFact](),
-          new JArrayList[StorageItem]()
-        )
-      )
 
       logger.info(s"Adding measurements to user $userId KIE Session...")
       val allMeasurements: Seq[MeasurementFact] =
@@ -84,9 +75,9 @@ class RecommendationServiceImpl @Inject()(
       allMeasurements.foreach(session.insert)
 
       logger.info(s"Adding recipes to user $userId KIE Session...")
-      recipeRepo
+      val allRecipes: Seq[RecipeFact] = recipeRepo
         .allRecipes()
-        .foreach { recipe =>
+        .map { recipe =>
           val recipeIngredients: Seq[RecipeIngredientFact] =
             ingredientRepo
               .recipeIngredientsScala(recipe.getId)
@@ -98,7 +89,7 @@ class RecommendationServiceImpl @Inject()(
                 )
               }
 
-          val recipeFact = new RecipeFact(
+          new RecipeFact(
             recipe.getId,
             recipe.getTitle,
             recipeIngredients.asJava,
@@ -107,8 +98,40 @@ class RecommendationServiceImpl @Inject()(
             recipe.getJunkFood,
             recipe.getNumberOfPortions.toInt
           )
-          session.insert(recipeFact)
+
         }
+
+      allRecipes.foreach(r => session.insert(r))
+
+      logger.info(s"Adding user $userId to KIE Session...")
+      val user = userRepo.oneBlocking(userId).get
+      user.getLikes.forEach(i => logger.info(s"User $userId likes " + i.getIngredient))
+
+      val storage = ingredientStorageRepo.getIngredientStorage(userId).map(is => new StorageItem(allIngredients.find(_.getId==is.getIngredient.getId).get, is.getQuantity,
+        allMeasurements.find(_.getId==is.getMeasurement.getId).get, is.getBestBefore)).asJava
+
+
+      session.insert(
+        new User(
+          userId,
+          allIngredients.filter(r => user.getLikes.asScala.map(_.getId).toSeq.contains(r.getId)).asJava, // TODO: test with manually created facts
+          allIngredients.filter(r => user.getAllergies.asScala.map(_.getId).toSeq.contains(r.getId)).asJava,
+          allIngredients.filter(r => user.getDislikes.asScala.map(_.getId).toSeq.contains(r.getId)).asJava,
+          allIngredients.filter(r => user.getUnavailable.asScala.map(_.getId).toSeq.contains(r.getId)).asJava,
+          storage
+        )
+      )
+
+      val historyEntryPoint: EntryPoint = session.getEntryPoint("history")
+
+      historyRepo.getHistory(userId)
+        .foreach(h =>
+          historyEntryPoint.insert(new MadeRecipe(
+            allRecipes.find(_.getId==h.getRecipe.getId).get,
+            h.getDate,
+            h.getServings.toInt
+          ))
+        )
 
       logger.info(s"KIE Session initialized for user $userId.")
 
@@ -121,7 +144,7 @@ class RecommendationServiceImpl @Inject()(
     sessions.invalidateSimpleSession(userId)
   }
 
-  override def recommendOnHomepage(userId: Long): Seq[Recommendation] = {
+  override def recommendOnHomepage(userId: Long): Option[Recommendation] = {
     val session: KieSession = sessions.simpleSession(userId)
 
     session.getAgenda().getAgendaGroup("Conclusion").setFocus()
@@ -129,14 +152,15 @@ class RecommendationServiceImpl @Inject()(
 
     session.fireAllRules
 
-    val results = session
+    val results: Option[Recommendation] = session
       .getQueryResults("SimpleResults")
       .iterator()
       .asScala
       .map(r => r.get("$recommendation").asInstanceOf[Recommendation])
-      .toSeq
+      .toSeq.headOption
 
-    results.headOption.map(session.getFactHandle(_)).foreach(session.delete)
+    results.foreach(r => logger.info(s"User $userId might like recipe " + r.getRecipeId))
+    results.map(session.getFactHandle(_)).foreach(session.delete)
 
     results
   }
