@@ -1,0 +1,8 @@
+import drools.recommendation.MadeRecipe;
+
+rule "Made recipe test"
+when
+    $m: MadeRecipe() from entry-point "$history"
+then
+    System.out.printf("Test - made recipe %s\n", $m);
+end

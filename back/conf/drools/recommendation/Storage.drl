@@ -22,5 +22,5 @@ when
     Number($bestUntil: intValue >= 0 && <= 30) from ChronoUnit.DAYS.between(LocalDate.now(), $bestBefore)
 then
     insert(new Recommendation($id, 100 - $bestUntil));
-    System.out.printf("Increase hit by %s for recipe '%s'\n", $bestUntil, $recipe.getId());
+    System.out.printf("Increase hit by 100-%s for recipe %s because one of the ingredients will expire soon. \n", $bestUntil, $recipe.getId());
 end

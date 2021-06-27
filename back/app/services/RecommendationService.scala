@@ -122,7 +122,7 @@ class RecommendationServiceImpl @Inject()(
         )
       )
 
-      val historyEntryPoint: EntryPoint = session.getEntryPoint("history")
+      val historyEntryPoint: EntryPoint = session.getEntryPoint("$history")
 
       historyRepo.getHistory(userId)
         .foreach(h =>
@@ -147,8 +147,10 @@ class RecommendationServiceImpl @Inject()(
   override def recommendOnHomepage(userId: Long): Option[Recommendation] = {
     val session: KieSession = sessions.simpleSession(userId)
 
-    session.getAgenda().getAgendaGroup("Conclusion").setFocus()
     session.getAgenda().getAgendaGroup("Recommendation").setFocus()
+
+
+    session.getAgenda().getAgendaGroup("Conclusion").setFocus()
 
     session.fireAllRules
 

@@ -3,6 +3,7 @@ package drools.recommendation;
 import drools.recommendation.Recipe;
 import drools.recommendation.Ingredient;
 import drools.recommendation.IngredientType;
+import drools.recommendation.MadeRecipe;
 import drools.conclusion.EatingUnhealthy;
 
 rule "User is eating unhealthy"
@@ -14,7 +15,7 @@ when
            $t: this,
            $r: recipe,
            $r.junkFood == true,
-           madeDate.isAfter(LocalDate.now().minusDays(10))) from entry-point "history",
+           madeDate.isAfter(LocalDate.now().minusDays(10))) from entry-point "$history",
        count($t)
     )
 then
@@ -47,16 +48,16 @@ no-loop
 when
     $recipe: Recipe($id: id)
     Number(intValue >= 3) from accumulate(
-        MadeRecipe($t: this, recipe.id == $id, madeDate.isBefore(LocalDate.now().minusMonths(6))) from entry-point "history",
+        MadeRecipe($t: this, recipe.id == $id, madeDate.isBefore(LocalDate.now().minusMonths(6))) from entry-point "$history",
         count($t)
     )
     Number(intValue == 0) from accumulate(
-        MadeRecipe($t: this, recipe.id == $id, madeDate.isAfter(LocalDate.now().minusMonths(6))) from entry-point "history",
+        MadeRecipe($t: this, recipe.id == $id, madeDate.isAfter(LocalDate.now().minusMonths(6))) from entry-point "$history",
         count($t)
     )
 then
     insert(new Recommendation($id, 50));
-    System.out.printf("Increase hit for %s recipe.\n", $id);
+    System.out.printf("Increase hit for recipe %s because it was made often in the past.\n", $id);
 end
 
 rule "Remove recommendations of recipes which user made minimum 6 times in last 2 months(recently)"
@@ -64,7 +65,7 @@ agenda-group "Recommendation"
 when
     $recipe: Recipe($id: id)
     Number(intValue > 5) from accumulate(
-        MadeRecipe($t: this, recipe.id == $id, madeDate.isAfter(LocalDate.now().minusMonths(2))) from entry-point "history",
+        MadeRecipe($t: this, recipe.id == $id, madeDate.isAfter(LocalDate.now().minusMonths(2))) from entry-point "$history",
         count($t)
     )
 then
