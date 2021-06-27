@@ -1,7 +1,8 @@
 package services
 
 import com.typesafe.scalalogging.LazyLogging
-import database.RecipeRepo
+import database.{IngredientRepo, RecipeRepo}
+import forms.RecipeForm
 import models.{Recipe, RecipeIngredient}
 
 import java.util.{ArrayList => JArrayList}
@@ -13,22 +14,13 @@ trait RecipeService {
 
   def getRecipeById(id: Long): Recipe
 
-  def saveRecipe(
-      title: String,
-      description: String,
-      numberOfPortions: Long,
-      vegan: Boolean,
-      vegetarian: Boolean,
-      junkFood: Boolean,
-      daysBeforeExpiration: Long,
-      preparationTime: Long,
-      imageName: Option[String]
-  ): Recipe
+  def saveRecipe(recipeForm: RecipeForm): Option[Recipe]
 
 }
 
 class RecipeServiceImpl @Inject()(
-    recipeRepo: RecipeRepo
+    recipeRepo: RecipeRepo,
+    ingredientRepo: IngredientRepo
 ) extends RecipeService
     with LazyLogging {
 
@@ -36,33 +28,22 @@ class RecipeServiceImpl @Inject()(
 
   override def getRecipeById(id: Long): Recipe = recipeRepo.recipeById(id)
 
-  override def saveRecipe(
-      title: String,
-      description: String,
-      numberOfPortions: Long,
-      vegan: Boolean,
-      vegetarian: Boolean,
-      junkFood: Boolean,
-      daysBeforeExpiration: Long,
-      preparationTime: Long,
-      imageName: Option[String]
-  ): Recipe = {
-    val imagePath = imageName.map(fileName => s"http://localhost:9000/images/$fileName").orNull
+  override def saveRecipe(recipeForm: RecipeForm): Option[Recipe] = {
 
-    recipeRepo.saveRecipe(
-      new Recipe(
-        title,
-        description,
-        numberOfPortions,
-        vegan,
-        vegetarian,
-        junkFood,
-        daysBeforeExpiration,
-        preparationTime,
-        new JArrayList[RecipeIngredient](),
-        imagePath
-      )
+    val recipe = new Recipe(
+      recipeForm.title,
+      recipeForm.description,
+      recipeForm.numberOfPortions,
+      recipeForm.vegan,
+      recipeForm.vegetarian,
+      recipeForm.junkFood,
+      recipeForm.daysBeforeExpiration,
+      recipeForm.preparationTime,
+      new JArrayList[RecipeIngredient](),
+      recipeForm.image.orNull
     )
+
+    Option(recipeRepo.saveRecipe(recipe))
   }
 
 }
