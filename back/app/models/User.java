@@ -25,7 +25,7 @@ public class User extends Model {
     @Column
     Long userType;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_likes",
             joinColumns = { @JoinColumn(name = "user_id") },

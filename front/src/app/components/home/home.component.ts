@@ -4,6 +4,7 @@ import { LoginService } from 'src/app/services/login.service';
 import { RecommendationService } from 'src/app/services/recommendation.service';
 import { HomepageRecommendation } from 'src/app/model/homepage-recommendation';
 import { range } from 'rxjs';
+import { Recipe } from 'src/app/model/recipe';
 
 
 @Component({
@@ -13,27 +14,21 @@ import { range } from 'rxjs';
 })
 export class HomeComponent implements OnInit {
 
-  recommendation: Array<Array<HomepageRecommendation>>;
-
+  recommendation: Recipe;
+  
   constructor(private router: Router, private userService: LoginService, private recommendationService: RecommendationService) { 
     if (!this.userService.isLoggedIn()) {
       this.router.navigateByUrl('/login');
     }
   }
 
-  getHomepageRecommendations(): Array<Array<HomepageRecommendation>>{
-    let recs: Array<HomepageRecommendation> = this.recommendationService.homepage();
-    
-    let formated: Array<Array<HomepageRecommendation>> = new Array();
-    Array.from(Array( Math.floor(recs.length / 4)).keys())
-    .map((v, i, a) => formated.push(recs.slice(i * 4, i * 4 + 4)));
-
-    return formated;
+  getHomepageRecommendations() {
+    this.recommendationService.homepage().subscribe(r => this.recommendation = r);
   }
 
   ngOnInit() {
-    this.recommendation = this.getHomepageRecommendations();
     console.log("load recommendations")
+    this.getHomepageRecommendations();
   }
 
 }

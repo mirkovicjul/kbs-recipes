@@ -9,9 +9,10 @@ import drools.conclusion.Vegetarian
 import drools.recommendation.{Recommendation, StorageItem, User, Ingredient => IngredientFact, Measurement => MeasurementFact, Recipe => RecipeFact, RecipeIngredient => RecipeIngredientFact}
 import org.kie.api.runtime.KieSession
 
+import java.lang
 import javax.inject.Inject
 import scala.collection.JavaConverters.seqAsJavaListConverter
-import scala.jdk.CollectionConverters.IteratorHasAsScala
+import scala.jdk.CollectionConverters.{IterableHasAsScala, IteratorHasAsScala}
 import java.util.{ArrayList => JArrayList}
 
 trait RecommendationService {
@@ -60,13 +61,14 @@ class RecommendationServiceImpl @Inject()(
           }
       allIngredients.foreach(session.insert)
 
-      val likes: Seq[IngredientFact] = Nil
-
       logger.info(s"Adding user $userId to KIE Session...")
+      val user = userRepo.oneBlocking(userId).get
+      user.getLikes.forEach(i => logger.info(s"User $userId likes " + i.getIngredient))
+
       session.insert(
         new User(
           userId,
-          allIngredients.filter(r => likes.map(_.getId).contains(r.getId)).asJava, // TODO: test with manually created facts
+          allIngredients.filter(r => user.getLikes.asScala.map(_.getId).toSeq.contains(r.getId)).asJava, // TODO: test with manually created facts
           new JArrayList[IngredientFact](),
           new JArrayList[IngredientFact](),
           new JArrayList[IngredientFact](),

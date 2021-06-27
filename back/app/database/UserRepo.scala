@@ -11,6 +11,8 @@ trait UserRepo {
 
   def one(id: Long): Future[Option[User]]
 
+  def oneBlocking(id: Long): Option[User]
+
   def getByUsername(username: String): Future[Option[User]]
 
   def getByEmail(email: String): Future[Option[User]]
@@ -30,6 +32,10 @@ class UserRepoPostgres extends UserRepo {
       OptionConverters.toScala(
         find.query().where().eq("id", id).findOneOrEmpty())
     }
+
+  override def oneBlocking(id: Long): Option[User] =
+    OptionConverters.toScala(
+      find.query().where().eq("id", id).findOneOrEmpty())
 
   override def getByUsername(username: String): Future[Option[User]] =
     Future {

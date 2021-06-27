@@ -16,6 +16,8 @@ trait RecipeRepo {
 
   def saveRecipe(recipe: Recipe): Recipe
 
+  def getRandomRecipe(): Recipe
+
 }
 
 class RecipeRepoImpl extends RecipeRepo {
@@ -41,4 +43,7 @@ class RecipeRepoImpl extends RecipeRepo {
     recipe
   }
 
+  override def getRandomRecipe(): Recipe = {
+    find.nativeSql("SELECT * FROM recipes ORDER BY RANDOM() LIMIT 1").findOne()
+  }
 }

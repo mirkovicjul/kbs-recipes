@@ -3,7 +3,6 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { LoginResponse } from '../model/login-response';
 import { ElementSchemaRegistry } from '@angular/compiler';
 import { environment } from './../../environments/environment';
-import { AnyARecord } from 'dns';
 
 @Injectable({
   providedIn: 'root'

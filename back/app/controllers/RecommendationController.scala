@@ -4,16 +4,18 @@ import auth.AuthUtils
 import com.typesafe.scalalogging.LazyLogging
 import controllers.RecommendationController._
 import drools.recommendation.Recommendation
+import models.Recipe
 import play.api.libs.json.{JsValue, Json, Writes}
 import play.api.mvc._
-import services.RecommendationService
+import services.{RecipeService, RecommendationService}
 
 import javax.inject._
 import scala.concurrent.ExecutionContext
-import scala.jdk.CollectionConverters.CollectionHasAsScala
+import scala.jdk.CollectionConverters.{CollectionHasAsScala, SeqHasAsJava}
 
 class RecommendationController @Inject()(
     val controllerComponents: ControllerComponents,
+    recipeService:RecipeService,
     recommendationService: RecommendationService
 )(implicit ec: ExecutionContext)
     extends BaseController
@@ -28,7 +30,11 @@ class RecommendationController @Inject()(
             recommendationService.recommendOnHomepage(userId)
           logger.info(
             s"Recommendation finished for user ${userId}, recommended recipes ${recommendations.size}.")
-          Ok(Json.toJson(recommendations))
+          val recipes:java.util.List[Recipe] = recommendations.map(r => recipeService.getRecipeById(r.getRecipeId)).asJava
+          if(recipes.size() > 0)
+            (Ok(play.libs.Json.toJson(recipes.get(0)).toString()))
+          else
+            (Ok(play.libs.Json.toJson(recipeService.getRandomRecipe()).toString()))
         case None =>
           BadRequest
       }

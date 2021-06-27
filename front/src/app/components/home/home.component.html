@@ -1,10 +1,20 @@
-<div>
-  <div class="row" *ngFor="let chunk of this.recommendation">
-    <div class="column" *ngFor="let item of chunk">
-      <div class="card">
-        <div><img src="{{ item.thumbnail }}" width="width:100%"></div>
-        <b>{{ item.name }}</b>
+<section class="hero-area">
+  <div class="hero-slides owl-carousel">
+      <!-- Single Hero Slide -->
+      <div class="single-hero-slide bg-img" [ngStyle]="{background: 'url(' + recommendation.image + ')'}">
+          <div class="container h-100">
+              <div class="row h-100 align-items-center">
+                  <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                      <div class="hero-slides-content" data-animation="fadeInUp" data-delay="100ms" >
+                          <h2 data-animation="fadeInUp" data-delay="300ms">{{recommendation.title}}</h2>
+                          <p data-animation="fadeInUp" data-delay="700ms" style=" width: 500px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                              {{recommendation.description}}</p>
+                          <a href="/recipe/{{recommendation.id}}" class="btn delicious-btn" style="background: #a1ae25" data-animation="fadeInUp" data-delay="1000ms">See Recipe</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
       </div>
-    </div>
+
   </div>
-</div>
+</section>

@@ -16,6 +16,7 @@ trait RecipeService {
 
   def saveRecipe(recipeForm: RecipeForm): Option[Recipe]
 
+  def getRandomRecipe(): Recipe
 }
 
 class RecipeServiceImpl @Inject()(
@@ -46,4 +47,5 @@ class RecipeServiceImpl @Inject()(
     Option(recipeRepo.saveRecipe(recipe))
   }
 
+  override def getRandomRecipe(): Recipe = recipeRepo.getRandomRecipe()
 }
