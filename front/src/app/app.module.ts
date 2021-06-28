@@ -25,6 +25,7 @@ import { RegistrationService } from './services/registration.service';
 import { StorageService } from './services/storage.service';
 import { RecipesComponent } from './components/recipes/recipes.component';
 import { RecipeProfileComponent } from './components/recipe-profile/recipe-profile.component';
+import { PreferencesComponent } from './components/preferences/preferences.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { RecipeProfileComponent } from './components/recipe-profile/recipe-profi
     HomeComponent,
     HistoryComponent,
     RecipesComponent,
-    RecipeProfileComponent
+    RecipeProfileComponent,
+    PreferencesComponent
   ],
   imports: [
     BrowserModule,

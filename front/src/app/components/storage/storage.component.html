@@ -1,6 +1,39 @@
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
 <div class="container">
+
+  <ng-template #content let-modal>
+
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add ingredients</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form #data="ngForm" id="mform">
+        <div class="form-group">
+
+          <ul *ngFor="let i of allIngredients" >
+            <li>{{i.ingredient}} - <input type="number" id="lname" name="lname" style="width:100px" placeholder="quantity">
+              <select>
+                <option *ngFor="let measurement of measurements">
+                    {{measurement}}
+                </option>
+              </select>
+           <button class="btn btn-light btn-sm" style="background: #a1ae25;"  [disabled]="!ingredientToUseQuantity">Add</button></li>
+          </ul>
+          
+          
+        </div>
+      </form>
+    </div>
+
+  
+  </ng-template>
   <div class="row">
-    <div class="col-sm">
+    <!-- <div class="col-sm">
       <table class="table">
         <thead>
           <tr>
@@ -15,12 +48,12 @@
             <td>{{meal.recipe.title}}</td>
             <td>{{meal.servings}}</td>
             <td>{{meal.bestBefore}}</td>
-            <td><button class="btn btn-light"  style="background: #a1ae25;" >Remove</button></td>
+            <td><input type="number" id="lname" name="lname" style="width:60px" [(ngModel)]="mealToUseServings"><button class="btn btn-light"  style="background: #a1ae25;" [disabled]="!mealToUseServings">Remove</button></td>
           </tr>
         </tbody>
       </table>
     </div>
-    
+     -->
     <div class="col-sm">
       <table class="table">
         <thead>
@@ -36,11 +69,17 @@
             <td>{{ingredient.ingredient.ingredient}}</td>
             <td>{{ingredient.quantity}} {{ingredient.measurement.measurement}}</td>
             <td>{{ingredient.bestBefore}}</td>
-            <td><button class="btn btn-light"  style="background: #a1ae25;">Remove</button></td>
+            <td><input type="number" id="lname" name="lname" style="width:60px" [(ngModel)]="ingredientToUseQuantity"><button class="btn btn-light"  style="background: #a1ae25;" [disabled]="!ingredientToUseQuantity">Remove</button></td>
           </tr>
         </tbody>
       </table>
     </div>
 
   </div>
+
+ 
+
+  <button class="btn btn-light"  style="background:  #a1ae25;" (click)="open(content)">Add ingredients</button>
+
+  <hr>
 </div>

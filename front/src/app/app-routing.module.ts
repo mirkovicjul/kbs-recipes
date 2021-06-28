@@ -9,6 +9,7 @@ import { IngredientComponent } from './components/ingredient/ingredient.componen
 import { HistoryComponent } from './components/history/history.component';
 import { RecipesComponent } from './components/recipes/recipes.component';
 import { RecipeProfileComponent } from './components/recipe-profile/recipe-profile.component';
+import { PreferencesComponent } from './components/preferences/preferences.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent},
@@ -20,8 +21,8 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent},
   { path: 'history', component: HistoryComponent},
   { path: 'recipes', component: RecipesComponent},
-  { path: 'recipe/:id', component: RecipeProfileComponent }
-
+  { path: 'recipe/:id', component: RecipeProfileComponent },
+  { path: 'preferences', component: PreferencesComponent }
 ];
 
 @NgModule({

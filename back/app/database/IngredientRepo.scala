@@ -5,7 +5,7 @@ import models.{Ingredient, IngredientScala, RecipeIngredientScala}
 import scalikejdbc._
 
 import java.util.{List => JList}
-import scala.jdk.CollectionConverters.IterableHasAsJava
+import scala.jdk.CollectionConverters.{IterableHasAsJava, ListHasAsScala}
 
 trait IngredientRepo {
 
@@ -13,9 +13,12 @@ trait IngredientRepo {
 
   def recipeIngredientsScala(recipeId: Long): Seq[RecipeIngredientScala]
 
+  def allIngredients(): Seq[Ingredient]
+
   def findByIds(id: Seq[Long]): JList[Ingredient]
 
   def one(id: Long): Option[Ingredient]
+
 
 }
 
@@ -49,6 +52,9 @@ class IngredientRepoImpl extends IngredientRepo {
         .list()
         .apply()
     }
+
+  override def allIngredients(): Seq[Ingredient] = find.all().asScala.toList
+
 
   override def findByIds(ids: Seq[Long]): JList[Ingredient] =
     find.query().where().idIn(ids.asJava).findList()

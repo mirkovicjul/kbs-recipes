@@ -34,7 +34,7 @@ class UserController @Inject()(
 
   def getUser(): Action[AnyContent] = Action.async {
     implicit request: Request[AnyContent] =>
-      val serviceResult: Future[Either[Throwable, User]] = userService.get(1)
+      val serviceResult: Future[Either[Throwable, User]] = userService.get(2)
 
       val formattedResult: Future[String] = serviceResult.map {
         case Left(_)      => "No such user"
@@ -44,6 +44,25 @@ class UserController @Inject()(
       val resultToReturn: Future[Result] = formattedResult.map(Ok(_))
 
       resultToReturn
+  }
+
+  def getUserById(): Action[AnyContent] = userAction.async { request =>
+    val token: Option[String] = request.headers.get(HeaderNames.AUTHORIZATION)
+
+    token.flatMap(
+      t =>
+        JwtJson
+          .decodeJson(t, "secretKey", Seq(JwtAlgorithm.HS256))
+          .toOption) match {
+      case Some(value) =>
+        val userId = (value \ "userId").as[Long]
+        val serviceResult: Future[Either[Throwable, User]] = userService.get(userId)
+        serviceResult.map {
+          case Left(_) => Ok("No such user")
+          case Right(value) => Ok(Json.toJson(value).toString)
+        }
+      case None => Future(Forbidden)
+    }
   }
 
   def register(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>

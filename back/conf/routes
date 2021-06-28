@@ -10,6 +10,7 @@ POST    /upload                      controllers.FileUploadController.upload()
 POST    /login                       controllers.LoginController.login()
 GET     /logout                      controllers.LoginController.logout()
 GET     /user                        controllers.UserController.getUser()
+GET     /userById                    controllers.UserController.getUserById()
 POST    /register                    controllers.UserController.register()
 
 # Recommendations
@@ -34,3 +35,6 @@ POST    /addLike                     controllers.UserController.addLike()
 POST    /addDislike                  controllers.UserController.addLike()
 POST    /addAllergy                  controllers.UserController.addLike()
 POST    /addUnavailable              controllers.UserController.addLike()
+
+#Ingredients
+GET     /ingredients                 controllers.IngredientController.getAllIngredients()

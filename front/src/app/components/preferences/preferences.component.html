@@ -1,0 +1,125 @@
+<div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Likes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr  *ngFor="let like of userPreferences.likes">
+              <td>{{like.ingredient}}</td>
+              <td><button class="btn btn-light btn-sm"  style="background: #a1ae25;" (click)="removeLike(like.id)">Remove</button></td>
+            </tr>
+            <br>
+            <tr>
+                <div class="form-group">
+                    <label class="asearch-label" for="selectbasic" (click)="showIngredients(1)">Ingredients
+                        <img src='../../../assets/triangle_down.png' height="21" width="21" *ngIf="!ingredientsVisible.likes" />
+                        <img src='../../../assets/triangle_up.png' height="21" width="21" *ngIf="ingredientsVisible.likes" />
+                    </label>
+                </div>
+            </tr>
+            <tr  *ngFor="let i of allIngredients">  
+                <td *ngIf="ingredientsVisible.likes">{{i.ingredient}}</td>
+                <td *ngIf="ingredientsVisible.likes"><button class="btn btn-light btn-sm"  style="background: #a1ae25;" (click)="addLike(i.id)">Add</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="col-sm">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Dislikes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr  *ngFor="let dislike of userPreferences.dislikes">
+              <td>{{dislike.ingredient}}</td>
+              <td><button class="btn btn-light btn-sm"  style="background: #a1ae25;" (click)="removeDislike(dislike.id)">Remove</button></td>
+            </tr>
+            <br>
+            <tr>
+                <div class="form-group">
+                    <label class="asearch-label" for="selectbasic" (click)="showIngredients(2)">Ingredients
+                        <img src='../../../assets/triangle_down.png' height="21" width="21" *ngIf="!ingredientsVisible.dislikes" />
+                        <img src='../../../assets/triangle_up.png' height="21" width="21" *ngIf="ingredientsVisible.dislikes" />
+                    </label>
+                </div>
+            </tr>
+            <tr  *ngFor="let i of allIngredients">  
+                <td  *ngIf="ingredientsVisible.dislikes">{{i.ingredient}}</td>
+                <td *ngIf="ingredientsVisible.dislikes"><button class="btn btn-light btn-sm"  style="background: #a1ae25;" (click)="addDislike(i.id)">Add</button></td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <div class="col-sm">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Allergies</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr  *ngFor="let allergy of userPreferences.allergies">
+              <td>{{allergy.ingredient}}</td>
+              <td><button class="btn btn-light btn-sm"  style="background: #a1ae25;" (click)="removeAllergy(allergy.id)">Remove</button></td>
+            </tr>
+            <br>
+            <tr>
+                <div class="form-group">
+                    <label class="asearch-label" for="selectbasic" (click)="showIngredients(3)">Ingredients
+                        <img src='../../../assets/triangle_down.png' height="21" width="21" *ngIf="!ingredientsVisible.allergies" />
+                        <img src='../../../assets/triangle_up.png' height="21" width="21" *ngIf="ingredientsVisible.allergies" />
+                    </label>
+                </div>
+            </tr>
+            <tr  *ngFor="let i of allIngredients">  
+                <td  *ngIf="ingredientsVisible.allergies">{{i.ingredient}}</td>
+                <td *ngIf="ingredientsVisible.allergies"><button class="btn btn-light btn-sm"  style="background: #a1ae25;" (click)="addAllergy(i.id)">Add</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-sm">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Unavailable</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr  *ngFor="let unavailable of userPreferences.unavailable">
+              <td>{{unavailable.ingredient}}</td>
+              <td><button class="btn btn-light btn-sm"  style="background: #a1ae25;" (click)="removeUnavailable(unavailable.id)">Remove</button></td>
+            </tr>
+            <br>
+            <tr>
+                <div class="form-group">
+                    <label class="asearch-label" for="selectbasic" (click)="showIngredients(4)">Ingredients
+                        <img src='../../../assets/triangle_down.png' height="21" width="21" *ngIf="!ingredientsVisible.unavailable" />
+                        <img src='../../../assets/triangle_up.png' height="21" width="21" *ngIf="ingredientsVisible.unavailable" />
+                    </label>
+                </div>
+            </tr>
+            <tr  *ngFor="let i of allIngredients">  
+                <td *ngIf="ingredientsVisible.unavailable">{{i.ingredient}}</td>
+                <td *ngIf="ingredientsVisible.unavailable"><button class="btn btn-light btn-sm"  style="background: #a1ae25;" (click)="addUnavailable(i.id)">Add</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>

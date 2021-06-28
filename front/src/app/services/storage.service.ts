@@ -38,7 +38,6 @@ export class StorageService {
   }
 
   getIngredientsForRecipe(recipeId: number) {
-    console.log("======= uso u servis")
     var config = {
       headers: {
         'content-type': 'application/json',

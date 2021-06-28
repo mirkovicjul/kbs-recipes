@@ -4,6 +4,7 @@ import io.ebean.Model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -31,7 +32,7 @@ public class User extends Model {
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "ingredient_id") }
     )
-    List<Ingredient> likes;
+    Set<Ingredient> likes;
 
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(
@@ -39,7 +40,7 @@ public class User extends Model {
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "ingredient_id") }
     )
-    List<Ingredient> dislikes;
+    Set<Ingredient> dislikes;
 
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(
@@ -47,7 +48,7 @@ public class User extends Model {
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "ingredient_id") }
     )
-    List<Ingredient> allergies;
+    Set<Ingredient> allergies;
 
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(
@@ -55,7 +56,7 @@ public class User extends Model {
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "ingredient_id") }
     )
-    List<Ingredient> unavailable;
+    Set<Ingredient> unavailable;
 
     public User(String username, String email, String password, Long userType) {
         this.username = username;
@@ -64,7 +65,7 @@ public class User extends Model {
         this.userType = userType;
     }
 
-    public User(Long id, String username, String email, String password, Long userType, List<Ingredient> likes, List<Ingredient> dislikes, List<Ingredient> allergies, List<Ingredient> unavailable) {
+    public User(Long id, String username, String email, String password, Long userType, Set<Ingredient> likes, Set<Ingredient> dislikes, Set<Ingredient> allergies, Set<Ingredient> unavailable) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -116,35 +117,35 @@ public class User extends Model {
         this.userType = userType;
     }
 
-    public List<Ingredient> getLikes() {
+    public Set<Ingredient> getLikes() {
         return likes;
     }
 
-    public void setLikes(List<Ingredient> likes) {
+    public void setLikes(Set<Ingredient> likes) {
         this.likes = likes;
     }
 
-    public List<Ingredient> getDislikes() {
+    public Set<Ingredient> getDislikes() {
         return dislikes;
     }
 
-    public void setDislikes(List<Ingredient> dislikes) {
+    public void setDislikes(Set<Ingredient> dislikes) {
         this.dislikes = dislikes;
     }
 
-    public List<Ingredient> getAllergies() {
+    public Set<Ingredient> getAllergies() {
         return allergies;
     }
 
-    public void setAllergies(List<Ingredient> allergies) {
+    public void setAllergies(Set<Ingredient> allergies) {
         this.allergies = allergies;
     }
 
-    public List<Ingredient> getUnavailable() {
+    public Set<Ingredient> getUnavailable() {
         return unavailable;
     }
 
-    public void setUnavailable(List<Ingredient> unavailable) {
+    public void setUnavailable(Set<Ingredient> unavailable) {
         this.unavailable = unavailable;
     }
 }
