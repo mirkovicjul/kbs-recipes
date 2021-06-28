@@ -53,7 +53,7 @@ INSERT into ingredients (id, ingredient, fats, carbs, protein, type) values (23,
 INSERT into ingredients (id, ingredient, fats, carbs, protein, type) values (24, 'Potato', 0.09, 17.49, 2.05, 'Vegetable');
 INSERT into ingredients (id, ingredient, fats, carbs, protein, type) values (25, 'Beef', 15, 0, 26, 'Meat');
 INSERT into ingredients (id, ingredient, fats, carbs, protein, type) values (26, 'Pork', 14, 0, 27, 'Meat');
-
+INSERT into ingredients (id, ingredient, fats, carbs, protein, type) values (27, 'Salami', 26, 2.4, 22, 'Meat');
 
 INSERT into recipes (id, title, description, number_of_portions, vegan, vegetarian, junk_food) values (1, 'Hummus', 'In the bowl of a food processor, combine the tahini and lemon juice and process for 1 minute, 
 scrape the sides and bottom of the bowl then process for 30 seconds more. This extra time helps “whip” or “cream” the tahini, making the hummus smooth and creamy. 
@@ -94,6 +94,25 @@ INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quanti
 INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (4, 16, 3, 0.5);
 INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (4, 5, 4, 1);
 
+
+INSERT into recipes (id, title, description, number_of_portions, vegan, vegetarian, junk_food) values (5, 'French fries', 'Heat oil and slice the potatoes. Fry them in about 6 batches for 5-6 minutes until golden brown. 
+Don’t overcrowd them by placing too many in at a time, they won’t be as crispy. Place them bake on paper towels and sprinkle immediately with salt. ', 3, 'true', 'true', 'true');
+
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (5, 13, 2, 500);
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (5, 24, 1, 1000);
+
+
+
+INSERT into recipes (id, title, description, number_of_portions, vegan, vegetarian, junk_food) values (6, 'Salami pizza', 'Place Pizza Dough on a large sheet of parchment paper. 
+Cover with a damp towel; let rise in a warm place (85°), free from drafts, 45 minutes. While dough rises, heat a large nonstick skillet over medium-high heat. Add oil; swirl to coat.
+ Add mushrooms; cook 6 minutes or until tender, stirring frequently. Roll dough into a 12-inch circle on parchment paper. Crimp edges of dough with fingers to form a rim. 
+ Slide dough and parchment paper onto a large baking sheet. Place on bottom rack in oven. Bake at 500° for 5 minutes. Spoon Pizza Sauce onto crust, spreading to rim. Top with salami, cheese, and mushrooms.
+ Bake an additional 10 minutes or until crust is golden and cheese melts. Remove from oven; let stand 5 minutes. Cut into wedges.', 2, 'false', 'false', 'true');
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (6, 11, 1, 500);
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (6, 13, 2, 100);
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (6, 21, 1, 150);
+INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quantity) values (6, 27, 1, 200);
+
 -- todo insert burger recipe
 -- todo insert potato chips recipe
 -- todo insert vegan recipe
@@ -103,6 +122,11 @@ INSERT into recipe_ingredients (recipe_id, ingredient_id, measurement_id, quanti
 insert into history (id, user_id, recipe_id, servings, date) values (1, 2, 3, 12, '2021-05-01 04:05:06');
 insert into history (id, user_id, recipe_id, servings, date) values (2, 2, 4, 2, '2021-05-03 04:05:06');
 insert into history (id, user_id, recipe_id, servings, date) values (3, 2, 3, 2, '2021-05-04 04:05:06');
+insert into history (id, user_id, recipe_id, servings, date) values (4, 2, 5, 10, '2021-06-06 04:05:06');
+insert into history (id, user_id, recipe_id, servings, date) values (5, 2, 1, 5, '2021-06-07 04:05:06');
+insert into history (id, user_id, recipe_id, servings, date) values (6, 2, 1, 5, '2021-06-08 04:05:06');
+insert into history (id, user_id, recipe_id, servings, date) values (7, 2, 1, 5, '2021-06-08 04:05:06');
+
 -- todo insert vegan recipe
 
 insert into ingredient_storage (id, user_id, ingredient_id, quantity, measurement_id, best_before) values (1, 2, 11, 1000, 1, '2022-05-01 04:05:06');
@@ -110,9 +134,15 @@ insert into ingredient_storage (id, user_id, ingredient_id, quantity, measuremen
 insert into ingredient_storage (id, user_id, ingredient_id, quantity, measurement_id, best_before) values (3, 2, 14, 500, 1, '2021-06-30 04:05:06');
 
 -- Junkfood user 3
-insert into history (id, user_id, recipe_id, servings, date) values (4, 2, 3, 12, now() - interval '2 days');
-insert into history (id, user_id, recipe_id, servings, date) values (4, 2, 3, 12, now() - interval '5 days');
-insert into history (id, user_id, recipe_id, servings, date) values (4, 2, 3, 12, now() - interval '7 days');
+insert into history (id, user_id, recipe_id, servings, date) values (8, 3, 6, 5, now() - interval '2 days');
+insert into history (id, user_id, recipe_id, servings, date) values (9, 3, 6, 5, now() - interval '5 days');
+insert into history (id, user_id, recipe_id, servings, date) values (10, 3, 6, 5, now() - interval '7 days');
+insert into history (id, user_id, recipe_id, servings, date) values (11, 3, 6, 5, now() - interval '8 days');
+insert into history (id, user_id, recipe_id, servings, date) values (12, 3, 6, 5, now() - interval '9 days');
+
+insert into user_likes (user_id, ingredient_id) values (3, 27);
+insert into user_likes (user_id, ingredient_id) values (3, 21);
+
 -- todo insert burger a copule of times
 
 -- New user 4
