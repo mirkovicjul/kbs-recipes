@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Ingredient } from 'src/app/model/ingredient';
+import { IngredientService } from 'src/app/services/ingredient.service';
 
 @Component({
   selector: 'app-recipe',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RecipeComponent implements OnInit {
 
-  constructor() { }
+  allIngredients: Ingredient[];
+  measurements: String[] = ["grams", "millilitre", "teaspoon", "tablespoon"];
+  ingredientsVisible: Boolean = false;
+
+  constructor(private ingredientService: IngredientService) { }
 
   ngOnInit() {
+    this.ingredientService.getAllIngredients().subscribe(response => this.allIngredients = response);
   }
 
+  showIngredients(){
+    this.ingredientsVisible = !this.ingredientsVisible;
+  }
 }

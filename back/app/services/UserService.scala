@@ -18,9 +18,13 @@ trait UserService {
   def checkIfEmailAvailable(email: String): Future[Boolean]
   def encryptPassword(password: String): Future[Option[String]]
   def addLike(user: User, ingredientId: Long): Unit
+  def removeLike(user: User, ingredientId: Long): Unit
   def addDislike(user: User, ingredientId: Long): Unit
+  def removeDislike(user: User, ingredientId: Long): Unit
   def addAllergy(user: User, ingredientId: Long): Unit
+  def removeAllergy(user: User, ingredientId: Long): Unit
   def addUnavailable(user: User, ingredientId: Long): Unit
+  def removeUnavailable(user: User, ingredientId: Long): Unit
 }
 
 class UserServiceImpl @Inject()(userRepo: UserRepo, ingredientRepo: IngredientRepo)(implicit ec: ExecutionContext) extends UserService {
@@ -86,11 +90,36 @@ class UserServiceImpl @Inject()(userRepo: UserRepo, ingredientRepo: IngredientRe
     }
   }
 
+  override def removeLike(user: User, ingredientId: Long) = {
+    val likes = user.getLikes
+    ingredientRepo.one(ingredientId) match {
+      case Some(value) => {
+        likes.remove(value)
+        user.setLikes(likes)
+        userRepo.save(user)
+      }
+      case None =>
+    }
+  }
+
   override def addDislike(user: User, ingredientId: Long) = {
     val dislikes = user.getDislikes
     ingredientRepo.one(ingredientId) match {
       case Some(value) => {
         dislikes.add(value)
+        user.setDislikes(dislikes)
+        userRepo.save(user)
+      }
+      case None =>
+    }
+  }
+
+  override def removeDislike(user: User, ingredientId: Long) = {
+    println("uso u dislike service remove")
+    val dislikes = user.getDislikes
+    ingredientRepo.one(ingredientId) match {
+      case Some(value) => {
+        dislikes.remove(value)
         user.setDislikes(dislikes)
         userRepo.save(user)
       }
@@ -110,11 +139,35 @@ class UserServiceImpl @Inject()(userRepo: UserRepo, ingredientRepo: IngredientRe
     }
   }
 
+  override def removeAllergy(user: User, ingredientId: Long) = {
+    val allergies = user.getAllergies
+    ingredientRepo.one(ingredientId) match {
+      case Some(value) => {
+        allergies.remove(value)
+        user.setAllergies(allergies)
+        userRepo.save(user)
+      }
+      case None =>
+    }
+  }
+
   override def addUnavailable(user: User, ingredientId: Long) = {
     val unavailable = user.getUnavailable
     ingredientRepo.one(ingredientId) match {
       case Some(value) => {
         unavailable.add(value)
+        user.setUnavailable(unavailable)
+        userRepo.save(user)
+      }
+      case None =>
+    }
+  }
+
+  override def removeUnavailable(user: User, ingredientId: Long) = {
+    val unavailable = user.getUnavailable
+    ingredientRepo.one(ingredientId) match {
+      case Some(value) => {
+        unavailable.remove(value)
         user.setUnavailable(unavailable)
         userRepo.save(user)
       }

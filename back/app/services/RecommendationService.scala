@@ -7,11 +7,11 @@ import drools.SessionCache
 import drools.cep.WantsNewRecommendation
 import drools.conclusion.Vegetarian
 import drools.recommendation.{MadeRecipe, Recommendation, StorageItem, User, Ingredient => IngredientFact, Measurement => MeasurementFact, Recipe => RecipeFact, RecipeIngredient => RecipeIngredientFact}
-import models.IngredientStorage
+import models.{Ingredient, IngredientStorage}
 import org.kie.api.runtime.KieSession
 import org.kie.api.runtime.rule.EntryPoint
 
-import java.lang
+import java.{lang, util}
 import javax.inject.Inject
 import scala.collection.JavaConverters.seqAsJavaListConverter
 import scala.jdk.CollectionConverters.{IterableHasAsScala, IteratorHasAsScala}
@@ -27,6 +27,7 @@ trait RecommendationService {
 
   def somethingNew(userId: Long): Seq[Recommendation]
 
+  def addNewFactLike(userId: Long, ingredientId: Long): Unit
 }
 
 class RecommendationServiceImpl @Inject()(
@@ -167,7 +168,43 @@ class RecommendationServiceImpl @Inject()(
     results
   }
 
-  override def somethingNew(userId: Long): Seq[Recommendation] = {
+
+  override def addNewFactLike(userId: Long, ingredientId: Long) = {
+    val session: KieSession = sessions.simpleSession(userId)
+
+    val userFact: Option[User] = session
+      .getQueryResults("User")
+      .iterator()
+      .asScala
+      .map(r => r.get("$user").asInstanceOf[User])
+      .toSeq
+      .headOption
+
+    val ingredientsFacts: Seq[IngredientFact] = session
+      .getQueryResults("Ingredients")
+      .iterator()
+      .asScala
+      .map(r => r.get("$ingredients").asInstanceOf[IngredientFact])
+      .toSeq
+
+
+    val user = userFact.get
+    val likes: util.List[IngredientFact] = user.getLikes
+    val newLike: IngredientFact = ingredientsFacts.filter(f => f.getId==ingredientId).head
+
+    likes.add(newLike)
+
+
+    val newUser: User = new User(user.getId, likes, user.getAllergies, user.getDislikes, user.getUnavailable, user.getStorage)
+
+    userFact.map(session.getFactHandle(_)).foreach(session.delete)
+    //user.setLikes(likes)
+
+    newUser.getLikes.forEach(x => println("-------------------- user " + newUser.getId +" likes" + x.getName))
+    session.insert(newUser)
+  }
+
+    override def somethingNew(userId: Long): Seq[Recommendation] = {
     def wantsNewRecommendation(implicit session: KieSession): Unit = {
       session
         .getEntryPoint("recommendation frequency")

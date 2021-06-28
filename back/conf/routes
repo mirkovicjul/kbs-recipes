@@ -23,18 +23,23 @@ GET     /recipeStorage               controllers.StorageController.getRecipeStor
 
 # History
 GET     /history                     controllers.HistoryController.getHistory()
+POST    /addRecipeToHistory          controllers.HistoryController.addRecipeToHistory()
 
 # Recipe resource
 GET     /recipes                     controllers.RecipeController.getAllRecipes()
 GET     /recipe/:id                  controllers.RecipeController.getRecipeById(id: Long)
 POST    /recipe                      controllers.RecipeController.addRecipe()
 
-
 # User preferences
 POST    /addLike                     controllers.UserController.addLike()
-POST    /addDislike                  controllers.UserController.addLike()
-POST    /addAllergy                  controllers.UserController.addLike()
-POST    /addUnavailable              controllers.UserController.addLike()
+POST    /removeLike                  controllers.UserController.removeLike()
+POST    /addDislike                  controllers.UserController.addDislike()
+POST    /removeDislike               controllers.UserController.removeDislike()
+POST    /addAllergy                  controllers.UserController.addAllergy()
+POST    /removeAllergy               controllers.UserController.removeAllergy()
+POST    /addUnavailable              controllers.UserController.addUnavailable()
+POST    /removeUnavailable           controllers.UserController.removeUnavailable()
+
 
 #Ingredients
 GET     /ingredients                 controllers.IngredientController.getAllIngredients()

@@ -45,24 +45,40 @@ export class PreferencesComponent implements OnInit {
    var ingrInLikes = this.userPreferences.likes.filter(l => l.id == ingr.id)
    if(ingrInLikes.length==0)
       this.userPreferences.likes.push(ingr)
+  
+    var data = "{\"ingredientId\":\"" + id + "\"}";
+
+    this.preferencesService.addLike(data).subscribe(res => console.log(res))
   }
   addDislike(id: number){
     var ingr  = this.allIngredients.filter(i => i.id == id)[0]
     var ingrInDislikes = this.userPreferences.dislikes.filter(l => l.id == ingr.id)
     if(ingrInDislikes.length==0)
       this.userPreferences.dislikes.push(ingr)
+
+    var data = "{\"ingredientId\":\"" + id + "\"}";
+
+    this.preferencesService.addDislike(data).subscribe(res => console.log(res))
   }
   addAllergy(id: number){
     var ingr  = this.allIngredients.filter(i => i.id == id)[0]
     var ingrInAllergies = this.userPreferences.allergies.filter(l => l.id == ingr.id)
     if(ingrInAllergies.length==0)
       this.userPreferences.allergies.push(ingr)
+
+    var data = "{\"ingredientId\":\"" + id + "\"}";
+
+    this.preferencesService.addAllergy(data).subscribe(res => console.log(res))
   }
   addUnavailable(id: number){
     var ingr  = this.allIngredients.filter(i => i.id == id)[0]
     var ingrInUnavailable = this.userPreferences.unavailable.filter(l => l.id == ingr.id)
     if(ingrInUnavailable.length==0)
       this.userPreferences.unavailable.push(ingr)
+    
+    var data = "{\"ingredientId\":\"" + id + "\"}";
+
+    this.preferencesService.addUnavailable(data).subscribe(res => console.log(res))
   }
 
   removeLike(id: number){
@@ -71,6 +87,9 @@ export class PreferencesComponent implements OnInit {
     if (index !== -1) {
         this.userPreferences.likes.splice(index, 1);
     }
+    var data = "{\"ingredientId\":\"" + id + "\"}";
+
+    this.preferencesService.removeLike(data).subscribe(res => console.log(res))
   }
 
   removeDislike(id: number){
@@ -79,6 +98,9 @@ export class PreferencesComponent implements OnInit {
     if (index !== -1) {
         this.userPreferences.dislikes.splice(index, 1);
     }
+    var data = "{\"ingredientId\":\"" + id + "\"}";
+
+    this.preferencesService.removeDislike(data).subscribe(res => console.log(res))
   }
 
   removeAllergy(id: number){
@@ -87,6 +109,9 @@ export class PreferencesComponent implements OnInit {
     if (index !== -1) {
         this.userPreferences.allergies.splice(index, 1);
     }
+    var data = "{\"ingredientId\":\"" + id + "\"}";
+
+    this.preferencesService.removeAllergy(data).subscribe(res => console.log(res))
   }
 
   removeUnavailable(id: number){
@@ -95,6 +120,9 @@ export class PreferencesComponent implements OnInit {
     if (index !== -1) {
         this.userPreferences.unavailable.splice(index, 1);
     }
+    var data = "{\"ingredientId\":\"" + id + "\"}";
+
+    this.preferencesService.removeUnavailable(data).subscribe(res => console.log(res))
   }
  
 }

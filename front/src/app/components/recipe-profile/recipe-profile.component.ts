@@ -6,6 +6,7 @@ import { Recipe } from 'src/app/model/recipe';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { IngredientStorageItem } from 'src/app/model/ingredient-storage-item';
 import { StorageService } from 'src/app/services/storage.service';
+import { HistoryService } from 'src/app/services/history.service';
 
 
 @Component({
@@ -21,8 +22,9 @@ export class RecipeProfileComponent implements OnInit {
   ingredientsInStorage: IngredientStorageItem[];
   ingredientToUse: number;
   ingredientToUseQuantity: number;
+  servings: number;
 
-  constructor(private recipeService: RecipeService, private storageService: StorageService, private route: ActivatedRoute, private modalService: NgbModal) { 
+  constructor(private recipeService: RecipeService, private storageService: StorageService, private historyService: HistoryService, private route: ActivatedRoute, private modalService: NgbModal) { 
     this.route.params.subscribe(params => {
       this.id = params['id'];
     });
@@ -39,6 +41,12 @@ export class RecipeProfileComponent implements OnInit {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+  }
+
+  makeRecipe(){
+      var data = "{\"recipeId\":\"" + this.id + "\","
+      + " \"servings\":\"" + this.servings + "\"}";
+      this.historyService.makeRecipe(data).subscribe(res => console.log(res))
   }
 
   private getDismissReason(reason: any): string {

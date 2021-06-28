@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.ebean.Model;
 
 import javax.persistence.*;
@@ -14,6 +15,10 @@ public class HistoryItem extends Model {
     Long id;
 
     @Column
+    @JsonIgnore
+    User user;
+
+    @Column
     @ManyToOne
     Recipe recipe;
 
@@ -23,8 +28,16 @@ public class HistoryItem extends Model {
     @Column
     LocalDate date;
 
-    public HistoryItem(Long id, Recipe recipe, Long servings, LocalDate date) {
+    public HistoryItem(User user, Recipe recipe, Long servings, LocalDate date) {
+        this.user = user;
+        this.recipe = recipe;
+        this.servings = servings;
+        this.date = date;
+    }
+
+    public HistoryItem(Long id, User user, Recipe recipe, Long servings, LocalDate date) {
         this.id = id;
+        this.user = user;
         this.recipe = recipe;
         this.servings = servings;
         this.date = date;
@@ -36,6 +49,14 @@ public class HistoryItem extends Model {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Recipe getRecipe() {
