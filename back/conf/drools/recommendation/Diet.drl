@@ -47,7 +47,6 @@ when
     )    
     eval($calories >= 500.0)
     eval($carbs + $fats >= 100.0)
-    eval($protein < 10.0)
 then
     System.out.printf("Carbs: %s, fats: %s, protein: %s, calories: %s\n", $carbs, $fats, $protein, $calories);
     System.out.printf("Recipe %s is junk food.\n", $id);

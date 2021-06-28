@@ -66,6 +66,7 @@ class StorageController @Inject()(
   }
 
   def getIngredientsForRecipe(recipeId: Long) = Action.apply { request =>
+    println("============================== " + recipeId)
     AuthUtils.extractUserId(request) match {
       case Some(userId) =>
         logger.info(s"Getting ingredients for user $userId and recipe $recipeId.")

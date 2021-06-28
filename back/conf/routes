@@ -31,4 +31,6 @@ POST    /recipe                      controllers.RecipeController.addRecipe()
 
 # User preferences
 POST    /addLike                     controllers.UserController.addLike()
-
+POST    /addDislike                  controllers.UserController.addLike()
+POST    /addAllergy                  controllers.UserController.addLike()
+POST    /addUnavailable              controllers.UserController.addLike()

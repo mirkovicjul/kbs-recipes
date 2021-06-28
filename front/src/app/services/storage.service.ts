@@ -36,4 +36,17 @@ export class StorageService {
     }
     return this.http.get<MealStorageItem[]>(`${this.apiUrl}recipeStorage`, config);
   }
+
+  getIngredientsForRecipe(recipeId: number) {
+    console.log("======= uso u servis")
+    var config = {
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+        'authorization': localStorage.getItem("id_token")
+      }
+    }
+    return this.http.get<IngredientStorageItem[]>(`${this.apiUrl}ingredientStorage/`+recipeId, config);
+
+  }
 }

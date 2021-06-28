@@ -14,12 +14,6 @@
       <button mat-button [routerLink]="['/storage']">Storage</button>
     </span>
     <span *ngIf="this.userService.isLoggedIn() && !this.userService.isAdmin()">
-      <button mat-button [routerLink]="['/charts']">Charts</button>
-    </span>
-    <span *ngIf="this.userService.isLoggedIn() && !this.userService.isAdmin()">
-      <button mat-button [routerLink]="['/recommend']">Recommend</button>
-    </span>
-    <span *ngIf="this.userService.isLoggedIn() && !this.userService.isAdmin()">
       <button mat-button [routerLink]="['/recipe']">Recipe</button>
     </span>
     <span *ngIf="this.userService.isLoggedIn() && !this.userService.isAdmin()">

@@ -31,6 +31,32 @@
     
   </section>
 
- 
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Make this recipe</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form #data="ngForm" id="mform">
+        <div class="form-group">
+          <label for="comment">Servings: <input type="number" id="lname" name="lname" [(ngModel)]="servings"><br><br></label>
+          
+          <label *ngIf="ingredientsInStorage.length!=0" for="comment">Use ingredients from storage:</label><br>
+          <ul *ngFor="let i of ingredientsInStorage" >
+            <li>{{i.quantity}} {{i.measurement.measurement}} {{i.ingredient.ingredient}} - <input type="number" id="lname" name="lname" style="width:60px" [(ngModel)]="ingredientToUseQuantity">{{i.measurement.measurement}} <button class="btn btn-light btn-sm" style="background: #a1ae25;"  [disabled]="!ingredientToUseQuantity">Use</button></li>
+          </ul>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light"  style="background: #a1ae25;" (click)="modal.close('Save click')"  [disabled]="!servings">Make!</button>
+    </div>
+  </ng-template>
   
+  <button class="btn btn-light"  style="background:  #a1ae25;" (click)="open(content)">Make this recipe</button>
+  
+  <hr>
+
 </div>
