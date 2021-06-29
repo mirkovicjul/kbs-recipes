@@ -27,7 +27,7 @@ trait RecommendationService {
 
   def somethingNew(userId: Long): Seq[Recommendation]
 
-  def addNewFactLike(userId: Long, ingredientId: Long): Unit
+  def addNewFactLike(fact: Long, userId: Long, ingredientId: Long): Unit
 }
 
 class RecommendationServiceImpl @Inject()(
@@ -169,7 +169,7 @@ class RecommendationServiceImpl @Inject()(
   }
 
 
-  override def addNewFactLike(userId: Long, ingredientId: Long) = {
+  override def addNewFactLike(fact: Long, userId: Long, ingredientId: Long) = {
     val session: KieSession = sessions.simpleSession(userId)
 
     val userFact: Option[User] = session
@@ -187,21 +187,42 @@ class RecommendationServiceImpl @Inject()(
       .map(r => r.get("$ingredients").asInstanceOf[IngredientFact])
       .toSeq
 
-
     val user = userFact.get
-    val likes: util.List[IngredientFact] = user.getLikes
-    val newLike: IngredientFact = ingredientsFacts.filter(f => f.getId==ingredientId).head
 
-    likes.add(newLike)
+    val newFact: IngredientFact = ingredientsFacts.filter(f => f.getId==ingredientId).head
+    val newFactList: util.List[IngredientFact] = new JArrayList[IngredientFact]()
 
-
-    val newUser: User = new User(user.getId, likes, user.getAllergies, user.getDislikes, user.getUnavailable, user.getStorage)
-
+    fact match {
+      case 1 =>
+        val likes: util.List[IngredientFact] = user.getLikes
+        likes.forEach(l => newFactList.add(l))
+        newFactList.add(newFact)
+        val newUser: User = new User(user.getId, newFactList, user.getAllergies, user.getDislikes, user.getUnavailable, user.getStorage)
+        newUser.getLikes.forEach(x => println(s"User "  + newUser.getId + " likes " + x.getName))
+        session.insert(newUser)
+      case 2 =>
+        val dislikes: util.List[IngredientFact] = user.getDislikes
+        dislikes.forEach(l => newFactList.add(l))
+        newFactList.add(newFact)
+        val newUser: User = new User(user.getId, user.getLikes, user.getAllergies, newFactList, user.getUnavailable, user.getStorage)
+        newUser.getDislikes.forEach(x => println(s"User "  + newUser.getId + " dislikes " + x.getName))
+        session.insert(newUser)
+      case 3 =>
+        val allergies: util.List[IngredientFact] = user.getAllergies
+        allergies.forEach(l => newFactList.add(l))
+        newFactList.add(newFact)
+        val newUser: User = new User(user.getId, user.getLikes, newFactList, user.getDislikes, user.getUnavailable, user.getStorage)
+        newUser.getAllergies.forEach(x => println(s"User "  + newUser.getId + " is allergic to " + x.getName))
+        session.insert(newUser)
+      case 4 =>
+        val unavailable: util.List[IngredientFact] = user.getUnavailable
+        unavailable.forEach(l => newFactList.add(l))
+        newFactList.add(newFact)
+        val newUser: User = new User(user.getId, user.getLikes, user.getAllergies, user.getDislikes, newFactList, user.getStorage)
+        newUser.getAllergies.forEach(x => println(s"User "  + newUser.getId + " is allergic to " + x.getName))
+    }
     userFact.map(session.getFactHandle(_)).foreach(session.delete)
-    //user.setLikes(likes)
 
-    newUser.getLikes.forEach(x => println("-------------------- user " + newUser.getId +" likes" + x.getName))
-    session.insert(newUser)
   }
 
     override def somethingNew(userId: Long): Seq[Recommendation] = {

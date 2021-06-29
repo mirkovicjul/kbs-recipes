@@ -91,9 +91,9 @@ class UserController @Inject()(
           case Left(value) => Future(Forbidden)
           case Right(user) => {
             userService.addLike(user, ingredientId.toLong)
-            recommendationService.removeSession(userId)
-            recommendationService.initSession(userId)
-            //recommendationService.addNewFactLike(userId, ingredientId.toLong)
+            //recommendationService.removeSession(userId)
+            //recommendationService.initSession(userId)
+            recommendationService.addNewFactLike(1, userId, ingredientId.toLong)
 
           }
         }
@@ -136,8 +136,9 @@ class UserController @Inject()(
           case Left(value) => Future(Forbidden)
           case Right(user) => {
             userService.addDislike(user, ingredientId.toLong)
-            recommendationService.removeSession(userId)
-            recommendationService.initSession(userId)
+            //recommendationService.removeSession(userId)
+            //recommendationService.initSession(userId)
+            recommendationService.addNewFactLike(2, userId, ingredientId.toLong)
           }
         }
       }
@@ -148,7 +149,6 @@ class UserController @Inject()(
   }
 
   def removeDislike() = userAction.async { request =>
-    println("usooooooooo u dislikeeee")
     val token: Option[String] = request.headers.get(HeaderNames.AUTHORIZATION)
     val ingredientId = request.body.asJson.flatMap(j => (j \ "ingredientId").asOpt[String]).get
     token.flatMap(t => JwtJson.decodeJson(t, "secretKey", Seq(JwtAlgorithm.HS256)).toOption) match {
@@ -180,8 +180,10 @@ class UserController @Inject()(
           case Left(value) => Future(Forbidden)
           case Right(user) => {
             userService.addAllergy(user, ingredientId.toLong)
-            recommendationService.removeSession(userId)
-            recommendationService.initSession(userId)
+            //recommendationService.removeSession(userId)
+            //recommendationService.initSession(userId)
+            recommendationService.addNewFactLike(3, userId, ingredientId.toLong)
+
           }
         }
       }
@@ -223,8 +225,9 @@ class UserController @Inject()(
           case Left(value) => Future(Forbidden)
           case Right(user) => {
             userService.addUnavailable(user, ingredientId.toLong)
-            recommendationService.removeSession(userId)
-            recommendationService.initSession(userId)
+            //recommendationService.removeSession(userId)
+            //recommendationService.initSession(userId)
+            recommendationService.addNewFactLike(4, userId, ingredientId.toLong)
           }
         }
       }
