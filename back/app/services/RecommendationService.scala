@@ -219,7 +219,8 @@ class RecommendationServiceImpl @Inject()(
         unavailable.forEach(l => newFactList.add(l))
         newFactList.add(newFact)
         val newUser: User = new User(user.getId, user.getLikes, user.getAllergies, user.getDislikes, newFactList, user.getStorage)
-        newUser.getAllergies.forEach(x => println(s"User "  + newUser.getId + " is allergic to " + x.getName))
+        newUser.getUnavailable.forEach(x => println(s"User "  + newUser.getId + " can't find " + x.getName))
+        session.insert(newUser)
     }
     userFact.map(session.getFactHandle(_)).foreach(session.delete)
 
