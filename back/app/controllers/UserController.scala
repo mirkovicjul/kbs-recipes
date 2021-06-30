@@ -93,7 +93,7 @@ class UserController @Inject()(
             userService.addLike(user, ingredientId.toLong)
             //recommendationService.removeSession(userId)
             //recommendationService.initSession(userId)
-            recommendationService.addNewFactLike(1, userId, ingredientId.toLong)
+            //recommendationService.addNewFactUserPreferences(1, userId, ingredientId.toLong)
 
           }
         }
@@ -114,9 +114,9 @@ class UserController @Inject()(
           case Left(value) => Future(Forbidden)
           case Right(user) => {
             userService.removeLike(user, ingredientId.toLong)
-            recommendationService.removeSession(userId)
-            recommendationService.initSession(userId)
-
+            //recommendationService.removeSession(userId)
+            //recommendationService.initSession(userId)
+            //recommendationService.removeFactUserPreferences(1, userId, ingredientId.toLong)
           }
         }
       }
@@ -138,7 +138,7 @@ class UserController @Inject()(
             userService.addDislike(user, ingredientId.toLong)
             //recommendationService.removeSession(userId)
             //recommendationService.initSession(userId)
-            recommendationService.addNewFactLike(2, userId, ingredientId.toLong)
+            //recommendationService.addNewFactUserPreferences(2, userId, ingredientId.toLong)
           }
         }
       }
@@ -158,8 +158,8 @@ class UserController @Inject()(
           case Left(value) => Future(Forbidden)
           case Right(user) => {
             userService.removeDislike(user, ingredientId.toLong)
-            recommendationService.removeSession(userId)
-            recommendationService.initSession(userId)
+            //recommendationService.removeSession(userId)
+            //recommendationService.initSession(userId)
 
           }
         }
@@ -182,7 +182,7 @@ class UserController @Inject()(
             userService.addAllergy(user, ingredientId.toLong)
             //recommendationService.removeSession(userId)
             //recommendationService.initSession(userId)
-            recommendationService.addNewFactLike(3, userId, ingredientId.toLong)
+            //recommendationService.addNewFactUserPreferences(3, userId, ingredientId.toLong)
 
           }
         }
@@ -203,8 +203,8 @@ class UserController @Inject()(
           case Left(value) => Future(Forbidden)
           case Right(user) => {
             userService.removeAllergy(user, ingredientId.toLong)
-            recommendationService.removeSession(userId)
-            recommendationService.initSession(userId)
+            //recommendationService.removeSession(userId)
+            //recommendationService.initSession(userId)
 
           }
         }
@@ -227,7 +227,7 @@ class UserController @Inject()(
             userService.addUnavailable(user, ingredientId.toLong)
             //recommendationService.removeSession(userId)
             //recommendationService.initSession(userId)
-            recommendationService.addNewFactLike(4, userId, ingredientId.toLong)
+            //recommendationService.addNewFactUserPreferences(4, userId, ingredientId.toLong)
           }
         }
       }
@@ -247,8 +247,8 @@ class UserController @Inject()(
           case Left(value) => Future(Forbidden)
           case Right(user) => {
             userService.removeUnavailable(user, ingredientId.toLong)
-            recommendationService.removeSession(userId)
-            recommendationService.initSession(userId)
+            //recommendationService.removeSession(userId)
+            //recommendationService.initSession(userId)
 
           }
         }

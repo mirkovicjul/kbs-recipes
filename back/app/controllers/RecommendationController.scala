@@ -30,7 +30,7 @@ class RecommendationController @Inject()(
 
           recommendation match {
             case Some(value) =>
-              logger.info(s"Recommendation finished for user $userId, recommended recipe id: ${value.getRecipeId}.")
+              logger.info(s"Recommendation finished for user $userId, recommended recipe id: ${value.getRecipeId} with hit: ${value.getHit}.")
               val recipe = recipeService.getRecipeById(value.getRecipeId)
               Ok(play.libs.Json.toJson(recipe).toString)
             case None =>

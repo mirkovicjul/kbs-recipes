@@ -7,6 +7,7 @@ import utils.RepoError
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import com.github.t3hnar.bcrypt._
+import drools.SessionCache
 
 import scala.concurrent.impl.Promise
 
@@ -27,7 +28,7 @@ trait UserService {
   def removeUnavailable(user: User, ingredientId: Long): Unit
 }
 
-class UserServiceImpl @Inject()(userRepo: UserRepo, ingredientRepo: IngredientRepo)(implicit ec: ExecutionContext) extends UserService {
+class UserServiceImpl @Inject()(userRepo: UserRepo, ingredientRepo: IngredientRepo, sessions: SessionCache)(implicit ec: ExecutionContext) extends UserService {
 
   override def get(id: Long): Future[Either[Throwable, User]] =
     userRepo.one(id).map {
@@ -85,6 +86,7 @@ class UserServiceImpl @Inject()(userRepo: UserRepo, ingredientRepo: IngredientRe
         likes.add(value)
         user.setLikes(likes)
         userRepo.save(user)
+        sessions.addNewFactUserPreferences(1, user.getId, ingredientId)
       }
       case None =>
     }
@@ -97,6 +99,7 @@ class UserServiceImpl @Inject()(userRepo: UserRepo, ingredientRepo: IngredientRe
         likes.remove(value)
         user.setLikes(likes)
         userRepo.save(user)
+        sessions.removeFactUserPreferences(1, user.getId, ingredientId)
       }
       case None =>
     }
@@ -109,19 +112,20 @@ class UserServiceImpl @Inject()(userRepo: UserRepo, ingredientRepo: IngredientRe
         dislikes.add(value)
         user.setDislikes(dislikes)
         userRepo.save(user)
+        sessions.addNewFactUserPreferences(2, user.getId, ingredientId)
       }
       case None =>
     }
   }
 
   override def removeDislike(user: User, ingredientId: Long) = {
-    println("uso u dislike service remove")
     val dislikes = user.getDislikes
     ingredientRepo.one(ingredientId) match {
       case Some(value) => {
         dislikes.remove(value)
         user.setDislikes(dislikes)
         userRepo.save(user)
+        sessions.removeFactUserPreferences(2, user.getId, ingredientId)
       }
       case None =>
     }
@@ -134,6 +138,7 @@ class UserServiceImpl @Inject()(userRepo: UserRepo, ingredientRepo: IngredientRe
         allergies.add(value)
         user.setAllergies(allergies)
         userRepo.save(user)
+        sessions.addNewFactUserPreferences(3, user.getId, ingredientId)
       }
       case None =>
     }
@@ -146,6 +151,7 @@ class UserServiceImpl @Inject()(userRepo: UserRepo, ingredientRepo: IngredientRe
         allergies.remove(value)
         user.setAllergies(allergies)
         userRepo.save(user)
+        sessions.removeFactUserPreferences(3, user.getId, ingredientId)
       }
       case None =>
     }
@@ -158,6 +164,7 @@ class UserServiceImpl @Inject()(userRepo: UserRepo, ingredientRepo: IngredientRe
         unavailable.add(value)
         user.setUnavailable(unavailable)
         userRepo.save(user)
+        sessions.addNewFactUserPreferences(4, user.getId, ingredientId)
       }
       case None =>
     }
@@ -170,6 +177,7 @@ class UserServiceImpl @Inject()(userRepo: UserRepo, ingredientRepo: IngredientRe
         unavailable.remove(value)
         user.setUnavailable(unavailable)
         userRepo.save(user)
+        sessions.removeFactUserPreferences(4, user.getId, ingredientId)
       }
       case None =>
     }
