@@ -15,7 +15,7 @@ query "SimpleResults"
       Recommendation($hit: hit),
       max($hit)
   )
-  $recommendation: Recommendation(hit == $maxHit)
+  $recommendation: Recommendation(hit == $maxHit, hit > 0)
 end
 
 query "Recipes"

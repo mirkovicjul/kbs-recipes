@@ -37,7 +37,7 @@ rule "Lower the possibility of recommending a recipe with ingredients which user
     agenda-group "Recommendation"
     when
         $recommendation: Recommendation($id: recipeId, $hit: hit)
-        $recipe: Recipe($rIngredients: ingredients)
+        $recipe: Recipe($rIngredients: ingredients, id == $id)
         $ingredients: List() from accumulate(
             RecipeIngredient($i: ingredient) from $rIngredients,
             collectList($i)
