@@ -2,14 +2,12 @@ package drools
 
 import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
 import org.kie.api.runtime.{KieContainer, KieSession}
-import drools.recommendation.{MadeRecipe, Recommendation, StorageItem, User, Ingredient => IngredientFact, Measurement => MeasurementFact, Recipe => RecipeFact, RecipeIngredient => RecipeIngredientFact}
+import drools.recommendation.{MadeRecipe, Recommendation, StartedEngine, StorageItem, User, Ingredient => IngredientFact, Measurement => MeasurementFact, Recipe => RecipeFact, RecipeIngredient => RecipeIngredientFact}
 
 import java.util
 import java.util.concurrent.TimeUnit
 import java.util.{ArrayList => JArrayList}
-
 import javax.inject.Inject
-
 import scala.jdk.CollectionConverters.{IterableHasAsScala, IteratorHasAsScala}
 
 trait SessionCache {
@@ -24,6 +22,7 @@ trait SessionCache {
 
   def removeFactUserPreferences(fact: Long, userId: Long, ingredientId: Long): Unit
 
+  def removeStartedEngine(session: KieSession)
 }
 
 class SessionCacheImpl @Inject()(kieContainer: KieContainer) extends SessionCache {
@@ -44,9 +43,22 @@ class SessionCacheImpl @Inject()(kieContainer: KieContainer) extends SessionCach
     simpleSessionCache.invalidate(userId)
   }
 
+  override def removeStartedEngine(session: KieSession): Unit = {
+    val started: Seq[StartedEngine] = session
+      .getQueryResults("Started")
+      .iterator()
+      .asScala
+      .map(r => r.get("$started").asInstanceOf[StartedEngine])
+      .toSeq
+
+    started.map(session.getFactHandle(_)).foreach(session.delete)
+  }
+
   override def addNewFactUserPreferences(fact: Long, userId: Long, ingredientId: Long) = {
     println("Adding new fact into session...")
     val session: KieSession = simpleSession(userId)
+
+    removeStartedEngine(session)
 
     val oldResults: Seq[Recommendation] = session
       .getQueryResults("AllRecommendations")
@@ -126,7 +138,9 @@ class SessionCacheImpl @Inject()(kieContainer: KieContainer) extends SessionCach
   override def removeFactUserPreferences(fact: Long, userId: Long, ingredientId: Long): Unit ={
     println("Removing fact from session...")
     val session: KieSession = simpleSession(userId)
-    
+
+    removeStartedEngine(session)
+
     val oldResults: Seq[Recommendation] = session
       .getQueryResults("AllRecommendations")
       .iterator()
@@ -134,7 +148,6 @@ class SessionCacheImpl @Inject()(kieContainer: KieContainer) extends SessionCach
       .map(r => r.get("$recommendation").asInstanceOf[Recommendation])
       .toSeq
 
-    oldResults.foreach(x=> println("===============--------" + x.getRecipeId))
     oldResults.map(session.getFactHandle(_)).foreach(session.delete)
 
     val userFact: Option[User] = session

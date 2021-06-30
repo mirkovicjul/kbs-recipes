@@ -38,3 +38,7 @@ end
 query "AllRecommendations"
   $recommendation: Recommendation()
 end
+
+query "Started"
+  $started: StartedEngine()
+end

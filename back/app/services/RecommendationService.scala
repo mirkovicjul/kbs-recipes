@@ -4,7 +4,7 @@ import com.typesafe.scalalogging.LazyLogging
 import database._
 import drools.SessionCache
 import drools.cep.WantsNewRecommendation
-import drools.recommendation.{MadeRecipe, Recommendation, StorageItem, User, Ingredient => IngredientFact, Measurement => MeasurementFact, Recipe => RecipeFact, RecipeIngredient => RecipeIngredientFact}
+import drools.recommendation.{MadeRecipe, Recommendation, StartedEngine, StorageItem, User, Ingredient => IngredientFact, Measurement => MeasurementFact, Recipe => RecipeFact, RecipeIngredient => RecipeIngredientFact}
 import org.kie.api.runtime.KieSession
 import org.kie.api.runtime.rule.EntryPoint
 
@@ -143,14 +143,29 @@ class RecommendationServiceImpl @Inject()(
   override def recommendOnHomepage(userId: Long): Option[Recommendation] = {
     val session: KieSession = sessions.simpleSession(userId)
 
+    val recommendations: Seq[Recommendation] = session
+      .getQueryResults("AllRecommendations")
+      .iterator()
+      .asScala
+      .map(r => r.get("$recommendation").asInstanceOf[Recommendation])
+      .toSeq
 
+    val started: Seq[StartedEngine] = session
+      .getQueryResults("Started")
+      .iterator()
+      .asScala
+      .map(r => r.get("$started").asInstanceOf[StartedEngine])
+      .toSeq
 
-    session.getAgenda().getAgendaGroup("Recommendation").setFocus()
+    if(recommendations.size == 0 && started.size == 0) {
+      session.getAgenda().getAgendaGroup("Recommendation").setFocus()
 
+      session.getAgenda().getAgendaGroup("Conclusion").setFocus()
 
-    session.getAgenda().getAgendaGroup("Conclusion").setFocus()
+      session.fireAllRules
 
-    session.fireAllRules
+      session.insert(new StartedEngine())
+    }
 
     val results: Option[Recommendation] = session
       .getQueryResults("SimpleResults")
