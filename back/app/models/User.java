@@ -58,6 +58,10 @@ public class User extends Model {
     )
     Set<Ingredient> unavailable;
 
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    List<HistoryItem> history;
+
     public User(String username, String email, String password, Long userType) {
         this.username = username;
         this.email = email;
@@ -147,5 +151,13 @@ public class User extends Model {
 
     public void setUnavailable(Set<Ingredient> unavailable) {
         this.unavailable = unavailable;
+    }
+
+    public List<HistoryItem> getHistory() {
+        return history;
+    }
+
+    public void setHistory(List<HistoryItem> history) {
+        this.history = history;
     }
 }

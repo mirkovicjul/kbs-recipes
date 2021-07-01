@@ -8,30 +8,28 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.impl.Promise
-
+import java.time.format.DateTimeFormatter
 
 trait HistoryService {
   def getHistory(userId: Long): Seq[HistoryItem]
-  def addRecipeToHistory(userId: Long, recipeId: Long, servings: Long): Option[HistoryItem]
+  def addRecipeToHistory(userId: Long, recipeId: Long, servings: Long, date: String): Option[HistoryItem]
 }
 
 class HistoryServiceImpl @Inject()(historyRepo: HistoryRepo, userRepo: UserRepo, recipeRepo: RecipeRepo)(implicit ec: ExecutionContext) extends HistoryService with LazyLogging {
 
   override def getHistory(userId: Long): Seq[HistoryItem] = historyRepo.getHistory(userId)
 
-  override def addRecipeToHistory(userId: Long, recipeId: Long, servings: Long): Option[HistoryItem] = {
-    println("============== entered service add recipe to history")
-    println("============userId " + userId)
-    println("============== recipeId" + recipeId)
-    println("============== servings" + servings)
+  override def addRecipeToHistory(userId: Long, recipeId: Long, servings: Long, date: String): Option[HistoryItem] = {
+    println(s"Adding recipe to history for user ${userId}, recipe ${recipeId}")
 
     val recipe = recipeRepo.recipeById(recipeId)
-    val date = LocalDate.now()
-    println("============== date" + date)
+
+    val formatter = DateTimeFormatter.ofPattern("yyyy-M-d")
+    val d = LocalDate.parse(date, formatter)
 
     userRepo.one(userId).map(x => x match {
         case Some(value) =>
-          historyRepo.saveHistoryItem(new HistoryItem(value, recipe, servings, date))
+          historyRepo.saveHistoryItem(new HistoryItem(value, recipe, servings, d))
         case None =>
       })
     None

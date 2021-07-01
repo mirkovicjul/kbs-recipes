@@ -11,11 +11,12 @@ import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
 import play.libs.Json
 import services.HistoryService
 
+import java.time.LocalDate
 import scala.jdk.CollectionConverters.SeqHasAsJava
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-case class RecipeToAdd(recipeId: String, servings: String)
+case class RecipeToAdd(recipeId: String, servings: String, date: String)
 
 class HistoryController @Inject()(
                                    val controllerComponents: ControllerComponents,
@@ -46,7 +47,7 @@ class HistoryController @Inject()(
     token.flatMap(t => JwtJson.decodeJson(t, "secretKey", Seq(JwtAlgorithm.HS256)).toOption) match {
       case Some(value) =>
         val userId = (value \ "userId").as[Long]
-        historyService.addRecipeToHistory(userId, recipeToAdd.recipeId.toLong, recipeToAdd.servings.toLong)
+        historyService.addRecipeToHistory(userId, recipeToAdd.recipeId.toLong, recipeToAdd.servings.toLong, recipeToAdd.date)
         Future(Ok)
       case None => Future(Forbidden)
     }
@@ -59,7 +60,8 @@ object RecipeToAdd {
 
   implicit val recipeToAddReads: Reads[RecipeToAdd] = (
     (JsPath \ "recipeId").read[String] and
-      (JsPath \ "servings").read[String]
+      (JsPath \ "servings").read[String] and
+      (JsPath \ "date").read[String]
     )(RecipeToAdd.apply _)
 
 }

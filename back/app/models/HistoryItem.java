@@ -15,6 +15,7 @@ public class HistoryItem extends Model {
     Long id;
 
     @Column
+    @ManyToOne
     @JsonIgnore
     User user;
 
