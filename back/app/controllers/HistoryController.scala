@@ -39,7 +39,6 @@ class HistoryController @Inject()(
   }
 
   def addRecipeToHistory(): Action[AnyContent] = userAction.async { request =>
-    println("entered endpoint add recipe to history ================")
     val token: Option[String] = request.headers.get(HeaderNames.AUTHORIZATION)
     val json = request.body.asJson.get
     val recipeToAdd = json.as[RecipeToAdd]

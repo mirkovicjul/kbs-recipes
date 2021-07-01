@@ -43,6 +43,13 @@
         <div class="form-group">
           <label for="comment">Servings: <input type="number" id="lname" name="lname" [(ngModel)]="servings"><br><br></label>
           
+          <div class="input-group">
+            <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker" [(ngModel)]="date">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button">Pick</button>
+            </div>
+          </div>
+
           <label *ngIf="ingredientsInStorage.length!=0" for="comment">Use ingredients from storage:</label><br>
           <ul *ngFor="let i of ingredientsInStorage" >
             <li>{{i.quantity}} {{i.measurement.measurement}} {{i.ingredient.ingredient}} - <input type="number" id="lname" name="lname" style="width:60px" [(ngModel)]="ingredientToUseQuantity">{{i.measurement.measurement}} <button class="btn btn-light btn-sm" style="background: #a1ae25;"  [disabled]="!ingredientToUseQuantity">Use</button></li>
@@ -51,7 +58,7 @@
       </form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-light"  style="background: #a1ae25;" (click)="makeRecipe()"  [disabled]="!servings">Make!</button>
+      <button type="button" class="btn btn-light"  style="background: #a1ae25;" (click)="makeRecipe(); modal.close('Save click'); clearFields()"  [disabled]="!servings">Make!</button>
     </div>
   </ng-template>
   
