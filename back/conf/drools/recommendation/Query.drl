@@ -4,6 +4,7 @@ import drools.recommendation.Recommendation;
 import drools.recommendation.Recipe;
 import drools.recommendation.Ingredient;
 import drools.recommendation.User;
+import drools.recommendation.Measurement;
 
 import drools.conclusion.EatingUnhealthy;
 
@@ -34,6 +35,9 @@ query "Ingredients"
     $ingredients: Ingredient()
 end
 
+query "Measurements"
+    $measurement: Measurement()
+end
 
 query "AllRecommendations"
   $recommendation: Recommendation()

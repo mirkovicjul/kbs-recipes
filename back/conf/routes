@@ -20,6 +20,7 @@ POST    /recommendation/regular      controllers.RecommendationController.regula
 GET     /ingredientStorage           controllers.StorageController.getIngredientStorage()
 GET     /ingredientStorage/:recipeId controllers.StorageController.getIngredientsForRecipe(recipeId: Long)
 GET     /recipeStorage               controllers.StorageController.getRecipeStorage()
+POST    /addIngredientToStorage      controllers.StorageController.addIngredientToStorage()
 
 # History
 GET     /history                     controllers.HistoryController.getHistory()
@@ -43,3 +44,6 @@ POST    /removeUnavailable           controllers.UserController.removeUnavailabl
 
 #Ingredients
 GET     /ingredients                 controllers.IngredientController.getAllIngredients()
+
+#Measurements
+GET     /measurements                controllers.MeasurementController.getAllMeasurements()

@@ -6,6 +6,7 @@ import database.IngredientStorageRepo
 import models.{IngredientStorage, RecipeStorage}
 import pdi.jwt.{JwtAlgorithm, JwtJson}
 import play.api.http.HeaderNames
+import play.api.libs.json.JsPath.\
 import play.api.mvc._
 import play.libs.Json
 import services.{IngredientStorageService, RecipeStorageService, UserService}
@@ -66,7 +67,6 @@ class StorageController @Inject()(
   }
 
   def getIngredientsForRecipe(recipeId: Long) = Action.apply { request =>
-    println("============================== " + recipeId)
     AuthUtils.extractUserId(request) match {
       case Some(userId) =>
         logger.info(s"Getting ingredients for user $userId and recipe $recipeId.")
@@ -76,6 +76,24 @@ class StorageController @Inject()(
       case None =>
         BadRequest
     }
+  }
+
+  def addIngredientToStorage() = userAction.apply { request =>
+    val token: Option[String] = request.headers.get(HeaderNames.AUTHORIZATION)
+
+    token.flatMap(t => JwtJson.decodeJson(t, "secretKey", Seq(JwtAlgorithm.HS256)).toOption) match {
+      case Some(value) =>
+        val userId = (value \ "userId").as[Long]
+        val body = request.body.asJson.get
+        val ingredientId = (body \ "ingredientId").as[Long]
+        val measurementId = (body \ "measurementId").as[Long]
+        val quantity = (body \ "quantity").as[Long]
+        val date = (body\"date").as[String]
+        ingredientStorageService.addIngredientToStorage(userId, ingredientId, measurementId, quantity, date)
+        Ok
+      case None => Forbidden
+    }
+
   }
 
 }

@@ -1,16 +1,16 @@
 package drools
 
 import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
-import org.kie.api.runtime.{KieContainer, KieSession}
-import drools.recommendation.{MadeRecipe, Recommendation, StartedEngine, StorageItem, User, Ingredient => IngredientFact, Measurement => MeasurementFact, Recipe => RecipeFact, RecipeIngredient => RecipeIngredientFact}
+import drools.recommendation.{MadeRecipe, Recommendation, StartedEngine, StorageItem, User, Ingredient => IngredientFact, Measurement => MeasurementFact, Recipe => RecipeFact}
 import org.kie.api.runtime.rule.EntryPoint
+import org.kie.api.runtime.{KieContainer, KieSession}
 
 import java.time.LocalDate
 import java.util
 import java.util.concurrent.TimeUnit
 import java.util.{ArrayList => JArrayList}
 import javax.inject.Inject
-import scala.jdk.CollectionConverters.{IterableHasAsScala, IteratorHasAsScala}
+import scala.jdk.CollectionConverters.IteratorHasAsScala
 
 trait SessionCache {
 
@@ -29,6 +29,8 @@ trait SessionCache {
   def addFactHistoryItem(userId: Long, recipeId: Long, servings: Long, date: LocalDate): Unit
 
   def removeRecommendations(session: KieSession): Unit
+
+  def addFactStorageIngredient(userId: Long, ingredientId: Long, quantity: Long, measurementId: Long, bestBefore: LocalDate): Unit
 }
 
 class SessionCacheImpl @Inject()(kieContainer: KieContainer) extends SessionCache {
@@ -60,7 +62,7 @@ class SessionCacheImpl @Inject()(kieContainer: KieContainer) extends SessionCach
     started.map(session.getFactHandle(_)).foreach(session.delete)
   }
 
-  override def removeRecommendations(session: KieSession): Unit ={
+  override def removeRecommendations(session: KieSession): Unit = {
     val oldResults: Seq[Recommendation] = session
       .getQueryResults("AllRecommendations")
       .iterator()
@@ -71,6 +73,7 @@ class SessionCacheImpl @Inject()(kieContainer: KieContainer) extends SessionCach
     oldResults.map(session.getFactHandle(_)).foreach(session.delete)
 
   }
+
   override def addNewFactUserPreferences(fact: Long, userId: Long, ingredientId: Long) = {
     println("Adding new fact into session...")
     val session: KieSession = simpleSession(userId)
@@ -104,13 +107,13 @@ class SessionCacheImpl @Inject()(kieContainer: KieContainer) extends SessionCach
       case 1 =>
         val likes: util.List[IngredientFact] = user.getLikes
         val userAlreadyLikes = likes.contains(newFact)
-       if (!userAlreadyLikes) {
-         likes.forEach(l => newFactList.add(l))
-         newFactList.add(newFact)
-         val newUser: User = new User(user.getId, newFactList, user.getAllergies, user.getDislikes, user.getUnavailable, user.getStorage)
-         newUser.getLikes.forEach(x => println(s"User " + newUser.getId + " likes " + x.getName))
-         session.update(session.getFactHandle(user), newUser)
-       }
+        if (!userAlreadyLikes) {
+          likes.forEach(l => newFactList.add(l))
+          newFactList.add(newFact)
+          val newUser: User = new User(user.getId, newFactList, user.getAllergies, user.getDislikes, user.getUnavailable, user.getStorage)
+          newUser.getLikes.forEach(x => println(s"User " + newUser.getId + " likes " + x.getName))
+          session.update(session.getFactHandle(user), newUser)
+        }
       case 2 =>
         val dislikes: util.List[IngredientFact] = user.getDislikes
         val userAlreadyDislikes = dislikes.contains(newFact)
@@ -144,7 +147,7 @@ class SessionCacheImpl @Inject()(kieContainer: KieContainer) extends SessionCach
     }
   }
 
-  override def removeFactUserPreferences(fact: Long, userId: Long, ingredientId: Long): Unit ={
+  override def removeFactUserPreferences(fact: Long, userId: Long, ingredientId: Long): Unit = {
     println("Removing fact from session...")
     val session: KieSession = simpleSession(userId)
 
@@ -179,28 +182,28 @@ class SessionCacheImpl @Inject()(kieContainer: KieContainer) extends SessionCach
         likes.forEach(l => newList.add(l))
         newList.remove(factToRemove)
         val newUser: User = new User(user.getId, newList, user.getAllergies, user.getDislikes, user.getUnavailable, user.getStorage)
-        newUser.getLikes.forEach(x=> println("User " + user.getId + " likes " + x.getName))
+        newUser.getLikes.forEach(x => println("User " + user.getId + " likes " + x.getName))
         session.update(session.getFactHandle(user), newUser)
       case 2 =>
         val dislikes = user.getDislikes
         dislikes.forEach(l => newList.add(l))
         newList.remove(factToRemove)
         val newUser: User = new User(user.getId, user.getLikes, user.getAllergies, newList, user.getUnavailable, user.getStorage)
-        newUser.getDislikes.forEach(x=> println("User " + user.getId + " dislikes " + x.getName))
+        newUser.getDislikes.forEach(x => println("User " + user.getId + " dislikes " + x.getName))
         session.update(session.getFactHandle(user), newUser)
       case 3 =>
         val allergies = user.getAllergies
         allergies.forEach(l => newList.add(l))
         newList.remove(factToRemove)
         val newUser: User = new User(user.getId, user.getLikes, newList, user.getDislikes, user.getUnavailable, user.getStorage)
-        newUser.getAllergies.forEach(x=> println("User " + user.getId + " is allergic to " + x.getName))
+        newUser.getAllergies.forEach(x => println("User " + user.getId + " is allergic to " + x.getName))
         session.update(session.getFactHandle(user), newUser)
       case 4 =>
         val unavailable = user.getUnavailable
         unavailable.forEach(l => newList.add(l))
         newList.remove(factToRemove)
         val newUser: User = new User(user.getId, user.getLikes, user.getAllergies, user.getDislikes, newList, user.getStorage)
-        newUser.getUnavailable.forEach(x=> println("User " + user.getId + " can't find " + x.getName))
+        newUser.getUnavailable.forEach(x => println("User " + user.getId + " can't find " + x.getName))
         session.update(session.getFactHandle(user), newUser)
     }
 
@@ -208,7 +211,7 @@ class SessionCacheImpl @Inject()(kieContainer: KieContainer) extends SessionCach
 
   }
 
-  override def addFactHistoryItem(userId: Long, recipeId: Long, servings: Long, date: LocalDate): Unit ={
+  override def addFactHistoryItem(userId: Long, recipeId: Long, servings: Long, date: LocalDate): Unit = {
     val session: KieSession = simpleSession(userId)
 
     val historyEntryPoint: EntryPoint = session.getEntryPoint("$history")
@@ -220,7 +223,7 @@ class SessionCacheImpl @Inject()(kieContainer: KieContainer) extends SessionCach
       .map(r => r.get("$recipe").asInstanceOf[RecipeFact])
       .toSeq
 
-    historyEntryPoint.insert(new MadeRecipe((recipes.filter(_.getId==recipeId).head), date, servings.toInt))
+    historyEntryPoint.insert(new MadeRecipe((recipes.filter(_.getId == recipeId).head), date, servings.toInt))
 
     removeStartedEngine(session)
 
@@ -228,5 +231,71 @@ class SessionCacheImpl @Inject()(kieContainer: KieContainer) extends SessionCach
 
   }
 
+  override def addFactStorageIngredient(userId: Long, ingredientId: Long, quantity: Long, measurementId: Long, bestBefore: LocalDate) = {
+    val session: KieSession = simpleSession(userId)
 
+    val user = getUserFromSession(session).get
+
+    val ingredient: IngredientFact = getIngredientsFromSession(session).filter(f => f.getId == ingredientId).head
+
+    val newFactList: util.List[StorageItem] = new JArrayList[StorageItem]()
+
+    val newStorageIngredient: StorageItem = new StorageItem(ingredient, quantity.toDouble, getMeasurementsFromSession(session).filter(_.getId == measurementId).head, bestBefore)
+    val storage: util.List[StorageItem] = user.getStorage
+
+    storage.forEach(l => newFactList.add(l))
+    newFactList.add(newStorageIngredient)
+    val newUserInfo: User = new User(user.getId, user.getLikes, user.getAllergies, user.getDislikes, user.getUnavailable, newFactList)
+
+    session.update(session.getFactHandle(user), newUserInfo)
+
+    removeStartedEngine(session)
+
+    removeRecommendations(session)
+  }
+
+  private def getMeasurementsFromSession(session: KieSession): Seq[MeasurementFact] = {
+    val measurementFacts: Seq[MeasurementFact] = session
+      .getQueryResults("Measurements")
+      .iterator()
+      .asScala
+      .map(r => r.get("$measurement").asInstanceOf[MeasurementFact])
+      .toSeq
+
+    measurementFacts
+  }
+
+  private def getUserFromSession(session: KieSession): Option[User] = {
+    val userFact: Option[User] = session
+      .getQueryResults("User")
+      .iterator()
+      .asScala
+      .map(r => r.get("$user").asInstanceOf[User])
+      .toSeq
+      .headOption
+
+    userFact
+  }
+
+  private def getIngredientsFromSession(session: KieSession): Seq[IngredientFact] = {
+    val ingredientsFacts: Seq[IngredientFact] = session
+      .getQueryResults("Ingredients")
+      .iterator()
+      .asScala
+      .map(r => r.get("$ingredients").asInstanceOf[IngredientFact])
+      .toSeq
+
+    ingredientsFacts
+  }
+
+  private def getRecipesFromSession(session: KieSession): Seq[RecipeFact] = {
+    val recipesFacts: Seq[RecipeFact] = session
+      .getQueryResults("Recipes")
+      .iterator()
+      .asScala
+      .map(r => r.get("$recipe").asInstanceOf[RecipeFact])
+      .toSeq
+
+    recipesFacts
+  }
 }

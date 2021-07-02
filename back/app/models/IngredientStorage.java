@@ -19,6 +19,10 @@ public class IngredientStorage extends Model {
     Ingredient ingredient;
 
     @Column
+    @ManyToOne
+    User user;
+
+    @Column
     Double quantity;
 
     @Column
@@ -31,6 +35,21 @@ public class IngredientStorage extends Model {
     public IngredientStorage(Long id, Ingredient ingredient, Double quantity, Measurement measurement, LocalDate bestBefore) {
         this.id = id;
         this.ingredient = ingredient;
+        this.quantity = quantity;
+        this.measurement = measurement;
+        this.bestBefore = bestBefore;
+    }
+
+    public IngredientStorage(Ingredient ingredient, Double quantity, Measurement measurement, LocalDate bestBefore) {
+        this.ingredient = ingredient;
+        this.quantity = quantity;
+        this.measurement = measurement;
+        this.bestBefore = bestBefore;
+    }
+
+    public IngredientStorage(Ingredient ingredient, User user, Double quantity, Measurement measurement, LocalDate bestBefore) {
+        this.ingredient = ingredient;
+        this.user = user;
         this.quantity = quantity;
         this.measurement = measurement;
         this.bestBefore = bestBefore;
@@ -76,4 +95,11 @@ public class IngredientStorage extends Model {
         this.bestBefore = bestBefore;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

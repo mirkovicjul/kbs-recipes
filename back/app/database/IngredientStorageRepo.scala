@@ -14,6 +14,8 @@ trait IngredientStorageRepo {
 
   def getIngredientsForRecipe(recipeId: Long, userId: Long): JList[IngredientStorage]
 
+  def addNewIngredientToStorage(storageIngredient: IngredientStorage): Unit
+
 }
 
 class IngredientStorageRepoImpl extends IngredientStorageRepo with LazyLogging {
@@ -34,6 +36,10 @@ class IngredientStorageRepoImpl extends IngredientStorageRepo with LazyLogging {
 
     find.query().where.eq("user_id", userId).and()
       .in("ingredient_id", recipeIngredients).findList()
+  }
+
+  override def addNewIngredientToStorage(storageIngredient: IngredientStorage): Unit = {
+    storageIngredient.save()
   }
 
 }
